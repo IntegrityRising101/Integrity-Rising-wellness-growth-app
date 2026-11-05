@@ -17,40 +17,68 @@ import PersonalWellnessDashboard from './components/PersonalWellnessDashboard';
 import MemberAccount from './components/MemberAccount';
 import ModerationDashboard from './components/ModerationDashboard';
 
+const navigation = [
+  { label: 'My Dashboard', target: 'dashboard' },
+  { label: 'Wellness & AI', target: 'wellness' },
+  { label: 'Community', target: 'community' },
+  { label: 'Academy', target: 'academy' },
+  { label: 'Safety & Support', target: 'safety' },
+];
+
 function App() {
   return (
     <div className="app-container">
       <QuickExitButton />
 
-      <header className="app-header">
+      <header className="app-header" id="top">
+        <p className="brand-eyebrow">THE INTEGRITY MOVEMENT</p>
         <h1>Integrity Rising</h1>
-        <p>United by Truth, Driven by Purpose</p>
-        <h2>The Integrity Movement</h2>
-        <p>A safe place to learn, grow, heal, and rise.</p>
+        <p className="brand-slogan">United by Truth, Driven by Purpose</p>
+        <p className="brand-welcome">A supportive place to learn, grow, heal, and rise — at your own pace.</p>
       </header>
 
+      <nav className="main-navigation" aria-label="Main navigation">
+        {navigation.map((item) => (
+          <a key={item.target} href={`#${item.target}`}>{item.label}</a>
+        ))}
+      </nav>
+
       <main>
-        <section className="community-section">
-          <h2>Welcome to Your Safe Space</h2>
-          <p>
-            Find support, share experiences, and connect with others at your own pace.
-          </p>
+        <section className="community-section welcome-section">
+          <p className="section-kicker">WELCOME</p>
+          <h2>Your next step starts here.</h2>
+          <p>Build healthy habits, find practical support, learn new skills, and connect with a community rooted in respect and accountability.</p>
         </section>
 
-        <MemberAccount />
-        <PersonalWellnessDashboard />
-        <AIHub />
-        <AIPrivacyNotice />
-        <WellnessChat />
-        <WellnessAI />
-        <MoodTracker />
-        <WomensWellness />
-        <CommunityDiscussions />
-        <ModerationDashboard />
-        <Academy />
+        <section id="dashboard" className="app-area">
+          <MemberAccount />
+          <PersonalWellnessDashboard />
+          <MoodTracker />
+        </section>
 
-        <section className="safety-section">
-          <h2>My Safety Tools</h2>
+        <section id="wellness" className="app-area">
+          <AIHub />
+          <AIPrivacyNotice />
+          <WellnessChat />
+          <WellnessAI />
+          <WomensWellness />
+        </section>
+
+        <section id="community" className="app-area">
+          <CommunityDiscussions />
+          <ModerationDashboard />
+        </section>
+
+        <section id="academy" className="app-area">
+          <Academy />
+        </section>
+
+        <section id="safety" className="safety-section app-area">
+          <div className="section-intro">
+            <p className="section-kicker">SUPPORT & RESOURCES</p>
+            <h2>My Safety Tools</h2>
+            <p>Explore support options and practical tools. If a device may be monitored, consider using a safer device before viewing sensitive information.</p>
+          </div>
           <MentalHealthServices />
           <StateResourceDirectory />
           <LocalSupportFinder />
@@ -59,9 +87,11 @@ function App() {
         </section>
       </main>
 
-      <footer>
+      <footer className="app-footer">
+        <a href="#top" className="back-to-top">Back to top ↑</a>
         <p>Integrity Rising | The Integrity Movement</p>
         <p>United by Truth, Driven by Purpose</p>
+        <p className="footer-note">This app provides educational and peer-support tools. It is not a substitute for emergency services, professional mental health care, or individualized safety planning.</p>
       </footer>
     </div>
   );
