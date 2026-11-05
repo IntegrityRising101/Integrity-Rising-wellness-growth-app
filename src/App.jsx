@@ -1,6 +1,7 @@
 import './App.css';
 import QuickExitButton from './components/QuickExitButton';
 import IncidentVault from './components/IncidentVault';
+import PersonalSafetyPlan from './components/PersonalSafetyPlan';
 import WellnessAI from './components/WellnessAI';
 import WellnessChat from './components/WellnessChat';
 import MoodTracker from './components/MoodTracker';
@@ -43,6 +44,7 @@ function App() {
 
         <section className="safety-section">
           <h2>My Safety Tools</h2>
+          <PersonalSafetyPlan />
           <IncidentVault />
         </section>
       </main>
