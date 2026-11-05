@@ -23,6 +23,7 @@ function CommunityDiscussions() {
   const [user, setUser] = useState(null);
   const [posts, setPosts] = useState([]);
   const [comments, setComments] = useState({});
+  const [mySubmissions, setMySubmissions] = useState([]);
   const [category, setCategory] = useState(categories[0]);
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
@@ -54,6 +55,30 @@ function CommunityDiscussions() {
       if (!currentUser) {
         setLoading(false);
         return;
+      }
+
+      const [ownPostsResult, ownRepliesResult] = await Promise.all([
+        supabase.from('community_posts')
+          .select('id, title, body, status, created_at')
+          .eq('user_id', currentUser.id)
+          .order('created_at', { ascending: false })
+          .limit(10),
+        supabase.from('community_comments')
+          .select('id, body, status, created_at')
+          .eq('user_id', currentUser.id)
+          .order('created_at', { ascending: false })
+          .limit(10)
+      ]);
+
+      if (!active) return;
+      if (ownPostsResult.error || ownRepliesResult.error) {
+        setNotice('Your submission status could not be loaded. Your community access is not affected.');
+      } else {
+        const ownItems = [
+          ...(ownPostsResult.data || []).map(item => ({ ...item, kind: 'Post' })),
+          ...(ownRepliesResult.data || []).map(item => ({ ...item, kind: 'Reply' }))
+        ].sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).slice(0, 10);
+        setMySubmissions(ownItems);
       }
 
       const { data: postData, error: postError } = await supabase
@@ -139,6 +164,7 @@ function CommunityDiscussions() {
     } else {
       setTitle('');
       setBody('');
+      setMySubmissions(current => [{ ...data, kind: 'Post' }, ...current].slice(0, 10));
       setNotice('Your post was submitted for moderator review. It will appear in the community after approval.');
     }
     setBusy(false);
@@ -160,6 +186,7 @@ function CommunityDiscussions() {
       setNotice('Your reply could not be submitted. Please try again.');
     } else {
       setReplyDrafts(current => ({ ...current, [postId]: '' }));
+      setMySubmissions(current => [{ ...data, kind: 'Reply' }, ...current].slice(0, 10));
       setNotice('Your reply was submitted for moderator review. It will appear after approval.');
     }
     setBusy(false);
@@ -233,6 +260,30 @@ function CommunityDiscussions() {
               <button type="submit" disabled={busy}>{busy ? 'Sharing…' : 'Share post'}</button>
             </div>
           </form>
+
+          <section className="my-submissions" aria-labelledby="my-submissions-title">
+            <div className="discussion-feed-heading">
+              <h3 id="my-submissions-title">My submissions</h3>
+              <span>Only you can see this list</span>
+            </div>
+            {mySubmissions.length === 0 ? (
+              <p>Your posts and replies will appear here with their review status.</p>
+            ) : (
+              <ul>
+                {mySubmissions.map(item => (
+                  <li key={`${item.kind}-${item.id}`}>
+                    <div>
+                      <strong>{item.kind}: {item.kind === 'Post' ? item.title : item.body}</strong>
+                      <span>{new Date(item.created_at).toLocaleDateString()}</span>
+                    </div>
+                    <span className={`submission-status submission-status-${item.status || 'pending'}`}>
+                      {item.status === 'published' ? 'Approved · Published' : item.status === 'rejected' ? 'Not approved' : item.status === 'hidden' ? 'Hidden by moderators' : 'Pending review'}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
 
           <div className="discussion-feed">
             <div className="discussion-feed-heading">
