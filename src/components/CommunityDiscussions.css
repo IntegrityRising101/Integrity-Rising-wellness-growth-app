@@ -132,3 +132,45 @@
     width: 100%;
   }
 }
+
+
+/* Private member view of their own community submission review status */
+.my-submissions {
+  margin: 1.25rem 0;
+  padding: 1.1rem;
+  border: 1px solid #dce9e6;
+  border-radius: 13px;
+  background: #fbfdfc;
+}
+.my-submissions .discussion-feed-heading h3 { margin-bottom: 0; }
+.my-submissions ul { list-style: none; margin: .5rem 0 0; padding: 0; }
+.my-submissions li {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: .8rem;
+  padding: .8rem 0;
+  border-top: 1px solid #e6eeec;
+}
+.my-submissions li > div { display: grid; gap: .25rem; min-width: 0; }
+.my-submissions li strong {
+  overflow-wrap: anywhere;
+  color: #344946;
+  font-size: .9rem;
+  font-weight: 650;
+}
+.my-submissions li > div span { color: #71817e; font-size: .78rem; }
+.submission-status {
+  flex: 0 0 auto;
+  border-radius: 999px;
+  padding: .3rem .6rem;
+  background: #fff3d8;
+  color: #79591d;
+  font-size: .75rem;
+  font-weight: 700;
+}
+.submission-status-published { background: #e4f4e9; color: #24613b; }
+.submission-status-rejected, .submission-status-hidden { background: #f8e9e7; color: #85443d; }
+@media (max-width: 600px) {
+  .my-submissions li { flex-direction: column; }
+}
