@@ -174,3 +174,41 @@
 @media (max-width: 600px) {
   .my-submissions li { flex-direction: column; }
 }
+
+
+/* Member-controlled personal safety settings */
+.member-safety-controls {
+  margin: 1.25rem 0;
+  padding: 1.1rem;
+  border: 1px solid #d8e5e2;
+  border-radius: 13px;
+  background: #f7fbfa;
+}
+.member-safety-controls h3 { margin: 0 0 .35rem; color: #155b59; }
+.member-safety-controls p { color: #647572; font-size: .86rem; line-height: 1.5; }
+.member-safety-controls ul { list-style: none; margin: .6rem 0 0; padding: 0; }
+.member-safety-controls li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: .75rem;
+  padding: .65rem 0;
+  border-top: 1px solid #e1ebe8;
+  font-size: .86rem;
+}
+.member-safety-controls button, .discussion-block-button {
+  border: 1px solid #9a5b52;
+  border-radius: 8px;
+  padding: .55rem .8rem;
+  background: #fff;
+  color: #87463f;
+  font: inherit;
+  font-weight: 650;
+  cursor: pointer;
+}
+.discussion-member-actions { margin-top: .75rem; }
+.member-safety-controls button:disabled, .discussion-block-button:disabled { opacity: .55; cursor: not-allowed; }
+@media (max-width: 600px) {
+  .member-safety-controls li { align-items: flex-start; flex-direction: column; }
+  .member-safety-controls button { width: 100%; }
+}
