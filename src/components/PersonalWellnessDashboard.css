@@ -48,3 +48,58 @@
 .wellness-mood-option:hover { border-color: #c9a64b; }
 .wellness-save-row button { background: linear-gradient(135deg, #075e60, #087477); }
 .wellness-affirmation { border: 1px solid #eadbb5; }
+
+
+/* Dashboard shortcuts: clear destinations with teal structure and gold details. */
+.dashboard-quick-actions {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: .75rem;
+  margin: 1.1rem 0 1.35rem;
+}
+.dashboard-action-card {
+  display: flex;
+  align-items: center;
+  gap: .65rem;
+  min-width: 0;
+  padding: .9rem;
+  border: 1px solid #dce8e4;
+  border-radius: 12px;
+  background: linear-gradient(145deg, #fff, #f5faf8);
+  color: #174b49;
+  text-decoration: none;
+  transition: border-color .18s ease, transform .18s ease, box-shadow .18s ease;
+}
+.dashboard-action-card:hover,
+.dashboard-action-card:focus-visible {
+  border-color: #c9a64b;
+  box-shadow: 0 5px 16px rgba(20, 75, 73, .09);
+  transform: translateY(-2px);
+}
+.dashboard-action-icon {
+  display: grid;
+  flex: 0 0 2.2rem;
+  width: 2.2rem;
+  height: 2.2rem;
+  place-items: center;
+  border-radius: 10px;
+  background: #e4f1ee;
+  color: #075e60;
+  font-size: 1.15rem;
+}
+.dashboard-action-card strong,
+.dashboard-action-card small { display: block; }
+.dashboard-action-card strong { font-size: .88rem; line-height: 1.25; }
+.dashboard-action-card small { margin-top: .2rem; color: #647572; font-size: .74rem; line-height: 1.3; }
+.dashboard-action-arrow { margin-left: auto; color: #a27b27; font-size: 1.15rem; }
+@media (max-width: 850px) {
+  .dashboard-quick-actions { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 420px) {
+  .dashboard-quick-actions { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dashboard-action-card { transition: none; }
+  .dashboard-action-card:hover,
+  .dashboard-action-card:focus-visible { transform: none; }
+}
