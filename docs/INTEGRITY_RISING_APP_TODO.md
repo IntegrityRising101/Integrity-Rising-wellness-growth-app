@@ -8,7 +8,7 @@ This checklist tracks work still required before the Integrity Rising / The Inte
 - [x] Create the Integrity Rising Supabase project. — **Completed: Nov 5, 2026 (owner-confirmed)**
 - [ ] Connect the project to the GitHub app configuration.
 - [ ] Add the Supabase project URL and public anon key to the app's deployment environment.
-- [ ] Apply database migrations in order: 001 schema, 002 moderation hardening, 003 member blocking. — **001 and 002 successful: Nov 5, 2026 (owner-confirmed); 003 still pending.**
+- [x] Apply database migrations in order: 001 schema, 002 moderation hardening, 003 member blocking. — **Completed: Nov 5, 2026 (owner-confirmed).**
 - [ ] Verify row-level security and test member-versus-moderator permissions.
 - [ ] Assign trusted moderators through a secure admin process; never expose service-role credentials in the app.
 - [ ] Configure Edge Function secrets: APP_ORIGIN, AI_API_URL, AI_API_KEY, and AI_MODEL.
@@ -44,12 +44,12 @@ This checklist tracks work still required before the Integrity Rising / The Inte
 
 **Build verification (Nov 5, 2026):** The latest quality-check workflow passed, including dependency installation, lint, and production build. The committed `package-lock.json` now contains `@supabase/supabase-js`. GitHub Pages deployment attempt 2 also completed successfully. Android and desktop user-journey testing remain open.
 
-**Supabase and secure AI backend (Nov 5, 2026):** The owner reports that the Supabase account and Integrity Rising project have been created, and migrations 001 and 002 ran successfully. Migration 003 is still pending. The project is not yet connected to the app, RLS has not been tested with separate accounts, and no AI function/provider is deployed. Do not connect member data or enable community posting until migration 003 is applied and access policies are tested.
+**Supabase and secure AI backend (Nov 5, 2026):** The owner reports that the Supabase account and Integrity Rising project have been created, and migrations 001, 002, and 003 ran successfully on Nov 5, 2026. The project is not yet connected to the app, RLS has not been tested with separate accounts, and no AI function/provider is deployed. Do not connect member data or enable community posting until access policies are tested with separate member accounts and a moderator account.
 
 
 ## Daily progress tracker
 
-### Thursday, November 5, 2026 — App reliability (Priority 1)
+### Thursday, November 5, 2026 — App reliability and database foundation
 
 **Completed today**
 - [x] Inspected the existing app configuration, package manifest, lockfile, Vite configuration, and launch checklist. — **Completed: Nov 5, 2026**
@@ -57,6 +57,10 @@ This checklist tracks work still required before the Integrity Rising / The Inte
 - [x] Added the `npm run check` script to run linting and the production build together. — **Completed: Nov 5, 2026**
 - [x] Updated this launch checklist to track completed work and remaining launch blockers. — **Completed: Nov 5, 2026**
 - [x] Investigated the GitHub Actions folder conflict and removed the empty `.github/workflows` path placeholder so workflow creation can be retried. — **Completed: Nov 5, 2026**
+
+**Also completed today — Supabase foundation (owner-confirmed)**
+- [x] Create the Supabase account and Integrity Rising project. — **Completed: Nov 5, 2026**
+- [x] Run migrations 001, 002, and 003 successfully. — **Completed: Nov 5, 2026**
 
 **Still in progress / next**
 - [x] Generate and verify a correct `package-lock.json` using npm in CI; do not hand-write dependency integrity data. — **Completed: Nov 5, 2026**
