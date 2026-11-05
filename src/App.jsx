@@ -5,6 +5,7 @@ import PersonalSafetyPlan from './components/PersonalSafetyPlan';
 import StateResourceDirectory from './components/StateResourceDirectory';
 import MentalHealthServices from './components/MentalHealthServices';
 import LocalSupportFinder from './components/LocalSupportFinder';
+import AIPrivacyNotice from './components/AIPrivacyNotice';
 import WellnessAI from './components/WellnessAI';
 import WellnessChat from './components/WellnessChat';
 import MoodTracker from './components/MoodTracker';
@@ -37,6 +38,7 @@ function App() {
 
         <MemberAccount />
         <PersonalWellnessDashboard />
+        <AIPrivacyNotice />
         <WellnessChat />
         <WellnessAI />
         <MoodTracker />
