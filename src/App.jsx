@@ -5,6 +5,7 @@ import WellnessAI from './components/WellnessAI';
 import WellnessChat from './components/WellnessChat';
 import MoodTracker from './components/MoodTracker';
 import WomensWellness from './components/WomensWellness';
+import CommunityDiscussions from './components/CommunityDiscussions';
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
         <WellnessAI />
         <MoodTracker />
         <WomensWellness />
+        <CommunityDiscussions />
 
         <section className="safety-section">
           <h2>My Safety Tools</h2>
