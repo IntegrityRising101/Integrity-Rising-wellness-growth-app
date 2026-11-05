@@ -9,6 +9,7 @@ import CommunityDiscussions from './components/CommunityDiscussions';
 import Academy from './components/Academy';
 import PersonalWellnessDashboard from './components/PersonalWellnessDashboard';
 import MemberAccount from './components/MemberAccount';
+import ModerationDashboard from './components/ModerationDashboard';
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
         <MoodTracker />
         <WomensWellness />
         <CommunityDiscussions />
+        <ModerationDashboard />
         <Academy />
 
         <section className="safety-section">
