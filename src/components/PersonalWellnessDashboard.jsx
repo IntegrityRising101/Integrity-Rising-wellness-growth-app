@@ -44,6 +44,29 @@ function PersonalWellnessDashboard() {
         <p>A gentle place to check in, choose an intention, and recognize small steps forward.</p>
       </div>
 
+      <div className="dashboard-quick-actions" aria-label="Dashboard shortcuts">
+        <a href="#wellness" className="dashboard-action-card">
+          <span className="dashboard-action-icon" aria-hidden="true">✦</span>
+          <span><strong>Wellness & AI</strong><small>Explore guided support</small></span>
+          <span className="dashboard-action-arrow" aria-hidden="true">→</span>
+        </a>
+        <a href="#community" className="dashboard-action-card">
+          <span className="dashboard-action-icon" aria-hidden="true">♡</span>
+          <span><strong>Community</strong><small>Connect with others</small></span>
+          <span className="dashboard-action-arrow" aria-hidden="true">→</span>
+        </a>
+        <a href="#academy" className="dashboard-action-card">
+          <span className="dashboard-action-icon" aria-hidden="true">▤</span>
+          <span><strong>Academy</strong><small>Learn at your pace</small></span>
+          <span className="dashboard-action-arrow" aria-hidden="true">→</span>
+        </a>
+        <a href="#safety" className="dashboard-action-card">
+          <span className="dashboard-action-icon" aria-hidden="true">⌂</span>
+          <span><strong>Safety & Support</strong><small>Find practical resources</small></span>
+          <span className="dashboard-action-arrow" aria-hidden="true">→</span>
+        </a>
+      </div>
+
       <form className="wellness-checkin-card" onSubmit={saveCheckIn}>
         <h3>How are you feeling right now?</h3>
         <p>There is no right or wrong answer. You can change your selection anytime.</p>
