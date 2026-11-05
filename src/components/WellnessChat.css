@@ -1,0 +1,6 @@
+.wellness-chat-safety { margin: 18px 0; padding: 16px 18px; border-left: 4px solid #c9a64b; border-radius: 10px; background: #fff8e8; color: #243536; line-height: 1.6; }
+.wellness-chat-safety p { margin: 8px 0 0; }
+.wellness-chat-safety strong { color: #075e60; }
+.wellness-chat-reply { padding: 16px 18px; margin-top: 18px; border: 1px solid #b8caca; border-radius: 11px; background: #f1f7f6; line-height: 1.6; }
+.wellness-chat-reply h3 { color: #075e60; }
+.wellness-chat-reply p:last-child { font-size: .92rem; }
