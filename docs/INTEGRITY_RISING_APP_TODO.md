@@ -4,11 +4,11 @@ This checklist tracks work still required before the Integrity Rising / The Inte
 
 ## Supabase setup and secure AI backend
 
-- [ ] Create or access the Supabase account.
-- [ ] Create the Integrity Rising Supabase project.
+- [x] Create/access the Supabase account using the owner's GitHub sign-in. — **Completed: Nov 5, 2026 (owner-confirmed)**
+- [x] Create the Integrity Rising Supabase project. — **Completed: Nov 5, 2026 (owner-confirmed)**
 - [ ] Connect the project to the GitHub app configuration.
 - [ ] Add the Supabase project URL and public anon key to the app's deployment environment.
-- [ ] Apply database migrations in order: 001 schema, 002 moderation hardening, 003 member blocking.
+- [ ] Apply database migrations in order: 001 schema, 002 moderation hardening, 003 member blocking. — **001 and 002 successful: Nov 5, 2026 (owner-confirmed); 003 still pending.**
 - [ ] Verify row-level security and test member-versus-moderator permissions.
 - [ ] Assign trusted moderators through a secure admin process; never expose service-role credentials in the app.
 - [ ] Configure Edge Function secrets: APP_ORIGIN, AI_API_URL, AI_API_KEY, and AI_MODEL.
@@ -44,7 +44,7 @@ This checklist tracks work still required before the Integrity Rising / The Inte
 
 **Build verification (Nov 5, 2026):** The latest quality-check workflow passed, including dependency installation, lint, and production build. The committed `package-lock.json` now contains `@supabase/supabase-js`. GitHub Pages deployment attempt 2 also completed successfully. Android and desktop user-journey testing remain open.
 
-**Supabase and secure AI backend:** The repository contains three reviewed migration files and an initial Edge Function scaffold. No live Supabase project, applied migrations, deployed AI function, or production AI provider has been confirmed. Do not enable member community/data storage until the database and RLS policies are applied and tested.
+**Supabase and secure AI backend (Nov 5, 2026):** The owner reports that the Supabase account and Integrity Rising project have been created, and migrations 001 and 002 ran successfully. Migration 003 is still pending. The project is not yet connected to the app, RLS has not been tested with separate accounts, and no AI function/provider is deployed. Do not connect member data or enable community posting until migration 003 is applied and access policies are tested.
 
 
 ## Daily progress tracker
@@ -59,11 +59,12 @@ This checklist tracks work still required before the Integrity Rising / The Inte
 - [x] Investigated the GitHub Actions folder conflict and removed the empty `.github/workflows` path placeholder so workflow creation can be retried. — **Completed: Nov 5, 2026**
 
 **Still in progress / next**
-- [ ] Generate a correct `package-lock.json` using npm; do not hand-write dependency integrity data.
+- [x] Generate and verify a correct `package-lock.json` using npm in CI; do not hand-write dependency integrity data. — **Completed: Nov 5, 2026**
 - [x] Create `.github/workflows/quality-checks.yml` to regenerate the lockfile in CI, install from it, run lint/build, and save the generated lockfile as an artifact. — **Created: Nov 5, 2026**
-- [ ] Confirm the workflow run succeeds and retrieve/review the generated lockfile artifact.
-- [ ] Run lint and production build; record actual results.
-- [ ] Continue the remaining Priority 1 reliability checks.
+- [x] Confirm the workflow run succeeds; artifact listing returned no downloadable artifact. — **Completed: Nov 5, 2026**
+- [x] Run lint and production build; record actual results. — **Passed: Nov 5, 2026**
+- [x] Verify the GitHub Pages deployment. — **Passed: Nov 5, 2026**
+- [ ] Test core app navigation and behavior on Android and desktop.
 
 **Daily record:** Progress is recorded by date. At the end of each work session, completed items will be checked off and unfinished items will remain open for the next day.
 
@@ -93,17 +94,17 @@ Progress is counted from verified checklist items—not estimates. A task only m
 
 **Target:** A clean install, automated quality checks, and a verified production build.
 
-<text>**Progress: 4 of 8 steps complete — 50%**</text>
+<text>**Progress: 7 of 8 steps complete — 88%**</text>
 
-`[████░░░░] 50%`
+`[███████░] 88%`
 
 - [x] Inspect app configuration and project files — completed Nov 5, 2026.
 - [x] Identify the package manifest / lockfile mismatch — completed Nov 5, 2026.
 - [x] Add the combined lint-and-build command — completed Nov 5, 2026.
 - [x] Clear the empty GitHub workflow-folder obstruction — completed Nov 5, 2026.
-- [ ] Regenerate and verify the dependency lockfile.
-- [ ] Add the automated GitHub Actions workflow.
-- [ ] Run lint and production build; fix any failures.
+- [x] Regenerate and verify the dependency lockfile — completed Nov 5, 2026.
+- [x] Add the automated GitHub Actions workflow — completed Nov 5, 2026.
+- [x] Run lint and production build; fix any failures — passed Nov 5, 2026.
 - [ ] Test core app navigation and behavior on Android and desktop.
 
 **Make this goal easier to reach**
@@ -122,8 +123,10 @@ Progress is counted from verified checklist items—not estimates. A task only m
 `[░░░░░░░░░░] Pending`
 
 **Reachable steps**
-- [ ] Confirm the Supabase project and connect app environment variables.
-- [ ] Apply migrations 001, 002, and 003 in order.
+- [x] Create the Supabase project — completed Nov 5, 2026 (owner-confirmed).
+- [ ] Apply migration 003; migrations 001 and 002 are owner-confirmed successful.
+- [ ] Connect app environment variables after database policies are fully applied and tested.
+- [ ] Apply migration 003; migrations 001 and 002 were successful on Nov 5, 2026 (owner-confirmed).
 - [ ] Test member and moderator access with separate test accounts.
 - [ ] Confirm sensitive records are private and not sent to AI.
 - [ ] Publish privacy, consent, and data-deletion information.
@@ -199,8 +202,8 @@ Progress is counted from verified checklist items—not estimates. A task only m
 - [x] Reviewed migrations 001–003, Supabase client configuration, AI privacy notice, and secure AI backend setup notes. — **Reviewed: Nov 5, 2026**
 
 **Priority 2 — still open**
-- [ ] Confirm the Supabase project exists and is controlled by the owner.
-- [ ] Apply migrations 001, 002, and 003 in order in a non-production/test project first.
+- [x] Create the Supabase account and project. — **Completed: Nov 5, 2026 (owner-confirmed)**
+- [ ] Apply migration 003; migrations 001 and 002 ran successfully. — **Updated: Nov 5, 2026 (owner-confirmed)**
 - [ ] Verify row-level security with separate member accounts, including owner-only wellness records and moderator-only report access.
 - [ ] Confirm no service-role key or AI provider secret is exposed in frontend code, Git history, or public configuration.
 - [ ] Keep community posting disabled until RLS and moderator workflows are tested.
