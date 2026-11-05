@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import './WellnessChat.css';
 
 const guidance = {
   stress: {
