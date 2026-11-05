@@ -131,16 +131,15 @@ function CommunityDiscussions() {
         title: title.trim(),
         body: body.trim()
       })
-      .select('id, user_id, category, title, body, created_at')
+      .select('id, user_id, category, title, body, status, created_at')
       .single();
 
     if (error) {
-      setNotice('Your post could not be published. Please try again.');
+      setNotice('Your post could not be submitted. Please try again.');
     } else {
-      setPosts(current => [data, ...current]);
       setTitle('');
       setBody('');
-      setNotice('Your post has been shared with signed-in community members.');
+      setNotice('Your post was submitted for moderator review. It will appear in the community after approval.');
     }
     setBusy(false);
   }
@@ -154,17 +153,14 @@ function CommunityDiscussions() {
     const { data, error } = await supabase
       .from('community_comments')
       .insert({ post_id: postId, user_id: user.id, body: message })
-      .select('id, post_id, user_id, body, created_at')
+      .select('id, post_id, user_id, body, status, created_at')
       .single();
 
     if (error) {
-      setNotice('Your reply could not be added. Please try again.');
+      setNotice('Your reply could not be submitted. Please try again.');
     } else {
-      setComments(current => ({
-        ...current,
-        [postId]: [...(current[postId] || []), data]
-      }));
       setReplyDrafts(current => ({ ...current, [postId]: '' }));
+      setNotice('Your reply was submitted for moderator review. It will appear after approval.');
     }
     setBusy(false);
   }
