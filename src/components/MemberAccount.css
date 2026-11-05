@@ -31,3 +31,7 @@
 .account-status { padding: .8rem; background: #f1f7f6; border-radius: 8px; line-height: 1.5; }
 .account-signed-in { padding: 1rem; background: #f1f7f6; border-radius: 12px; }
 @media (max-width: 560px) { .member-account { width: min(100% - 1rem, 900px); padding: 1rem; } }
+
+/* Brand polish: consistent teal structure with warm gold accents. */
+.member-account { border-top: 4px solid #c9a64b; }
+.account-setup-notice, .account-signed-in { border: 1px solid #dce7e4; }
