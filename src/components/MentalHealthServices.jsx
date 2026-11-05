@@ -27,21 +27,21 @@ const services = [
     category: 'Peer and family support',
     name: 'NAMI – Find Your Local NAMI',
     description: 'Connect with local NAMI organizations for education, peer support, and family support resources.',
-    url: 'https://www.nami.org/findsupport/',
+    url: 'https://www.nami.org/find-your-local-nami/',
     source: 'National Alliance on Mental Illness'
   },
   {
     category: 'Children, youth, and families',
     name: 'AACAP Child and Adolescent Psychiatrist Finder',
     description: 'Find child and adolescent psychiatry resources and learn about mental health care for young people.',
-    url: 'https://www.aacap.org/',
+    url: 'https://mobile.aacap.org/AACAP/Families_and_Youth/Resources/CAP_Finder.aspx',
     source: 'American Academy of Child and Adolescent Psychiatry'
   },
   {
     category: 'Psychiatry and medication',
     name: 'American Psychiatric Association – Find a Psychiatrist',
     description: 'Use the professional association’s psychiatrist-finder resource to look for psychiatric care.',
-    url: 'https://www.psychiatry.org/',
+    url: 'https://www.psychiatry.org/psychiatrists/search-directories-databases',
     source: 'American Psychiatric Association'
   },
   {
