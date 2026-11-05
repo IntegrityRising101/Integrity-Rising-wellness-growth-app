@@ -32,7 +32,8 @@ This checklist tracks work still required before the Integrity Rising / The Inte
 - [ ] Reconcile `package-lock.json` with `package.json`; the current lockfile does not contain `@supabase/supabase-js` even though it is declared as an app dependency.
 - [x] Add the combined `npm run check` script (lint + production build) to `package.json`.
 - [ ] Run `npm run check` and resolve all errors.
-- [ ] Add and verify a GitHub Actions workflow for automated checks. An empty `.github/workflows` path placeholder was removed on November 5 so the workflow file can be retried.
+- [x] Create the GitHub Actions quality-check workflow for automated checks. — **Created: Nov 5, 2026**
+- [ ] Confirm the workflow runs successfully and review its regenerated lockfile artifact.
 - [ ] Test the app on Android mobile and desktop.
 - [ ] Review accessibility, navigation, empty states, and error messages.
 - [ ] Publish terms of use, privacy policy, community guidelines, and support/contact information.
@@ -58,7 +59,8 @@ This checklist tracks work still required before the Integrity Rising / The Inte
 
 **Still in progress / next**
 - [ ] Generate a correct `package-lock.json` using npm; do not hand-write dependency integrity data.
-- [ ] Create the GitHub Actions quality-check workflow and confirm it runs.
+- [x] Create `.github/workflows/quality-checks.yml` to regenerate the lockfile in CI, install from it, run lint/build, and save the generated lockfile as an artifact. — **Created: Nov 5, 2026**
+- [ ] Confirm the workflow run succeeds and retrieve/review the generated lockfile artifact.
 - [ ] Run lint and production build; record actual results.
 - [ ] Continue the remaining Priority 1 reliability checks.
 
