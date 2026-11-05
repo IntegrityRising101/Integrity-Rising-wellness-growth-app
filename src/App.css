@@ -182,3 +182,110 @@
     border-right-color: var(--border);
   }
 }
+
+
+/* Integrity Rising wellness check-in */
+.wellness-ai {
+  max-width: 900px;
+  margin: 32px auto;
+  padding: 28px;
+  background: #ffffff;
+  border: 1px solid #d9e2e2;
+  border-radius: 18px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+}
+
+.wellness-ai-heading {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.wellness-kicker {
+  color: #a17c25;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.wellness-ai h2,
+.wellness-ai h3 {
+  color: #075e60;
+}
+
+.wellness-ai h3 {
+  margin-top: 20px;
+}
+
+.mood-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 16px 0 22px;
+}
+
+.mood-button,
+.reset-checkin {
+  border: 1px solid #075e60;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #075e60;
+  padding: 11px 17px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.mood-button.selected,
+.mood-button:hover,
+.reset-checkin:hover {
+  background: #075e60;
+  color: #ffffff;
+}
+
+.mood-button:focus-visible,
+.reset-checkin:focus-visible {
+  outline: 3px solid #c9a64b;
+  outline-offset: 3px;
+}
+
+.wellness-suggestion {
+  background: #f1f7f6;
+  border-left: 4px solid #c9a64b;
+  border-radius: 10px;
+  padding: 18px 22px;
+  margin: 20px 0;
+}
+
+.wellness-suggestion li {
+  margin: 10px 0;
+  line-height: 1.55;
+}
+
+.wellness-disclaimer {
+  color: #4b5558;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  margin-top: 24px;
+}
+
+.wellness-help {
+  background: #fff8e8;
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin-top: 18px;
+  line-height: 1.6;
+}
+
+.wellness-help h3 {
+  margin-top: 0;
+}
+
+@media (max-width: 600px) {
+  .wellness-ai {
+    padding: 20px 16px;
+  }
+
+  .mood-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+}
