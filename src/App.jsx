@@ -8,6 +8,7 @@ import WomensWellness from './components/WomensWellness';
 import CommunityDiscussions from './components/CommunityDiscussions';
 import Academy from './components/Academy';
 import PersonalWellnessDashboard from './components/PersonalWellnessDashboard';
+import MemberAccount from './components/MemberAccount';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
           </p>
         </section>
 
+        <MemberAccount />
         <PersonalWellnessDashboard />
         <WellnessChat />
         <WellnessAI />
