@@ -16,6 +16,7 @@ import Academy from './components/Academy';
 import PersonalWellnessDashboard from './components/PersonalWellnessDashboard';
 import MemberAccount from './components/MemberAccount';
 import ModerationDashboard from './components/ModerationDashboard';
+import AppDirectory from './components/AppDirectory';
 
 const navigation = [
   { label: 'My Dashboard', target: 'dashboard' },
@@ -49,6 +50,8 @@ function App() {
           <h2>Your next step starts here.</h2>
           <p>Build healthy habits, find practical support, learn new skills, and connect with a community rooted in respect and accountability.</p>
         </section>
+
+        <AppDirectory />
 
         <section id="dashboard" className="app-area">
           <MemberAccount />
