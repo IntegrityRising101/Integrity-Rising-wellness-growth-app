@@ -13,6 +13,7 @@ import WomensWellness from './components/WomensWellness';
 import CommunityDiscussions from './components/CommunityDiscussions';
 import Academy from './components/Academy';
 import PersonalWellnessDashboard from './components/PersonalWellnessDashboard';
+import GoalCenter from './components/GoalCenter';
 import MemberAccount from './components/MemberAccount';
 import ModerationDashboard from './components/ModerationDashboard';
 import AppDirectory from './components/AppDirectory';
@@ -55,6 +56,7 @@ function App() {
 
         <section id="dashboard" className="app-area">
           <MemberAccount />
+          <GoalCenter />
           <PersonalWellnessDashboard />
         </section>
 
