@@ -80,3 +80,107 @@ This section is for improvements beyond the launch blockers: ideas, enhancements
 - If work spans multiple days, record the date it was truly finished—not the date it was started.
 - Keep unfinished items unchecked and carry them forward.
 - Record worthwhile ideas in **Room to grow** so they are not lost or confused with launch blockers.
+
+
+## Goals and progress dashboard
+
+Progress is counted from verified checklist items—not estimates. A task only moves to complete after the work is done and checked. Percentages are recalculated as tasks are completed or the scope changes.
+
+### Goal 1 — Make the app reliable and buildable
+
+**Target:** A clean install, automated quality checks, and a verified production build.
+
+<text>**Progress: 4 of 8 steps complete — 50%**</text>
+
+`[████░░░░] 50%`
+
+- [x] Inspect app configuration and project files — completed Nov 5, 2026.
+- [x] Identify the package manifest / lockfile mismatch — completed Nov 5, 2026.
+- [x] Add the combined lint-and-build command — completed Nov 5, 2026.
+- [x] Clear the empty GitHub workflow-folder obstruction — completed Nov 5, 2026.
+- [ ] Regenerate and verify the dependency lockfile.
+- [ ] Add the automated GitHub Actions workflow.
+- [ ] Run lint and production build; fix any failures.
+- [ ] Test core app navigation and behavior on Android and desktop.
+
+**Make this goal easier to reach**
+1. Work on one blocker at a time; do not mix app features with build repairs.
+2. Generate the lockfile with npm in a real Node/npm environment rather than editing dependency hashes by hand.
+3. Let GitHub Actions run the same checks automatically on each update.
+4. Test one user journey at a time: open app → navigate → use a feature → return home.
+5. Record errors with the exact file and message, then fix and retest.
+
+### Goal 2 — Make member accounts and data safe
+
+**Target:** Authentication, database rules, privacy controls, and moderator permissions are configured and tested before member data is stored.
+
+<text>**Progress: Not yet scored — verification steps remain open.**</text>
+
+`[░░░░░░░░░░] Pending`
+
+**Reachable steps**
+- [ ] Confirm the Supabase project and connect app environment variables.
+- [ ] Apply migrations 001, 002, and 003 in order.
+- [ ] Test member and moderator access with separate test accounts.
+- [ ] Confirm sensitive records are private and not sent to AI.
+- [ ] Publish privacy, consent, and data-deletion information.
+
+**Make this goal easier to reach:** Complete the database setup first, then test one permission scenario at a time. Never put service-role keys in the browser or repository.
+
+### Goal 3 — Make wellness and AI features honest, useful, and safe
+
+**Target:** Members understand which tools are prototypes, which are live, what data is shared, and where to get human help.
+
+<text>**Progress: Not yet scored — verification steps remain open.**</text>
+
+`[░░░░░░░░░░] Pending`
+
+**Reachable steps**
+- [ ] Review the current rule-based wellness tools and their limits.
+- [ ] Review and test the secure AI endpoint before deployment.
+- [ ] Add provider secrets only in the secure server environment.
+- [ ] Add rate limits, cost controls, monitoring, and failure handling.
+- [ ] Test crisis guidance and clearly direct emergencies to human services.
+
+**Make this goal easier to reach:** Launch the useful non-AI wellness tools first. Add live AI only after privacy, consent, security, and crisis safeguards are ready.
+
+### Goal 4 — Verify safety resources and moderation
+
+**Target:** Support links work, safety limitations are clear, and community reports and moderation are tested before public use.
+
+<text>**Progress: Not yet scored — verification steps remain open.**</text>
+
+`[░░░░░░░░░░] Pending`
+
+**Reachable steps**
+- [ ] Verify state resource links in manageable batches.
+- [ ] Test local support finder links.
+- [ ] Test reporting, blocking, review, and removal with test accounts.
+- [ ] Review safety disclaimers and quick-exit limitations.
+
+**Make this goal easier to reach:** Verify a small group of states and features per work session, record the date and source checked, and keep unverified resources clearly marked.
+
+### Goal 5 — Prepare a controlled public launch
+
+**Target:** A polished, accessible app with clear policies, tested user journeys, and a small feedback round before wider promotion.
+
+<text>**Progress: Not yet scored — verification steps remain open.**</text>
+
+`[░░░░░░░░░░] Pending`
+
+**Reachable steps**
+- [ ] Complete mobile and desktop testing.
+- [ ] Review accessibility and navigation.
+- [ ] Publish terms, privacy policy, community guidelines, and contact details.
+- [ ] Complete final security review.
+- [ ] Invite a small trusted test group and resolve priority feedback.
+
+**Make this goal easier to reach:** Use a limited pilot before public promotion. Ask testers to complete a few specific tasks and report what was confusing.
+
+### How we'll use this dashboard
+- Update progress at the end of each work session.
+- Add the actual completion date to every checked-off item.
+- Keep pending goals unscored until their steps are defined and verified.
+- Break any task that feels too large into smaller steps that can be finished in one session.
+- Keep new ideas in **Room to grow** until we decide they are part of a goal.
+- Progress bars show checklist completion, not a guarantee that the app is launch-ready.
