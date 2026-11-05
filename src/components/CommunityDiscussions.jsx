@@ -24,6 +24,7 @@ function CommunityDiscussions() {
   const [posts, setPosts] = useState([]);
   const [comments, setComments] = useState({});
   const [mySubmissions, setMySubmissions] = useState([]);
+  const [blockedUsers, setBlockedUsers] = useState([]);
   const [category, setCategory] = useState(categories[0]);
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
@@ -81,6 +82,17 @@ function CommunityDiscussions() {
         setMySubmissions(ownItems);
       }
 
+      const { data: blockData, error: blockError } = await supabase
+        .from('user_blocks')
+        .select('blocked_id')
+        .eq('blocker_id', currentUser.id);
+      if (!active) return;
+      if (blockError) {
+        setNotice('Your safety settings could not be loaded. Please refresh before using community controls.');
+      }
+      const blockedIds = (blockData || []).map(item => item.blocked_id);
+      setBlockedUsers(blockedIds);
+
       const { data: postData, error: postError } = await supabase
         .from('community_posts')
         .select('id, user_id, category, title, body, created_at')
@@ -95,7 +107,7 @@ function CommunityDiscussions() {
         return;
       }
 
-      const visiblePosts = postData || [];
+      const visiblePosts = (postData || []).filter(post => !blockedIds.includes(post.user_id));
       setPosts(visiblePosts);
 
       if (visiblePosts.length) {
@@ -109,7 +121,7 @@ function CommunityDiscussions() {
         if (!active) return;
         if (!commentError) {
           const grouped = {};
-          (commentData || []).forEach(comment => {
+          (commentData || []).filter(comment => !blockedIds.includes(comment.user_id)).forEach(comment => {
             grouped[comment.post_id] = [...(grouped[comment.post_id] || []), comment];
           });
           setComments(grouped);
@@ -192,6 +204,34 @@ function CommunityDiscussions() {
     setBusy(false);
   }
 
+  async function blockMember(memberId) {
+    if (!user || !memberId || memberId === user.id || busy || blockedUsers.includes(memberId)) return;
+    setBusy(true);
+    setNotice('');
+    const { error } = await supabase.from('user_blocks').insert({ blocker_id: user.id, blocked_id: memberId });
+    if (error) {
+      setNotice('That member could not be blocked. Please try again.');
+    } else {
+      setBlockedUsers(current => [...current, memberId]);
+      setPosts(current => current.filter(post => post.user_id !== memberId));
+      setComments(current => Object.fromEntries(Object.entries(current).map(([postId, items]) => [postId, items.filter(item => item.user_id !== memberId)])));
+      setNotice('Member blocked. Their community posts and replies are now hidden from your view.');
+    }
+    setBusy(false);
+  }
+
+  async function unblockMember(memberId) {
+    if (!user || busy) return;
+    setBusy(true);
+    const { error } = await supabase.from('user_blocks').delete().eq('blocker_id', user.id).eq('blocked_id', memberId);
+    if (error) setNotice('That member could not be unblocked. Please try again.');
+    else {
+      setBlockedUsers(current => current.filter(id => id !== memberId));
+      setNotice('Member unblocked. Refresh the community to see any available conversations.');
+    }
+    setBusy(false);
+  }
+
   async function reportPost(postId) {
     const reason = reportChoices[postId] || 'other';
     if (!user || busy) return;
@@ -261,6 +301,23 @@ function CommunityDiscussions() {
             </div>
           </form>
 
+          <section className="member-safety-controls" aria-labelledby="member-safety-title">
+            <div>
+              <h3 id="member-safety-title">My safety controls</h3>
+              <p>Blocked members’ posts and replies are hidden from your community view. Blocking does not notify the other member.</p>
+            </div>
+            {blockedUsers.length === 0 ? <p>You have not blocked any members.</p> : (
+              <ul>
+                {blockedUsers.map(memberId => (
+                  <li key={memberId}>
+                    <span>Blocked member · {memberId.slice(0, 8)}…</span>
+                    <button type="button" disabled={busy} onClick={() => unblockMember(memberId)}>Unblock</button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
+
           <section className="my-submissions" aria-labelledby="my-submissions-title">
             <div className="discussion-feed-heading">
               <h3 id="my-submissions-title">My submissions</h3>
@@ -329,6 +386,14 @@ function CommunityDiscussions() {
                     <button type="button" disabled={busy || !(replyDrafts[post.id] || '').trim()} onClick={() => addReply(post.id)}>Reply</button>
                   </div>
                 </div>
+
+                {post.user_id !== user.id && (
+                  <div className="discussion-member-actions">
+                    <button type="button" className="discussion-block-button" disabled={busy || blockedUsers.includes(post.user_id)} onClick={() => blockMember(post.user_id)}>
+                      {blockedUsers.includes(post.user_id) ? 'Member blocked' : 'Block member'}
+                    </button>
+                  </div>
+                )}
 
                 {post.user_id !== user.id && (
                   <div className="discussion-report">
