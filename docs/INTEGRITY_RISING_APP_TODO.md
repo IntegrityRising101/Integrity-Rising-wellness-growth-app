@@ -29,12 +29,16 @@ This checklist tracks work still required before the Integrity Rising / The Inte
 
 ## Final launch checks
 
-- [ ] Run the production build and resolve all build errors.
+- [ ] Reconcile `package-lock.json` with `package.json`; the current lockfile does not contain `@supabase/supabase-js` even though it is declared as an app dependency.
+- [ ] Run `npm run check` (lint + production build) and resolve all errors.
+- [ ] Add a GitHub Actions workflow for automated checks; creating `.github/workflows/quality-checks.yml` is currently blocked by a GitHub path conflict that must be investigated.
 - [ ] Test the app on Android mobile and desktop.
 - [ ] Review accessibility, navigation, empty states, and error messages.
 - [ ] Publish terms of use, privacy policy, community guidelines, and support/contact information.
 - [ ] Complete a final security and launch-readiness review before inviting the public.
 
 ## Current status
+
+**Build verification:** A combined `npm run check` script has been added to `package.json`. The production build has not yet been executed. A package-lock mismatch was identified and must be corrected before relying on clean CI installs.
 
 **Supabase and secure AI backend:** Not configured or deployed yet. The repository contains an initial Edge Function scaffold and setup documentation only. No live AI provider connection or production database is confirmed.
