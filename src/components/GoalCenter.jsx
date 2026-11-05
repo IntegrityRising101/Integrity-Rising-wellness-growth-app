@@ -2,7 +2,21 @@ import { useEffect, useMemo, useState } from 'react';
 import './GoalCenter.css';
 
 const STORAGE_KEY = 'integrity-rising-goal-center-v1';
-const today = () => new Date().toISOString().slice(0, 10);
+function today() {
+  const date = new Date();
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return year + '-' + month + '-' + day;
+}
+
+function getReachabilityTip(goal, tasks, taskDone) {
+  if (goal.done) return 'You completed this goal. Take a moment to recognize the effort it took to get here.';
+  if (goal.targetDate && goal.targetDate < today()) return 'Your target date has passed. Choose a new realistic date and adjust the next step—changing the plan is progress, not failure.';
+  if (tasks.length === 0) return 'Make this goal easier: add one action you can finish in about 10–15 minutes.';
+  if (taskDone === tasks.length) return 'All action steps are complete. Review your goal and mark it complete if you have reached it.';
+  return 'Focus on the next unchecked action. Keep it small enough to complete in about 10–15 minutes.';
+}
 
 function readGoals() {
   try {
@@ -32,8 +46,9 @@ function GoalCenter() {
   const allTasks = goals.flatMap(goal => (goal.tasks || []).map(task => ({ ...task, goalTitle: goal.title })));
   const completedTasks = allTasks.filter(task => task.done).length;
   const weekStart = new Date();
+  weekStart.setHours(12, 0, 0, 0);
   weekStart.setDate(weekStart.getDate() - 6);
-  const weekStartKey = weekStart.toISOString().slice(0, 10);
+  const weekStartKey = weekStart.getFullYear() + '-' + String(weekStart.getMonth() + 1).padStart(2, '0') + '-' + String(weekStart.getDate()).padStart(2, '0');
   const weeklyCompleted = allTasks.filter(task => task.done && task.completedAt >= weekStartKey && task.completedAt <= today()).length;
   const overallProgress = allTasks.length
     ? Math.round((completedTasks / allTasks.length) * 100)
@@ -142,7 +157,7 @@ function GoalCenter() {
                   <button type="submit">Add step</button>
                 </form>
               </div>
-              {!goal.done && <p className="goal-growth-tip">Reachability tip: choose actions that take 10–15 minutes or less. You can add more steps as you grow.</p>}
+              <p className="goal-growth-tip">Reachability tip: {getReachabilityTip(goal, tasks, taskDone)}</p>
             </article>
           );
         })}
