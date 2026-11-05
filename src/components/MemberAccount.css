@@ -1,0 +1,33 @@
+.member-account {
+  width: min(100% - 2rem, 900px);
+  margin: 2rem auto;
+  padding: clamp(1.2rem, 3vw, 2rem);
+  box-sizing: border-box;
+  color: #263638;
+  background: #fff;
+  border: 1px solid #d6e2e1;
+  border-radius: 18px;
+  box-shadow: 0 4px 14px rgba(0,0,0,.06);
+}
+.member-account h2 { margin: .35rem 0 1rem; color: #075e60; }
+.member-account-kicker { color: #96701f; font-size: .78rem; font-weight: 700; letter-spacing: .12em; }
+.account-setup-notice { padding: 1rem; border-radius: 12px; background: #f1f7f6; line-height: 1.6; }
+.account-setup-notice h3 { margin-top: 0; color: #075e60; }
+.account-mode-switch { display: flex; gap: .6rem; margin: 1rem 0; flex-wrap: wrap; }
+.account-mode-switch button, .member-account-form button, .account-signed-in button {
+  border: 1px solid #075e60; border-radius: 999px; padding: .7rem 1rem;
+  background: #fff; color: #075e60; font: inherit; cursor: pointer;
+}
+.account-mode-switch button[aria-pressed="true"], .member-account-form button, .account-signed-in button {
+  background: #075e60; color: #fff;
+}
+.member-account-form { display: grid; gap: .6rem; max-width: 480px; }
+.member-account-form label { margin-top: .5rem; color: #075e60; font-weight: 700; }
+.member-account-form input { width: 100%; box-sizing: border-box; padding: .8rem; border: 1px solid #b8caca; border-radius: 9px; font: inherit; }
+.member-account-form input:focus-visible, .member-account button:focus-visible { outline: 3px solid #c9a64b; outline-offset: 3px; }
+.member-account-form button { margin-top: .5rem; }
+.member-account-form button:disabled { opacity: .6; cursor: wait; }
+.account-password-hint, .account-privacy-note { color: #536164; font-size: .9rem; line-height: 1.55; }
+.account-status { padding: .8rem; background: #f1f7f6; border-radius: 8px; line-height: 1.5; }
+.account-signed-in { padding: 1rem; background: #f1f7f6; border-radius: 12px; }
+@media (max-width: 560px) { .member-account { width: min(100% - 1rem, 900px); padding: 1rem; } }
