@@ -1,0 +1,78 @@
+.wellness-ai {
+  width: min(100% - 2rem, 900px);
+  margin: 2rem auto;
+  padding: clamp(1.2rem, 3vw, 2rem);
+  color: #f4f7f8;
+  background: #142b31;
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 20px;
+  box-sizing: border-box;
+}
+.wellness-ai-heading { margin-bottom: 1.5rem; }
+.wellness-ai-heading h2 { margin: .35rem 0; color: #fff; }
+.wellness-ai-heading p, .wellness-ai-hint { color: #d0dddf; line-height: 1.6; }
+.wellness-ai-panel {
+  margin-top: 1.2rem;
+  padding: 1.2rem;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 14px;
+}
+.wellness-ai-panel h3, .wellness-ai-crisis h3 { margin-top: 0; color: #fff; }
+.wellness-ai-moods, .wellness-ai-tools { display: flex; flex-wrap: wrap; gap: .65rem; margin-top: 1rem; }
+.wellness-ai-choice, .wellness-ai-tool {
+  border: 1px solid #7ba6a8;
+  border-radius: 999px;
+  padding: .65rem 1rem;
+  color: #f4f7f8;
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+}
+.wellness-ai-choice:hover, .wellness-ai-tool:hover,
+.wellness-ai-choice.selected, .wellness-ai-tool.selected {
+  color: #10282d;
+  background: #b8ded7;
+  border-color: #b8ded7;
+}
+.wellness-ai-response {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: rgba(0,0,0,.16);
+  border-left: 4px solid #b8ded7;
+  border-radius: 8px;
+  line-height: 1.65;
+}
+.wellness-ai-response h4 { margin: 0 0 .5rem; color: #fff; }
+.wellness-ai-response li { margin: .45rem 0; padding-left: .2rem; }
+.wellness-ai-note, .wellness-ai-encouragement { color: #d5e8e4; }
+.wellness-ai-text-button {
+  border: 0;
+  padding: .5rem 0;
+  color: #b8ded7;
+  background: transparent;
+  text-decoration: underline;
+  cursor: pointer;
+  font: inherit;
+}
+.wellness-ai-crisis {
+  margin-top: 1.3rem;
+  padding: 1.2rem;
+  color: #fff;
+  background: #3a2928;
+  border: 1px solid #a66f68;
+  border-radius: 14px;
+  line-height: 1.6;
+}
+.wellness-ai-crisis p { margin: .65rem 0; }
+.wellness-ai-disclaimer {
+  margin: 1.2rem 0 0;
+  color: #d0dddf;
+  font-size: .9rem;
+  line-height: 1.6;
+}
+@media (max-width: 560px) {
+  .wellness-ai { width: min(100% - 1rem, 900px); padding: 1rem; }
+  .wellness-ai-panel, .wellness-ai-crisis { padding: 1rem; }
+  .wellness-ai-choice, .wellness-ai-tool { flex: 1 1 auto; }
+}
