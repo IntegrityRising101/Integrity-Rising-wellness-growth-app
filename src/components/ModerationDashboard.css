@@ -45,3 +45,21 @@
   .moderation-actions { align-items: stretch; flex-direction: column; }
   .moderation-actions button { width: 100%; }
 }
+
+
+.moderation-reports-queue {
+  padding-top: 1rem;
+  border-top: 1px solid #e4dfd1;
+}
+.moderation-report-warning {
+  padding: .75rem .9rem;
+  border-left: 3px solid #b88a3b;
+  background: #fbf6e9;
+  color: #5d523d;
+  font-size: .85rem;
+  line-height: 1.5;
+}
+.moderation-report-target, .moderation-report-current {
+  color: #71807b;
+  font-size: .78rem;
+}
