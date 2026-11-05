@@ -29,11 +29,12 @@ This checklist tracks work still required before the Integrity Rising / The Inte
 
 ## Final launch checks
 
-- [ ] Reconcile `package-lock.json` with `package.json`; the current lockfile does not contain `@supabase/supabase-js` even though it is declared as an app dependency.
+- [x] Reconcile `package-lock.json` with `package.json`; verified `@supabase/supabase-js` is present in the committed lockfile. — **Completed: Nov 5, 2026**
 - [x] Add the combined `npm run check` script (lint + production build) to `package.json`.
-- [ ] Run `npm run check` and resolve all errors.
+- [x] Run `npm run check` in GitHub Actions; lint and production build passed. — **Completed: Nov 5, 2026**
 - [x] Create the GitHub Actions quality-check workflow for automated checks. — **Created: Nov 5, 2026**
-- [ ] Confirm the workflow runs successfully and review its regenerated lockfile artifact.
+- [x] Confirm the quality-check workflow succeeds and the lockfile synchronization workflow completes successfully. — **Completed: Nov 5, 2026**
+- [ ] Inspect/download the generated lockfile artifact if one is produced; artifact listing returned no downloadable artifact.
 - [ ] Test the app on Android mobile and desktop.
 - [ ] Review accessibility, navigation, empty states, and error messages.
 - [ ] Publish terms of use, privacy policy, community guidelines, and support/contact information.
@@ -41,9 +42,9 @@ This checklist tracks work still required before the Integrity Rising / The Inte
 
 ## Current status
 
-**Build verification:** A combined `npm run check` script has been added to `package.json`. The production build has not yet been executed. A package-lock mismatch was identified and must be corrected before relying on clean CI installs.
+**Build verification (Nov 5, 2026):** The latest quality-check workflow passed, including dependency installation, lint, and production build. The committed `package-lock.json` now contains `@supabase/supabase-js`. GitHub Pages deployment attempt 2 also completed successfully. Android and desktop user-journey testing remain open.
 
-**Supabase and secure AI backend:** Not configured or deployed yet. The repository contains an initial Edge Function scaffold and setup documentation only. No live AI provider connection or production database is confirmed.
+**Supabase and secure AI backend:** The repository contains three reviewed migration files and an initial Edge Function scaffold. No live Supabase project, applied migrations, deployed AI function, or production AI provider has been confirmed. Do not enable member community/data storage until the database and RLS policies are applied and tested.
 
 
 ## Daily progress tracker
@@ -186,3 +187,27 @@ Progress is counted from verified checklist items—not estimates. A task only m
 - Break any task that feels too large into smaller steps that can be finished in one session.
 - Keep new ideas in **Room to grow** until we decide they are part of a goal.
 - Progress bars show checklist completion, not a guarantee that the app is launch-ready.
+
+
+### Thursday, November 5, 2026 — Priority 1 reliability verified; Priority 2 privacy and safety started
+
+**Completed today**
+- [x] Confirmed the latest quality-check run passed, including npm install, lint, and production build. — **Completed: Nov 5, 2026**
+- [x] Confirmed the lockfile synchronization workflow completed successfully. — **Completed: Nov 5, 2026**
+- [x] Verified the committed package lockfile contains `@supabase/supabase-js`. — **Completed: Nov 5, 2026**
+- [x] Confirmed GitHub Pages deployment attempt 2 completed successfully. — **Completed: Nov 5, 2026**
+- [x] Reviewed migrations 001–003, Supabase client configuration, AI privacy notice, and secure AI backend setup notes. — **Reviewed: Nov 5, 2026**
+
+**Priority 2 — still open**
+- [ ] Confirm the Supabase project exists and is controlled by the owner.
+- [ ] Apply migrations 001, 002, and 003 in order in a non-production/test project first.
+- [ ] Verify row-level security with separate member accounts, including owner-only wellness records and moderator-only report access.
+- [ ] Confirm no service-role key or AI provider secret is exposed in frontend code, Git history, or public configuration.
+- [ ] Keep community posting disabled until RLS and moderator workflows are tested.
+- [ ] Complete privacy policy, consent, retention, and deletion review before collecting sensitive member data or enabling live AI.
+
+**Important security finding**
+- Migration 001 creates owner-only policies for mood, journal, and women's wellness records. Migration 002 changes new community posts and comments to pending moderator review and adds a moderator role table with no client-facing assignment policy. Migration 003 adds block-aware read policies.
+- These SQL files being present in GitHub does **not** mean they have been applied to a Supabase database. Database setup and permission testing remain launch blockers.
+
+**Daily record:** Priority 1 CI/build/deployment verification is complete. Priority 2 is active; no production database or live AI service is claimed as configured.
