@@ -9,7 +9,6 @@ import AIPrivacyNotice from './components/AIPrivacyNotice';
 import AIHub from './components/AIHub';
 import WellnessAI from './components/WellnessAI';
 import WellnessChat from './components/WellnessChat';
-import MoodTracker from './components/MoodTracker';
 import WomensWellness from './components/WomensWellness';
 import CommunityDiscussions from './components/CommunityDiscussions';
 import Academy from './components/Academy';
@@ -57,7 +56,6 @@ function App() {
         <section id="dashboard" className="app-area">
           <MemberAccount />
           <PersonalWellnessDashboard />
-          <MoodTracker />
         </section>
 
         <section id="wellness" className="app-area">
