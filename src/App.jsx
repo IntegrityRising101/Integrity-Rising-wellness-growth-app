@@ -34,6 +34,7 @@ function App() {
       <header className="app-header" id="top">
         <p className="brand-eyebrow">THE INTEGRITY MOVEMENT</p>
         <h1>Integrity Rising</h1>
+        <p className="brand-app-name">THE WELLNESS &amp; GROWTH APP</p>
         <p className="brand-slogan">United by Truth, Driven by Purpose</p>
         <p className="brand-welcome">A supportive place to learn, grow, heal, and rise — at your own pace.</p>
       </header>
