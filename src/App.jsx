@@ -7,6 +7,7 @@ import MoodTracker from './components/MoodTracker';
 import WomensWellness from './components/WomensWellness';
 import CommunityDiscussions from './components/CommunityDiscussions';
 import Academy from './components/Academy';
+import PersonalWellnessDashboard from './components/PersonalWellnessDashboard';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           </p>
         </section>
 
+        <PersonalWellnessDashboard />
         <WellnessChat />
         <WellnessAI />
         <MoodTracker />
