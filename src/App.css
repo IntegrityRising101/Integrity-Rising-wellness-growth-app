@@ -404,3 +404,192 @@
     width: 100%;
   }
 }
+
+
+/* Integrity Rising app shell and responsive navigation */
+:root {
+  scroll-behavior: smooth;
+  scroll-padding-top: 88px;
+}
+
+.app-container {
+  min-height: 100vh;
+  color: #203234;
+  background: #f5f8f7;
+}
+
+.app-header {
+  padding: 54px 20px 42px;
+  text-align: center;
+  color: #fff;
+  background: linear-gradient(135deg, #073f43 0%, #087477 58%, #0b5559 100%);
+}
+
+.app-header .brand-eyebrow,
+.section-kicker {
+  margin: 0 0 10px;
+  color: #d8bd72;
+  font-size: .76rem;
+  font-weight: 800;
+  letter-spacing: .16em;
+}
+
+.app-header h1 {
+  margin: 0;
+  color: #fff;
+  font-size: clamp(2.35rem, 7vw, 4.4rem);
+  line-height: 1.08;
+}
+
+.app-header .brand-slogan {
+  margin: 14px 0 8px;
+  color: #f0d994;
+  font-weight: 700;
+  letter-spacing: .04em;
+}
+
+.app-header .brand-welcome {
+  max-width: 660px;
+  margin: 0 auto;
+  color: #edf7f5;
+  line-height: 1.6;
+}
+
+.main-navigation {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, .97);
+  border-bottom: 1px solid #dce7e4;
+  box-shadow: 0 3px 12px rgba(18, 54, 53, .08);
+}
+
+.main-navigation a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 8px 15px;
+  border-radius: 999px;
+  color: #075e60;
+  font-size: .92rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.main-navigation a:hover,
+.main-navigation a:focus-visible {
+  color: #fff;
+  background: #075e60;
+  outline-offset: 3px;
+}
+
+.welcome-section {
+  max-width: 1000px;
+  margin: 32px auto;
+  padding: 32px 28px;
+  text-align: center;
+  background: #fff;
+  border: 1px solid #dce7e4;
+  border-radius: 18px;
+  box-shadow: 0 5px 18px rgba(18, 54, 53, .06);
+}
+
+.welcome-section h2,
+.section-intro h2 {
+  margin: 0 0 12px;
+  color: #075e60;
+}
+
+.welcome-section p:last-child,
+.section-intro p:last-child {
+  max-width: 760px;
+  margin: 0 auto;
+  line-height: 1.65;
+}
+
+.app-area {
+  scroll-margin-top: 92px;
+}
+
+.app-area > * {
+  scroll-margin-top: 92px;
+}
+
+.safety-section {
+  max-width: 1100px;
+  margin: 38px auto;
+  padding: 28px 20px;
+  background: #edf4f2;
+  border: 1px solid #d7e4e0;
+  border-radius: 20px;
+}
+
+.section-intro {
+  margin: 0 auto 24px;
+  text-align: center;
+}
+
+.app-footer {
+  padding: 30px 20px;
+  color: #eaf4f2;
+  text-align: center;
+  background: #073f43;
+}
+
+.app-footer p {
+  margin: 8px 0;
+}
+
+.app-footer .footer-note {
+  max-width: 760px;
+  margin: 18px auto 0;
+  color: #c8ddda;
+  font-size: .86rem;
+  line-height: 1.55;
+}
+
+.back-to-top {
+  display: inline-block;
+  margin-bottom: 12px;
+  color: #f0d994;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+@media (max-width: 640px) {
+  .app-header {
+    padding: 42px 18px 34px;
+  }
+
+  .main-navigation {
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding: 9px 10px;
+  }
+
+  .main-navigation a {
+    flex: 0 0 auto;
+    font-size: .86rem;
+  }
+
+  .welcome-section {
+    margin: 20px 12px;
+    padding: 25px 18px;
+  }
+
+  .safety-section {
+    margin: 24px 10px;
+    padding: 22px 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { scroll-behavior: auto; }
+}
