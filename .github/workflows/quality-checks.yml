@@ -1,0 +1,40 @@
+name: Integrity Rising quality checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  quality-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Regenerate lockfile from package.json
+        run: npm install --package-lock-only --ignore-scripts
+
+      - name: Install from the regenerated lockfile
+        run: npm ci
+
+      - name: Run lint and production build
+        run: npm run check
+
+      - name: Save regenerated lockfile for review
+        uses: actions/upload-artifact@v4
+        with:
+          name: integrity-rising-package-lock
+          path: package-lock.json
+          if-no-files-found: error
