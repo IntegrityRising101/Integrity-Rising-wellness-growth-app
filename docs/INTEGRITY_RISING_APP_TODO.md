@@ -50,11 +50,11 @@ This checklist tracks work still required before the Integrity Rising / The Inte
 ### Thursday, November 5, 2026 — App reliability (Priority 1)
 
 **Completed today**
-- [x] Inspected the existing app configuration, package manifest, lockfile, Vite configuration, and launch checklist.
-- [x] Confirmed that `package.json` declares `@supabase/supabase-js`, but `package-lock.json` does not contain it.
-- [x] Added the `npm run check` script to run linting and the production build together.
-- [x] Updated this launch checklist to track completed work and remaining launch blockers.
-- [x] Investigated the GitHub Actions folder conflict and removed the empty `.github/workflows` path placeholder so workflow creation can be retried.
+- [x] Inspected the existing app configuration, package manifest, lockfile, Vite configuration, and launch checklist. — **Completed: Nov 5, 2026**
+- [x] Confirmed that `package.json` declares `@supabase/supabase-js`, but `package-lock.json` does not contain it. — **Completed: Nov 5, 2026**
+- [x] Added the `npm run check` script to run linting and the production build together. — **Completed: Nov 5, 2026**
+- [x] Updated this launch checklist to track completed work and remaining launch blockers. — **Completed: Nov 5, 2026**
+- [x] Investigated the GitHub Actions folder conflict and removed the empty `.github/workflows` path placeholder so workflow creation can be retried. — **Completed: Nov 5, 2026**
 
 **Still in progress / next**
 - [ ] Generate a correct `package-lock.json` using npm; do not hand-write dependency integrity data.
@@ -63,3 +63,20 @@ This checklist tracks work still required before the Integrity Rising / The Inte
 - [ ] Continue the remaining Priority 1 reliability checks.
 
 **Daily record:** Progress is recorded by date. At the end of each work session, completed items will be checked off and unfinished items will remain open for the next day.
+
+
+## Room to grow — ongoing improvement log
+
+This section is for improvements beyond the launch blockers: ideas, enhancements, member feedback, accessibility, new learning and wellness content, partnerships, and future features. Add an item here when it is a worthwhile opportunity but not required to finish today's task. Move it into the active checklist when it becomes a priority.
+
+| Improvement opportunity | Why it matters | Status / notes | Added |
+|---|---|---|---|
+| Gather feedback from a small group of trusted test users | Find confusing screens and missing support needs before public launch | Future improvement; schedule after a safe test version is ready | Nov 5, 2026 |
+| Continue improving mobile accessibility and ease of navigation | Make the app easier to use on phones and with assistive technology | Recheck during launch testing | Nov 5, 2026 |
+| Expand wellness and learning resources based on member needs | Keep the app useful, practical, and relevant | Future improvement; review after initial launch | Nov 5, 2026 |
+
+### Daily completion-date rule
+- Every completed checklist item gets its actual completion date beside it.
+- If work spans multiple days, record the date it was truly finished—not the date it was started.
+- Keep unfinished items unchecked and carry them forward.
+- Record worthwhile ideas in **Room to grow** so they are not lost or confused with launch blockers.
