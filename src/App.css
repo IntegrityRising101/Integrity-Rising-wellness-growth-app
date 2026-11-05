@@ -593,3 +593,15 @@
 @media (prefers-reduced-motion: reduce) {
   :root { scroll-behavior: auto; }
 }
+
+
+/* Official app descriptor under the main Integrity Rising wordmark. */
+.brand-app-name {
+  margin: .25rem 0 .55rem;
+  color: #e8c66a;
+  font-size: clamp(.78rem, 2vw, 1rem);
+  font-weight: 800;
+  letter-spacing: .14em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
