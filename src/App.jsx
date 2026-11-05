@@ -2,6 +2,7 @@ import './App.css';
 import QuickExitButton from './components/QuickExitButton';
 import IncidentVault from './components/IncidentVault';
 import WellnessAI from './components/WellnessAI';
+import WellnessChat from './components/WellnessChat';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           </p>
         </section>
 
+        <WellnessChat />
         <WellnessAI />
 
         <section className="safety-section">
