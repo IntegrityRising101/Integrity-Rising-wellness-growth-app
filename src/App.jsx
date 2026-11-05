@@ -3,6 +3,7 @@ import QuickExitButton from './components/QuickExitButton';
 import IncidentVault from './components/IncidentVault';
 import PersonalSafetyPlan from './components/PersonalSafetyPlan';
 import StateResourceDirectory from './components/StateResourceDirectory';
+import LocalSupportFinder from './components/LocalSupportFinder';
 import WellnessAI from './components/WellnessAI';
 import WellnessChat from './components/WellnessChat';
 import MoodTracker from './components/MoodTracker';
@@ -46,6 +47,7 @@ function App() {
         <section className="safety-section">
           <h2>My Safety Tools</h2>
           <StateResourceDirectory />
+          <LocalSupportFinder />
           <PersonalSafetyPlan />
           <IncidentVault />
         </section>
