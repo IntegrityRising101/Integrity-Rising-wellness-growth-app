@@ -30,8 +30,9 @@ This checklist tracks work still required before the Integrity Rising / The Inte
 ## Final launch checks
 
 - [ ] Reconcile `package-lock.json` with `package.json`; the current lockfile does not contain `@supabase/supabase-js` even though it is declared as an app dependency.
-- [ ] Run `npm run check` (lint + production build) and resolve all errors.
-- [ ] Add a GitHub Actions workflow for automated checks; creating `.github/workflows/quality-checks.yml` is currently blocked by a GitHub path conflict that must be investigated.
+- [x] Add the combined `npm run check` script (lint + production build) to `package.json`.
+- [ ] Run `npm run check` and resolve all errors.
+- [ ] Add and verify a GitHub Actions workflow for automated checks. An empty `.github/workflows` path placeholder was removed on November 5 so the workflow file can be retried.
 - [ ] Test the app on Android mobile and desktop.
 - [ ] Review accessibility, navigation, empty states, and error messages.
 - [ ] Publish terms of use, privacy policy, community guidelines, and support/contact information.
@@ -42,3 +43,23 @@ This checklist tracks work still required before the Integrity Rising / The Inte
 **Build verification:** A combined `npm run check` script has been added to `package.json`. The production build has not yet been executed. A package-lock mismatch was identified and must be corrected before relying on clean CI installs.
 
 **Supabase and secure AI backend:** Not configured or deployed yet. The repository contains an initial Edge Function scaffold and setup documentation only. No live AI provider connection or production database is confirmed.
+
+
+## Daily progress tracker
+
+### Thursday, November 5, 2026 — App reliability (Priority 1)
+
+**Completed today**
+- [x] Inspected the existing app configuration, package manifest, lockfile, Vite configuration, and launch checklist.
+- [x] Confirmed that `package.json` declares `@supabase/supabase-js`, but `package-lock.json` does not contain it.
+- [x] Added the `npm run check` script to run linting and the production build together.
+- [x] Updated this launch checklist to track completed work and remaining launch blockers.
+- [x] Investigated the GitHub Actions folder conflict and removed the empty `.github/workflows` path placeholder so workflow creation can be retried.
+
+**Still in progress / next**
+- [ ] Generate a correct `package-lock.json` using npm; do not hand-write dependency integrity data.
+- [ ] Create the GitHub Actions quality-check workflow and confirm it runs.
+- [ ] Run lint and production build; record actual results.
+- [ ] Continue the remaining Priority 1 reliability checks.
+
+**Daily record:** Progress is recorded by date. At the end of each work session, completed items will be checked off and unfinished items will remain open for the next day.
