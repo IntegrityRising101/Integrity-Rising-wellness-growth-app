@@ -75,3 +75,60 @@
   .discussions-heading, .discussion-feed-heading { align-items: flex-start; flex-direction: column; gap: .4rem; }
   .discussion-reply-form > div { flex-direction: column; }
 }
+
+
+/* Member community reporting controls */
+.discussion-report {
+  margin-top: 1rem;
+  padding-top: .85rem;
+  border-top: 1px solid #e0e9e7;
+}
+.discussion-report label {
+  display: block;
+  margin-bottom: .4rem;
+  color: #657674;
+  font-size: .85rem;
+  font-weight: 650;
+}
+.discussion-report > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+}
+.discussion-report select {
+  min-width: 0;
+  flex: 1 1 180px;
+  padding: .65rem .75rem;
+  border: 1px solid #cbd9d7;
+  border-radius: 9px;
+  background: #fff;
+  color: #243238;
+  font: inherit;
+}
+.discussion-report button {
+  border: 1px solid #9a5b52;
+  border-radius: 9px;
+  padding: .65rem .85rem;
+  background: #fff;
+  color: #87463f;
+  font: inherit;
+  font-weight: 650;
+  cursor: pointer;
+}
+.discussion-report button:disabled {
+  cursor: not-allowed;
+  opacity: .55;
+}
+.discussion-report button:focus-visible,
+.discussion-report select:focus-visible {
+  outline: 3px solid #c9a64b;
+  outline-offset: 3px;
+}
+@media (max-width: 600px) {
+  .discussion-report > div {
+    flex-direction: column;
+  }
+  .discussion-report button {
+    width: 100%;
+  }
+}
