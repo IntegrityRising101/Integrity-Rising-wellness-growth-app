@@ -3,6 +3,7 @@ import QuickExitButton from './components/QuickExitButton';
 import IncidentVault from './components/IncidentVault';
 import WellnessAI from './components/WellnessAI';
 import WellnessChat from './components/WellnessChat';
+import MoodTracker from './components/MoodTracker';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
 
         <WellnessChat />
         <WellnessAI />
+        <MoodTracker />
 
         <section className="safety-section">
           <h2>My Safety Tools</h2>
