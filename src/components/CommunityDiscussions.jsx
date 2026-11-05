@@ -1,67 +1,207 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { isSupabaseConfigured, supabase } from '../lib/supabase';
 import './CommunityDiscussions.css';
 
-const starterPosts = [
-  {
-    id: 1,
-    category: 'Encouragement',
-    author: 'Integrity Rising',
-    time: 'Community prompt',
-    title: 'What is one small win you can recognize today?',
-    body: 'Progress does not have to be loud to matter. Share a small step you are proud of, or simply take a moment to recognize it privately.',
-    replies: []
-  },
-  {
-    id: 2,
-    category: 'Healthy Relationships',
-    author: 'Integrity Rising',
-    time: 'Community prompt',
-    title: 'What does a healthy boundary look like to you?',
-    body: 'Boundaries can help protect your time, energy, and wellbeing. There is no pressure to share anything personal.',
-    replies: []
-  }
+const categories = [
+  'Encouragement',
+  'Healing & Growth',
+  'Healthy Relationships',
+  'Accountability',
+  'General'
 ];
 
-const categories = ['Encouragement', 'Healing & Growth', 'Healthy Relationships', 'Accountability', 'General'];
+const reportReasons = [
+  ['harassment', 'Harassment'],
+  ['threat', 'Threats'],
+  ['hate', 'Hate speech'],
+  ['personal_information', 'Personal information'],
+  ['spam', 'Spam'],
+  ['other', 'Other']
+];
 
 function CommunityDiscussions() {
-  const [posts, setPosts] = useState(starterPosts);
+  const [user, setUser] = useState(null);
+  const [posts, setPosts] = useState([]);
+  const [comments, setComments] = useState({});
   const [category, setCategory] = useState(categories[0]);
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
   const [replyDrafts, setReplyDrafts] = useState({});
+  const [reportChoices, setReportChoices] = useState({});
   const [notice, setNotice] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [busy, setBusy] = useState(false);
 
-  function publishPost(event) {
+  useEffect(() => {
+    if (!supabase) {
+      setLoading(false);
+      return undefined;
+    }
+
+    let active = true;
+
+    async function loadCommunity() {
+      const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+      if (!active) return;
+      if (sessionError) {
+        setNotice('We could not check your sign-in. Please refresh and try again.');
+        setLoading(false);
+        return;
+      }
+
+      const currentUser = sessionData.session?.user ?? null;
+      setUser(currentUser);
+      if (!currentUser) {
+        setLoading(false);
+        return;
+      }
+
+      const { data: postData, error: postError } = await supabase
+        .from('community_posts')
+        .select('id, user_id, category, title, body, created_at')
+        .eq('status', 'published')
+        .order('created_at', { ascending: false })
+        .limit(50);
+
+      if (!active) return;
+      if (postError) {
+        setNotice('Community posts could not be loaded. Please try again later.');
+        setLoading(false);
+        return;
+      }
+
+      const visiblePosts = postData || [];
+      setPosts(visiblePosts);
+
+      if (visiblePosts.length) {
+        const { data: commentData, error: commentError } = await supabase
+          .from('community_comments')
+          .select('id, post_id, user_id, body, created_at')
+          .in('post_id', visiblePosts.map(post => post.id))
+          .eq('status', 'published')
+          .order('created_at', { ascending: true });
+
+        if (!active) return;
+        if (!commentError) {
+          const grouped = {};
+          (commentData || []).forEach(comment => {
+            grouped[comment.post_id] = [...(grouped[comment.post_id] || []), comment];
+          });
+          setComments(grouped);
+        }
+      }
+      setLoading(false);
+    }
+
+    loadCommunity();
+
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+      setPosts([]);
+      setComments({});
+      setNotice('');
+      if (!session?.user) setLoading(false);
+      else {
+        setLoading(true);
+        loadCommunity();
+      }
+    });
+
+    return () => {
+      active = false;
+      listener.subscription.unsubscribe();
+    };
+  }, []);
+
+  async function publishPost(event) {
     event.preventDefault();
+    if (!user || busy) return;
     if (!title.trim() || !body.trim()) {
       setNotice('Add a title and message before sharing.');
       return;
     }
-    const newPost = {
-      id: Date.now(),
-      category,
-      author: 'You (this device)',
-      time: 'Just now',
-      title: title.trim(),
-      body: body.trim(),
-      replies: []
-    };
-    setPosts(current => [newPost, ...current]);
-    setTitle('');
-    setBody('');
-    setNotice('Your draft post was added to this on-device preview.');
+
+    setBusy(true);
+    setNotice('');
+    const { data, error } = await supabase
+      .from('community_posts')
+      .insert({
+        user_id: user.id,
+        category,
+        title: title.trim(),
+        body: body.trim()
+      })
+      .select('id, user_id, category, title, body, created_at')
+      .single();
+
+    if (error) {
+      setNotice('Your post could not be published. Please try again.');
+    } else {
+      setPosts(current => [data, ...current]);
+      setTitle('');
+      setBody('');
+      setNotice('Your post has been shared with signed-in community members.');
+    }
+    setBusy(false);
   }
 
-  function addReply(postId) {
+  async function addReply(postId) {
     const message = (replyDrafts[postId] || '').trim();
-    if (!message) return;
-    setPosts(current => current.map(post =>
-      post.id === postId
-        ? { ...post, replies: [...post.replies, message] }
-        : post
-    ));
-    setReplyDrafts(current => ({ ...current, [postId]: '' }));
+    if (!message || !user || busy) return;
+
+    setBusy(true);
+    setNotice('');
+    const { data, error } = await supabase
+      .from('community_comments')
+      .insert({ post_id: postId, user_id: user.id, body: message })
+      .select('id, post_id, user_id, body, created_at')
+      .single();
+
+    if (error) {
+      setNotice('Your reply could not be added. Please try again.');
+    } else {
+      setComments(current => ({
+        ...current,
+        [postId]: [...(current[postId] || []), data]
+      }));
+      setReplyDrafts(current => ({ ...current, [postId]: '' }));
+    }
+    setBusy(false);
+  }
+
+  async function reportPost(postId) {
+    const reason = reportChoices[postId] || 'other';
+    if (!user || busy) return;
+
+    setBusy(true);
+    setNotice('');
+    const { error } = await supabase
+      .from('community_reports')
+      .insert({ reporter_id: user.id, post_id: postId, reason });
+
+    setNotice(error
+      ? 'We could not submit that report. Please try again.'
+      : 'Thank you. Your report was submitted privately for review.');
+    setBusy(false);
+  }
+
+  if (!isSupabaseConfigured) {
+    return (
+      <section className="discussions-section" aria-labelledby="discussions-title">
+        <div className="discussions-heading">
+          <div>
+            <p className="discussions-eyebrow">THE INTEGRITY MOVEMENT</p>
+            <h2 id="discussions-title">Community Discussions</h2>
+            <p>A supportive space for encouragement, shared learning, and respectful conversation.</p>
+          </div>
+          <span className="discussion-status">Setup needed</span>
+        </div>
+        <div className="discussion-guidelines">
+          <h3>Community is being connected</h3>
+          <p>Secure community posting requires the Supabase project URL and public client key to be configured. No posts or replies are being collected on this screen yet.</p>
+        </div>
+      </section>
+    );
   }
 
   return (
@@ -72,75 +212,111 @@ function CommunityDiscussions() {
           <h2 id="discussions-title">Community Discussions</h2>
           <p>Encouragement, shared learning, and respectful conversation—at your own pace.</p>
         </div>
-        <span className="discussion-status">Preview</span>
+        <span className="discussion-status">Members</span>
       </div>
 
-      <form className="discussion-composer" onSubmit={publishPost}>
-        <h3>Start a conversation</h3>
-        <label htmlFor="discussion-category">Choose a topic</label>
-        <select id="discussion-category" value={category} onChange={event => setCategory(event.target.value)}>
-          {categories.map(item => <option key={item} value={item}>{item}</option>)}
-        </select>
-        <label htmlFor="discussion-title">Post title</label>
-        <input id="discussion-title" value={title} onChange={event => setTitle(event.target.value)} maxLength={100} placeholder="What would you like to talk about?" />
-        <label htmlFor="discussion-body">Your message</label>
-        <textarea id="discussion-body" value={body} onChange={event => setBody(event.target.value)} maxLength={1200} rows={4} placeholder="Share only what feels safe and comfortable..." />
-        <div className="discussion-compose-footer">
-          <span>{body.length}/1200</span>
-          <button type="submit">Add post</button>
+      {!user ? (
+        <div className="discussion-guidelines">
+          <h3>Sign in to join the community</h3>
+          <p>Community posts and replies are available to signed-in members. Use the Member Account section above to sign in or create an account.</p>
         </div>
-        {notice && <p className="discussion-notice" role="status">{notice}</p>}
-      </form>
+      ) : (
+        <>
+          <form className="discussion-composer" onSubmit={publishPost}>
+            <h3>Start a conversation</h3>
+            <label htmlFor="discussion-category">Choose a topic</label>
+            <select id="discussion-category" value={category} onChange={event => setCategory(event.target.value)}>
+              {categories.map(item => <option key={item} value={item}>{item}</option>)}
+            </select>
+            <label htmlFor="discussion-title">Post title</label>
+            <input id="discussion-title" value={title} onChange={event => setTitle(event.target.value)} maxLength={120} required placeholder="What would you like to talk about?" />
+            <label htmlFor="discussion-body">Your message</label>
+            <textarea id="discussion-body" value={body} onChange={event => setBody(event.target.value)} maxLength={3000} rows={4} required placeholder="Share only what feels safe and comfortable..." />
+            <div className="discussion-compose-footer">
+              <span>{body.length}/3000</span>
+              <button type="submit" disabled={busy}>{busy ? 'Sharing…' : 'Share post'}</button>
+            </div>
+          </form>
 
-      <div className="discussion-feed">
-        <div className="discussion-feed-heading">
-          <h3>Conversation starters</h3>
-          <span>{posts.length} posts in this preview</span>
-        </div>
-        {posts.map(post => (
-          <article className="discussion-post" key={post.id}>
-            <div className="discussion-post-meta">
-              <span className="discussion-category">{post.category}</span>
-              <span>{post.time}</span>
+          <div className="discussion-feed">
+            <div className="discussion-feed-heading">
+              <h3>Community conversations</h3>
+              <span>{posts.length} recent posts</span>
             </div>
-            <h3>{post.title}</h3>
-            <p className="discussion-author">{post.author}</p>
-            <p className="discussion-post-body">{post.body}</p>
-            {post.replies.length > 0 && (
-              <div className="discussion-replies">
-                <strong>Supportive replies</strong>
-                {post.replies.map((reply, index) => <p key={index}>{reply}</p>)}
-              </div>
-            )}
-            <div className="discussion-reply-form">
-              <label htmlFor={`reply-${post.id}`}>Add a supportive reply</label>
-              <div>
-                <input
-                  id={`reply-${post.id}`}
-                  value={replyDrafts[post.id] || ''}
-                  maxLength={300}
-                  onChange={event => setReplyDrafts(current => ({ ...current, [post.id]: event.target.value }))}
-                  placeholder="Offer encouragement..."
-                />
-                <button type="button" onClick={() => addReply(post.id)}>Reply</button>
-              </div>
-            </div>
-          </article>
-        ))}
-      </div>
+            {loading ? (
+              <p role="status">Loading community conversations…</p>
+            ) : posts.length === 0 ? (
+              <p>There are no posts yet. You can start the first conversation.</p>
+            ) : posts.map(post => (
+              <article className="discussion-post" key={post.id}>
+                <div className="discussion-post-meta">
+                  <span className="discussion-category">{post.category}</span>
+                  <span>{new Date(post.created_at).toLocaleString()}</span>
+                </div>
+                <h3>{post.title}</h3>
+                <p className="discussion-author">{post.user_id === user.id ? 'You' : 'Movement member'}</p>
+                <p className="discussion-post-body">{post.body}</p>
+
+                {(comments[post.id] || []).length > 0 && (
+                  <div className="discussion-replies">
+                    <strong>Replies</strong>
+                    {comments[post.id].map(comment => (
+                      <p key={comment.id}>
+                        <strong>{comment.user_id === user.id ? 'You: ' : 'Member: '}</strong>
+                        {comment.body}
+                      </p>
+                    ))}
+                  </div>
+                )}
+
+                <div className="discussion-reply-form">
+                  <label htmlFor={`reply-${post.id}`}>Add a supportive reply</label>
+                  <div>
+                    <input
+                      id={`reply-${post.id}`}
+                      value={replyDrafts[post.id] || ''}
+                      maxLength={1200}
+                      onChange={event => setReplyDrafts(current => ({ ...current, [post.id]: event.target.value }))}
+                      placeholder="Offer encouragement..."
+                    />
+                    <button type="button" disabled={busy || !(replyDrafts[post.id] || '').trim()} onClick={() => addReply(post.id)}>Reply</button>
+                  </div>
+                </div>
+
+                {post.user_id !== user.id && (
+                  <div className="discussion-report">
+                    <label htmlFor={`report-${post.id}`}>Report a concern</label>
+                    <div>
+                      <select
+                        id={`report-${post.id}`}
+                        value={reportChoices[post.id] || 'other'}
+                        onChange={event => setReportChoices(current => ({ ...current, [post.id]: event.target.value }))}
+                      >
+                        {reportReasons.map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+                      </select>
+                      <button type="button" disabled={busy} onClick={() => reportPost(post.id)}>Submit report</button>
+                    </div>
+                  </div>
+                )}
+              </article>
+            ))}
+          </div>
+        </>
+      )}
 
       <aside className="discussion-guidelines">
         <h3>Our community commitments</h3>
         <ul>
           <li>Lead with respect, empathy, and accountability.</li>
           <li>No harassment, threats, hate speech, or victim-blaming.</li>
-          <li>Do not post addresses, phone numbers, identifying details, or another person's private information.</li>
+          <li>Never post addresses, phone numbers, identifying details, or another person's private information.</li>
           <li>Share from your own experience; do not diagnose or pressure others.</li>
-          <li>This preview is not monitored. Do not use it to report an emergency or seek immediate protection.</li>
+          <li>Reports are private. This app is not monitored around the clock.</li>
         </ul>
         <p><strong>Need urgent help?</strong> If you are in immediate danger in the U.S., call 911. For confidential domestic violence support, contact the National Domestic Violence Hotline at 1-800-799-SAFE (7233) or text START to 88788.</p>
       </aside>
-      <p className="discussion-privacy">Prototype notice: posts and replies exist only in this browser session and disappear when the page is refreshed or closed. They are not shared with other people. A real community requires secure accounts, a database, reporting/blocking tools, and active moderation. Do not enter sensitive or identifying information here.</p>
+      {notice && <p className="discussion-notice" role="status">{notice}</p>}
+      <p className="discussion-privacy">Community content is available to signed-in members. Reports are private to the person submitting them. A trained, actively available moderation team must be in place before this community is opened to the public. Do not share sensitive identifying information.</p>
     </section>
   );
 }
