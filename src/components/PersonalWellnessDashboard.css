@@ -8,32 +8,32 @@
   box-shadow: 0 8px 28px rgba(20, 55, 58, .07);
 }
 .personal-wellness-header { margin-bottom: 1.2rem; }
-.personal-wellness-header h2 { margin: .2rem 0 .45rem; color: #155b59; }
+.personal-wellness-header h2 { margin: .2rem 0 .45rem; color: #075e60; }
 .personal-wellness-header p:last-child { margin-bottom: 0; line-height: 1.55; }
-.personal-wellness-eyebrow { margin: 0; color: #a4772d; font-size: .75rem; font-weight: 800; letter-spacing: .13em; }
+.personal-wellness-eyebrow { margin: 0; color: #96701f; font-size: .75rem; font-weight: 800; letter-spacing: .13em; }
 .wellness-checkin-card, .wellness-practice-card { padding: 1.2rem; border-radius: 14px; background: #f5f9f8; }
-.wellness-checkin-card h3, .wellness-practice-card h3 { margin: 0 0 .35rem; color: #155b59; }
+.wellness-checkin-card h3, .wellness-practice-card h3 { margin: 0 0 .35rem; color: #075e60; }
 .wellness-checkin-card > p, .wellness-practice-heading p { margin: .25rem 0 .9rem; color: #647572; font-size: .9rem; }
 .wellness-mood-options { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: .55rem; margin: 1rem 0; }
 .wellness-mood-option { display: flex; flex-direction: column; align-items: center; gap: .35rem; padding: .75rem .3rem; border: 1px solid #d6e3e0; border-radius: 10px; background: #fff; color: #263735; font: inherit; font-size: .83rem; cursor: pointer; }
 .wellness-mood-option span:first-child { font-size: 1.45rem; }
-.wellness-mood-option.selected { border-color: #176c68; background: #e7f4f2; outline: 2px solid rgba(23,108,104,.16); }
-.wellness-kind-message, .wellness-saved-message { padding: .7rem .85rem; border-radius: 8px; background: #eaf5f3; color: #155b59; line-height: 1.5; }
+.wellness-mood-option.selected { border-color: #075e60; background: #e7f4f2; outline: 2px solid rgba(23,108,104,.16); }
+.wellness-kind-message, .wellness-saved-message { padding: .7rem .85rem; border-radius: 8px; background: #eaf5f3; color: #075e60; line-height: 1.5; }
 .wellness-checkin-card > label { display: block; margin: 1rem 0 .4rem; font-weight: 700; font-size: .9rem; }
 .wellness-checkin-card textarea { box-sizing: border-box; width: 100%; padding: .8rem; border: 1px solid #cbd9d7; border-radius: 9px; background: #fff; color: #263735; font: inherit; }
 .wellness-save-row { display: flex; justify-content: space-between; align-items: center; gap: .8rem; margin-top: .7rem; color: #71817e; font-size: .82rem; }
-.wellness-save-row button { padding: .7rem 1rem; border: 0; border-radius: 9px; background: #176c68; color: #fff; font: inherit; font-weight: 700; cursor: pointer; }
+.wellness-save-row button { padding: .7rem 1rem; border: 0; border-radius: 9px; background: #075e60; color: #fff; font: inherit; font-weight: 700; cursor: pointer; }
 .wellness-save-row button:disabled { opacity: .5; cursor: not-allowed; }
 .wellness-practice-card { margin-top: 1.1rem; }
 .wellness-practice-heading { display: flex; justify-content: space-between; align-items: flex-start; gap: .8rem; }
-.wellness-practice-heading strong { color: #155b59; white-space: nowrap; }
+.wellness-practice-heading strong { color: #075e60; white-space: nowrap; }
 .wellness-practice-progress { height: 8px; margin: .5rem 0 1rem; overflow: hidden; border-radius: 999px; background: #e1eae7; }
-.wellness-practice-progress span { display: block; height: 100%; border-radius: inherit; background: #b18a43; transition: width .2s ease; }
+.wellness-practice-progress span { display: block; height: 100%; border-radius: inherit; background: #c9a64b; transition: width .2s ease; }
 .wellness-practice-card ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .7rem 1rem; margin: 0; padding: 0; list-style: none; }
 .wellness-practice-card li label { display: flex; align-items: flex-start; gap: .6rem; line-height: 1.45; cursor: pointer; }
-.wellness-practice-card input { accent-color: #176c68; margin-top: .2rem; }
+.wellness-practice-card input { accent-color: #075e60; margin-top: .2rem; }
 .wellness-affirmation { margin-top: 1.1rem; padding: 1.2rem; border-radius: 13px; background: #f8f3e8; text-align: center; }
-.wellness-affirmation > span { color: #a4772d; font-size: 1.4rem; }
+.wellness-affirmation > span { color: #96701f; font-size: 1.4rem; }
 .wellness-affirmation p { margin: .4rem 0; color: #594a2e; font-size: 1.08rem; font-weight: 700; }
 .wellness-affirmation small { color: #786b53; }
 .wellness-dashboard-privacy { margin: .9rem 0 0; color: #6d7d79; font-size: .82rem; line-height: 1.5; }
@@ -42,3 +42,9 @@
   .wellness-mood-options { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .wellness-practice-card ul { grid-template-columns: 1fr; }
 }
+
+/* Brand polish: consistent teal structure with warm gold accents. */
+.wellness-checkin-card, .wellness-practice-card { border: 1px solid #e1e9e5; }
+.wellness-mood-option:hover { border-color: #c9a64b; }
+.wellness-save-row button { background: linear-gradient(135deg, #075e60, #087477); }
+.wellness-affirmation { border: 1px solid #eadbb5; }
