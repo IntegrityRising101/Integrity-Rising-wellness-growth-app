@@ -1,0 +1,33 @@
+.personal-safety-plan {
+  max-width: 900px;
+  margin: 32px auto;
+  padding: 28px;
+  color: #243536;
+  background: #fff;
+  border: 1px solid #d9e2e2;
+  border-radius: 18px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+}
+.safety-plan-heading { text-align: center; margin-bottom: 22px; }
+.safety-plan-heading h2, .safety-plan-group legend, .safety-plan-resources h3 { color: #075e60; }
+.safety-plan-kicker { color: #a17c25; font-size: .78rem; font-weight: 700; letter-spacing: .12em; }
+.safety-plan-warning { padding: 16px 18px; margin: 18px 0; border-left: 4px solid #c9a64b; border-radius: 10px; background: #fff8e8; line-height: 1.6; }
+.safety-plan-progress { margin: 22px 0; font-weight: 700; color: #075e60; }
+.safety-plan-progress-track { height: 9px; margin-top: 9px; overflow: hidden; border-radius: 99px; background: #e7eeee; }
+.safety-plan-progress-track span { display: block; height: 100%; border-radius: inherit; background: #0b7778; transition: width .2s ease; }
+.safety-plan-group { min-width: 0; margin: 18px 0; padding: 16px 18px; border: 1px solid #d9e2e2; border-radius: 12px; }
+.safety-plan-group legend { padding: 0 7px; font-weight: 700; }
+.safety-plan-check { display: flex; align-items: flex-start; gap: 11px; margin: 13px 0; line-height: 1.5; cursor: pointer; }
+.safety-plan-check input { width: 18px; height: 18px; margin-top: 2px; accent-color: #075e60; flex: 0 0 auto; }
+.safety-plan-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+.safety-plan-actions button { padding: 11px 17px; border: 1px solid #075e60; border-radius: 999px; background: #075e60; color: #fff; font: inherit; cursor: pointer; }
+.safety-plan-actions button:disabled { opacity: .45; cursor: not-allowed; }
+.safety-plan-resources { margin-top: 20px; padding: 18px 20px; border-radius: 12px; background: #f1f7f6; line-height: 1.6; }
+.safety-plan-resources a { color: #075e60; font-weight: 700; }
+.safety-plan-disclaimer { margin-top: 22px; color: #4b5558; font-size: .9rem; line-height: 1.6; }
+.safety-plan-actions button:focus-visible, .safety-plan-check input:focus-visible { outline: 3px solid #c9a64b; outline-offset: 3px; }
+@media (max-width: 600px) {
+  .personal-safety-plan { padding: 20px 16px; }
+  .safety-plan-actions { flex-direction: column; }
+  .safety-plan-actions button { width: 100%; }
+}
