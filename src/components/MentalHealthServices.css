@@ -1,0 +1,23 @@
+.mental-health-services { max-width: 960px; margin: 30px auto; padding: 28px; color: #243536; background: #fff; border: 1px solid #d9e2e2; border-radius: 18px; box-shadow: 0 4px 14px rgba(0,0,0,.06); }
+.mental-health-heading { text-align: center; margin-bottom: 22px; }
+.mental-health-heading h2, .mental-health-card h3, .mental-health-start h3 { color: #075e60; }
+.mental-health-kicker { color: #a17c25; font-size: .78rem; font-weight: 700; letter-spacing: .12em; }
+.mental-health-crisis { padding: 16px 18px; margin: 18px 0; border-left: 4px solid #b64a4a; border-radius: 10px; background: #fff2f1; line-height: 1.6; }
+.mental-health-crisis p { margin: 8px 0 0; }
+.mental-health-crisis a, .mental-health-card a, .mental-health-start a { color: #075e60; font-weight: 700; }
+.mental-health-search { display: grid; gap: 8px; margin: 22px 0 12px; }
+.mental-health-search label { margin-top: 8px; color: #075e60; font-weight: 700; }
+.mental-health-search input, .mental-health-search select { width: 100%; box-sizing: border-box; min-height: 44px; padding: 10px 12px; border: 1px solid #b8caca; border-radius: 9px; background: #fff; color: #243536; font: inherit; }
+.mental-health-count { color: #526264; font-size: .92rem; }
+.mental-health-list { display: grid; gap: 10px; }
+.mental-health-card { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px; border: 1px solid #d9e2e2; border-radius: 11px; }
+.mental-health-card-copy { min-width: 0; }
+.mental-health-card h3 { margin: 5px 0; font-size: 1.05rem; }
+.mental-health-card p { margin: 0 0 7px; line-height: 1.5; }
+.mental-health-card small { color: #5d6a6b; }
+.mental-health-category { color: #8b6b20; font-size: .76rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
+.mental-health-start { display: grid; gap: 9px; margin-top: 22px; padding: 18px; border-radius: 11px; background: #f1f7f6; line-height: 1.55; }
+.mental-health-start h3, .mental-health-start p { margin: 0; }
+.mental-health-disclaimer { margin-top: 18px; padding: 15px 17px; border: 1px solid #e3dfd1; border-radius: 10px; background: #fbfaf6; line-height: 1.55; font-size: .92rem; }
+.mental-health-search input:focus-visible, .mental-health-search select:focus-visible, .mental-health-card a:focus-visible, .mental-health-start a:focus-visible { outline: 3px solid #c9a64b; outline-offset: 3px; }
+@media (max-width: 600px) { .mental-health-services { padding: 20px 16px; } .mental-health-card { align-items: flex-start; flex-direction: column; } }
