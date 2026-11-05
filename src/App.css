@@ -289,3 +289,118 @@
     grid-template-columns: 1fr 1fr;
   }
 }
+
+
+/* Integrity Rising wellness support chat */
+.wellness-chat {
+  max-width: 900px;
+  margin: 32px auto;
+  padding: 28px;
+  background: #ffffff;
+  border: 1px solid #d9e2e2;
+  border-radius: 18px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+}
+
+.wellness-chat-heading {
+  text-align: center;
+}
+
+.wellness-topic-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 22px 0;
+}
+
+.wellness-topic-list button,
+.wellness-chat-form button {
+  border: 1px solid #075e60;
+  border-radius: 999px;
+  padding: 11px 16px;
+  background: #ffffff;
+  color: #075e60;
+  font-size: 0.98rem;
+  cursor: pointer;
+}
+
+.wellness-topic-list button:hover,
+.wellness-chat-form button:hover:not(:disabled) {
+  background: #075e60;
+  color: #ffffff;
+}
+
+.wellness-chat-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.wellness-chat-form label {
+  color: #075e60;
+  font-weight: 700;
+}
+
+.wellness-chat-form textarea {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #b8caca;
+  border-radius: 10px;
+  padding: 13px;
+  font: inherit;
+  resize: vertical;
+}
+
+.wellness-chat-form textarea:focus-visible,
+.wellness-topic-list button:focus-visible,
+.wellness-chat-form button:focus-visible {
+  outline: 3px solid #c9a64b;
+  outline-offset: 3px;
+}
+
+.wellness-chat-form button {
+  align-self: flex-start;
+  background: #075e60;
+  color: #ffffff;
+}
+
+.wellness-chat-form button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.wellness-chat-reply {
+  margin-top: 22px;
+  padding: 18px 20px;
+  border-left: 4px solid #c9a64b;
+  border-radius: 10px;
+  background: #f1f7f6;
+  line-height: 1.6;
+}
+
+.wellness-chat-reply h3 {
+  color: #075e60;
+  margin-top: 0;
+}
+
+.wellness-chat-note {
+  margin-top: 22px;
+  color: #4b5558;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+@media (max-width: 600px) {
+  .wellness-chat {
+    padding: 20px 16px;
+  }
+
+  .wellness-topic-list {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .wellness-chat-form button {
+    width: 100%;
+  }
+}
