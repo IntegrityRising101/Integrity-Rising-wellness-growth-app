@@ -13,9 +13,9 @@ export default function QuickExitButton() {
     <button
       onClick={handleQuickExit}
       style={{
-        position: 'fixed',
-        top: '16px',
-        right: '16px',
+        position: 'relative',
+        display: 'inline-flex',
+        margin: '0 0 18px 0',
         backgroundColor: '#d9534f',
         color: '#ffffff',
         border: 'none',
