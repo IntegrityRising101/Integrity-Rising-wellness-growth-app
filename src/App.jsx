@@ -31,8 +31,6 @@ const navigation = [
 function App() {
   return (
     <div className="app-container">
-      <QuickExitButton />
-
       <header className="app-header" id="top">
         <p className="brand-eyebrow">THE INTEGRITY MOVEMENT</p>
         <h1>Integrity Rising</h1>
@@ -82,6 +80,7 @@ function App() {
         </section>
 
         <section id="safety" className="safety-section app-area">
+          <QuickExitButton />
           <div className="section-intro">
             <p className="section-kicker">SUPPORT & RESOURCES</p>
             <h2>My Safety Tools</h2>
