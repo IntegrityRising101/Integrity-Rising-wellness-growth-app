@@ -31,12 +31,20 @@ function MemberAccount() {
     setBusy(true);
     setMessage('');
     try {
-      const result = mode === 'signup'
-        ? await supabase.auth.signUp({ email: email.trim(), password })
-        : await supabase.auth.signInWithPassword({ email: email.trim(), password });
+      let result;
+      if (mode === 'signup') {
+        result = await supabase.auth.signUp({ email: email.trim(), password });
+      } else if (mode === 'reset') {
+        result = await supabase.auth.resetPasswordForEmail(email.trim());
+      } else {
+        result = await supabase.auth.signInWithPassword({ email: email.trim(), password });
+      }
       if (result.error) throw result.error;
+
       if (mode === 'signup' && !result.data.session) {
-        setMessage('Check your email for the confirmation link, then return here to sign in.');
+        setMessage('Account request received. Check your email for the confirmation link, then return here to sign in.');
+      } else if (mode === 'reset') {
+        setMessage('If an account exists for that email, a password reset link will be sent. Check your inbox.');
       } else {
         setMessage(mode === 'signup' ? 'Your account was created.' : 'You are signed in.');
       }
@@ -54,6 +62,12 @@ function MemberAccount() {
     setMessage(error ? error.message : 'You have signed out.');
   }
 
+  function changeMode(nextMode) {
+    setMode(nextMode);
+    setMessage('');
+    setPassword('');
+  }
+
   return (
     <section className="member-account" aria-labelledby="member-account-title">
       <span className="member-account-kicker">THE INTEGRITY MOVEMENT</span>
@@ -64,8 +78,8 @@ function MemberAccount() {
           <p>The secure sign-in screen is ready, but it is not connected to a database yet.
             No account can be created until the project URL and public client key are added
             to the hosting environment.</p>
-          <p><strong>Next:</strong> Create a Supabase project and add the two environment
-            variables described in the repository's <code>.env.example</code> file.
+          <p><strong>Next:</strong> Create or open the Integrity Rising Supabase project and add
+            the two environment variables described in the repository's <code>.env.example</code> file.
             Never place a service-role key or database password in this app.</p>
         </div>
       ) : user ? (
@@ -77,17 +91,29 @@ function MemberAccount() {
       ) : (
         <>
           <div className="account-mode-switch" role="group" aria-label="Account action">
-            <button type="button" aria-pressed={mode === 'signin'} onClick={() => { setMode('signin'); setMessage(''); }}>Sign in</button>
-            <button type="button" aria-pressed={mode === 'signup'} onClick={() => { setMode('signup'); setMessage(''); }}>Create account</button>
+            <button type="button" aria-pressed={mode === 'signin'} onClick={() => changeMode('signin')}>Sign in</button>
+            <button type="button" aria-pressed={mode === 'signup'} onClick={() => changeMode('signup')}>Create account</button>
           </div>
           <form className="member-account-form" onSubmit={handleSubmit}>
             <label htmlFor="member-email">Email address</label>
             <input id="member-email" type="email" autoComplete="email" required value={email} onChange={(event) => setEmail(event.target.value)} />
-            <label htmlFor="member-password">Password</label>
-            <input id="member-password" type="password" autoComplete={mode === 'signup' ? 'new-password' : 'current-password'} minLength={8} required value={password} onChange={(event) => setPassword(event.target.value)} />
-            <p className="account-password-hint">Use at least 8 characters. Choose a unique password you do not use elsewhere.</p>
-            <button type="submit" disabled={busy}>{busy ? 'Please wait…' : mode === 'signup' ? 'Create account' : 'Sign in'}</button>
+            {mode !== 'reset' && (
+              <>
+                <label htmlFor="member-password">Password</label>
+                <input id="member-password" type="password" autoComplete={mode === 'signup' ? 'new-password' : 'current-password'} minLength={8} required value={password} onChange={(event) => setPassword(event.target.value)} />
+                <p className="account-password-hint">Use at least 8 characters. Choose a unique password you do not use elsewhere.</p>
+              </>
+            )}
+            <button type="submit" disabled={busy}>
+              {busy ? 'Please wait…' : mode === 'signup' ? 'Create account' : mode === 'reset' ? 'Send reset link' : 'Sign in'}
+            </button>
           </form>
+          {mode === 'signin' && (
+            <button className="account-text-button" type="button" onClick={() => changeMode('reset')}>Forgot password?</button>
+          )}
+          {mode === 'reset' && (
+            <button className="account-text-button" type="button" onClick={() => changeMode('signin')}>Back to sign in</button>
+          )}
           {message && <p className="account-status" role="status">{message}</p>}
         </>
       )}
