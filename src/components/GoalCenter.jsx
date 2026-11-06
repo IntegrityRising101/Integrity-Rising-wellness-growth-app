@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import './GoalCenter.css';
 
 const STORAGE_KEY = 'integrity-rising-goal-center-v1';
