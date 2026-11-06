@@ -6,7 +6,11 @@ function MemberAccount() {
   const [mode, setMode] = useState('signin');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [displayName, setDisplayName] = useState('');
+  const [bio, setBio] = useState('');
   const [user, setUser] = useState(null);
+  const [profileLoading, setProfileLoading] = useState(false);
+  const [profileBusy, setProfileBusy] = useState(false);
   const [message, setMessage] = useState('');
   const [busy, setBusy] = useState(false);
 
@@ -18,12 +22,48 @@ function MemberAccount() {
     });
     const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
+      setMessage('');
     });
     return () => {
       active = false;
       listener.subscription.unsubscribe();
     };
   }, []);
+
+  useEffect(() => {
+    if (!supabase || !user) {
+      setDisplayName('');
+      setBio('');
+      return undefined;
+    }
+
+    let active = true;
+    async function loadProfile() {
+      setProfileLoading(true);
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('display_name, bio')
+        .eq('id', user.id)
+        .maybeSingle();
+
+      if (!active) return;
+      if (error) {
+        setMessage(`Your account is signed in, but we could not load your profile: ${error.message}`);
+      } else if (data) {
+        setDisplayName(data.display_name || '');
+        setBio(data.bio || '');
+      } else {
+        setDisplayName(user.user_metadata?.display_name || '');
+        setBio('');
+      }
+      setProfileLoading(false);
+    }
+
+    loadProfile();
+    return () => {
+      active = false;
+    };
+  }, [user]);
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -33,7 +73,11 @@ function MemberAccount() {
     try {
       let result;
       if (mode === 'signup') {
-        result = await supabase.auth.signUp({ email: email.trim(), password });
+        result = await supabase.auth.signUp({
+          email: email.trim(),
+          password,
+          options: { data: { display_name: displayName.trim() || 'Movement Member' } },
+        });
       } else if (mode === 'reset') {
         result = await supabase.auth.resetPasswordForEmail(email.trim());
       } else {
@@ -53,6 +97,38 @@ function MemberAccount() {
       setMessage(error.message || 'We could not complete that request. Please try again.');
     } finally {
       setBusy(false);
+    }
+  }
+
+  async function handleSaveProfile(event) {
+    event.preventDefault();
+    if (!supabase || !user || profileBusy) return;
+    const cleanName = displayName.trim();
+    const cleanBio = bio.trim();
+    if (!cleanName || cleanName.length > 60) {
+      setMessage('Please enter a display name between 1 and 60 characters.');
+      return;
+    }
+    if (cleanBio.length > 280) {
+      setMessage('Your bio must be 280 characters or fewer.');
+      return;
+    }
+
+    setProfileBusy(true);
+    setMessage('');
+    try {
+      const { error } = await supabase
+        .from('profiles')
+        .upsert(
+          { id: user.id, display_name: cleanName, bio: cleanBio, updated_at: new Date().toISOString() },
+          { onConflict: 'id' },
+        );
+      if (error) throw error;
+      setMessage('Your member profile has been saved.');
+    } catch (error) {
+      setMessage(error.message || 'We could not save your profile. Please try again.');
+    } finally {
+      setProfileBusy(false);
     }
   }
 
@@ -85,7 +161,35 @@ function MemberAccount() {
       ) : user ? (
         <div className="account-signed-in">
           <p>You are signed in as <strong>{user.email}</strong>.</p>
-          <p>Your account is active. Saved wellness features will be connected in a later step.</p>
+          <h3>My Member Profile</h3>
+          {profileLoading ? (
+            <p>Loading your profile…</p>
+          ) : (
+            <form className="member-account-form" onSubmit={handleSaveProfile}>
+              <label htmlFor="member-display-name">Display name</label>
+              <input
+                id="member-display-name"
+                type="text"
+                maxLength={60}
+                required
+                value={displayName}
+                onChange={(event) => setDisplayName(event.target.value)}
+              />
+              <label htmlFor="member-bio">Short bio</label>
+              <textarea
+                id="member-bio"
+                rows={4}
+                maxLength={280}
+                value={bio}
+                onChange={(event) => setBio(event.target.value)}
+                placeholder="Share a little about yourself (optional)."
+              />
+              <p className="account-password-hint">{bio.length}/280 characters. Your profile is visible to signed-in members.</p>
+              <button type="submit" disabled={profileBusy}>
+                {profileBusy ? 'Saving…' : 'Save profile'}
+              </button>
+            </form>
+          )}
           <button type="button" onClick={handleSignOut}>Sign out</button>
         </div>
       ) : (
@@ -95,6 +199,20 @@ function MemberAccount() {
             <button type="button" aria-pressed={mode === 'signup'} onClick={() => changeMode('signup')}>Create account</button>
           </div>
           <form className="member-account-form" onSubmit={handleSubmit}>
+            {mode === 'signup' && (
+              <>
+                <label htmlFor="member-display-name">Display name</label>
+                <input
+                  id="member-display-name"
+                  type="text"
+                  autoComplete="nickname"
+                  maxLength={60}
+                  value={displayName}
+                  onChange={(event) => setDisplayName(event.target.value)}
+                  placeholder="How members will see you"
+                />
+              </>
+            )}
             <label htmlFor="member-email">Email address</label>
             <input id="member-email" type="email" autoComplete="email" required value={email} onChange={(event) => setEmail(event.target.value)} />
             {mode !== 'reset' && (
@@ -114,9 +232,9 @@ function MemberAccount() {
           {mode === 'reset' && (
             <button className="account-text-button" type="button" onClick={() => changeMode('signin')}>Back to sign in</button>
           )}
-          {message && <p className="account-status" role="status">{message}</p>}
         </>
       )}
+      {message && <p className="account-status" role="status">{message}</p>}
       <p className="account-privacy-note">Account sign-in is separate from emergency support. This app is not monitored.
         Do not use it to store safety-critical information. Use a safer device if someone may monitor yours.</p>
     </section>
