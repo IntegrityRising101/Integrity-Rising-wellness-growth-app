@@ -8,6 +8,7 @@ import LocalSupportFinder from './components/LocalSupportFinder';
 import AIPrivacyNotice from './components/AIPrivacyNotice';
 import AIHub from './components/AIHub';
 import WellnessAI from './components/WellnessAI';
+import GuidedWellnessPractices from './components/GuidedWellnessPractices';
 import WellnessChat from './components/WellnessChat';
 import WomensWellness from './components/WomensWellness';
 import CommunityDiscussions from './components/CommunityDiscussions';
@@ -65,6 +66,7 @@ function App() {
           <AIPrivacyNotice />
           <WellnessChat />
           <WellnessAI />
+          <GuidedWellnessPractices />
           <WomensWellness />
         </section>
 
