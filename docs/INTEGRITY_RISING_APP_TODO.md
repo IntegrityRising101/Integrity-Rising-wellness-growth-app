@@ -128,9 +128,8 @@ Progress is counted from verified checklist items—not estimates. A task only m
 
 **Reachable steps**
 - [x] Create the Supabase project — completed Nov 5, 2026 (owner-confirmed).
-- [ ] Apply migration 003; migrations 001 and 002 are owner-confirmed successful.
+- [x] Apply migrations 001, 002, and 003 in order. — **Completed: Nov 5, 2026 (owner-confirmed)**
 - [ ] Connect app environment variables after database policies are fully applied and tested.
-- [ ] Apply migration 003; migrations 001 and 002 were successful on Nov 5, 2026 (owner-confirmed).
 - [ ] Test member and moderator access with separate test accounts.
 - [ ] Confirm sensitive records are private and not sent to AI.
 - [ ] Publish privacy, consent, and data-deletion information.
@@ -196,7 +195,7 @@ Progress is counted from verified checklist items—not estimates. A task only m
 - Progress bars show checklist completion, not a guarantee that the app is launch-ready.
 
 
-### Thursday, November 5, 2026 — Priority 1 reliability verified; Priority 2 privacy and safety started
+### Thursday, November 5, 2026 — Priority 1 reliability verified; database migrations owner-confirmed
 
 **Completed today**
 - [x] Confirmed the latest quality-check run passed, including npm install, lint, and production build. — **Completed: Nov 5, 2026**
@@ -207,7 +206,7 @@ Progress is counted from verified checklist items—not estimates. A task only m
 
 **Priority 2 — still open**
 - [x] Create the Supabase account and project. — **Completed: Nov 5, 2026 (owner-confirmed)**
-- [ ] Apply migration 003; migrations 001 and 002 ran successfully. — **Updated: Nov 5, 2026 (owner-confirmed)**
+- [x] Apply migrations 001, 002, and 003 successfully. — **Completed: Nov 5, 2026 (owner-confirmed)**
 - [ ] Verify row-level security with separate member accounts, including owner-only wellness records and moderator-only report access.
 - [ ] Confirm no service-role key or AI provider secret is exposed in frontend code, Git history, or public configuration.
 - [ ] Keep community posting disabled until RLS and moderator workflows are tested.
@@ -215,6 +214,17 @@ Progress is counted from verified checklist items—not estimates. A task only m
 
 **Important security finding**
 - Migration 001 creates owner-only policies for mood, journal, and women's wellness records. Migration 002 changes new community posts and comments to pending moderator review and adds a moderator role table with no client-facing assignment policy. Migration 003 adds block-aware read policies.
-- These SQL files being present in GitHub does **not** mean they have been applied to a Supabase database. Database setup and permission testing remain launch blockers.
+- The owner reports that all three migrations ran successfully. This is not the same as verifying row-level security: separate member and moderator accounts must still be used to test access boundaries.
 
-**Daily record:** Priority 1 CI/build/deployment verification is complete. Priority 2 is active; no production database or live AI service is claimed as configured.
+**Daily record:** Priority 1 CI/build/deployment verification is complete. Priority 2 is active; the Supabase project and migrations are owner-confirmed, but app connection, RLS tests, and live AI service remain unconfigured.
+
+
+### Thursday, November 5, 2026 — Goal Center refinement
+
+**Completed today**
+- [x] Reconciled the launch checklist: all three Supabase migrations are recorded as owner-confirmed successful; RLS testing remains open. — **Completed: Nov 5, 2026**
+- [x] Removed an unused React hook import from Goal Center to keep the component lint-clean. — **Completed: Nov 5, 2026**
+
+**Next build steps**
+- [ ] Verify the latest GitHub Actions quality-check run after this change.
+- [ ] Improve dashboard usability and mobile navigation.
