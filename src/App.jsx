@@ -55,9 +55,14 @@ function App() {
         <AppDirectory />
 
         <section id="dashboard" className="app-area">
+          <div className="section-intro dashboard-section-intro">
+            <p className="section-kicker">YOUR PERSONAL GROWTH HUB</p>
+            <h2>My Dashboard</h2>
+            <p>Start with a check-in, choose a small step, and keep your goals moving at a pace that works for you.</p>
+          </div>
           <MemberAccount />
-          <GoalCenter />
           <PersonalWellnessDashboard />
+          <GoalCenter />
         </section>
 
         <section id="wellness" className="app-area">
