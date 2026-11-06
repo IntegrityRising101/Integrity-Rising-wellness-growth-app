@@ -99,7 +99,18 @@ function PersonalWellnessDashboard() {
           <span>{intention.length}/300</span>
           <button type="submit" disabled={!mood && !intention.trim()}>Save check-in</button>
         </div>
-        {saved && <p className="wellness-saved-message" role="status">Your check-in is saved for this page session. Thank you for taking a moment for yourself.</p>}
+        {saved && (
+          <div className="wellness-saved-summary" role="status" aria-live="polite">
+            <div className="wellness-saved-summary-heading">
+              <span aria-hidden="true">✓</span>
+              <strong>Today's check-in is saved</strong>
+            </div>
+            <p><strong>How you're feeling:</strong> {selectedMood?.emoji} {selectedMood?.label}</p>
+            {intention.trim() && <p><strong>Your intention:</strong> {intention.trim()}</p>}
+            <p><strong>Small steps completed:</strong> {completedCount} of {practices.length}</p>
+            <small>This summary stays on this page only and clears when you refresh or close it.</small>
+          </div>
+        )}
       </form>
 
       <div className="wellness-practice-card">
