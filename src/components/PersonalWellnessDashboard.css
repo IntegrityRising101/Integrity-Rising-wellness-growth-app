@@ -103,3 +103,33 @@
   .dashboard-action-card:hover,
   .dashboard-action-card:focus-visible { transform: none; }
 }
+
+/* Saved check-in summary */
+
+.wellness-saved-summary {
+  margin-top: .9rem;
+  padding: .95rem 1rem;
+  border: 1px solid #d8c58f;
+  border-radius: 10px;
+  background: #fbf7ec;
+  color: #51472f;
+  line-height: 1.5;
+}
+.wellness-saved-summary-heading {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  color: #075e60;
+}
+.wellness-saved-summary-heading span {
+  display: grid;
+  width: 1.45rem;
+  height: 1.45rem;
+  place-items: center;
+  border-radius: 50%;
+  background: #e3f1eb;
+  color: #075e60;
+  font-weight: 800;
+}
+.wellness-saved-summary p { margin: .55rem 0 0; overflow-wrap: anywhere; }
+.wellness-saved-summary small { display: block; margin-top: .65rem; color: #786b53; }
