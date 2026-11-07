@@ -6,3 +6,5 @@ export default defineConfig({
   base: '/Integrity-Rising-wellness-growth-app/',
   plugins: [react()],
 })
+
+l
