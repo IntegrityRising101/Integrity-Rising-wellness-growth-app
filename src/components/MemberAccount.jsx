@@ -77,6 +77,7 @@ function MemberAccount() {
           email: email.trim(),
           password,
           options: { data: { display_name: displayName.trim() || 'Movement Member' } },
+          emailRedirectTo: "https://integrityrising101.github.io/Integrity-Rising-wellness-growth-app/",
         });
       } else if (mode === 'reset') {
         result = await supabase.auth.resetPasswordForEmail(email.trim());
