@@ -373,6 +373,12 @@ function CommunityDiscussions() {
             <input id="discussion-title" value={title} onChange={event => setTitle(event.target.value)} maxLength={120} required placeholder="What would you like to talk about?" />
             <label htmlFor="discussion-body">Your message</label>
             <textarea id="discussion-body" value={body} onChange={event => setBody(event.target.value)} maxLength={3000} rows={4} required placeholder="Share only what feels safe and comfortable..." />
+            <fieldset className="community-posting-checklist">
+              <legend>Before you share</legend>
+              <label><input type="checkbox" required /> I will communicate with respect and kindness.</label>
+              <label><input type="checkbox" required /> I will protect my privacy and other people’s personal information.</label>
+              <label><input type="checkbox" required /> I understand posts are reviewed by moderators before appearing.</label>
+            </fieldset>
             <div className="discussion-compose-footer">
               <span>{body.length}/3000</span>
               <button type="submit" disabled={busy}>{busy ? 'Sharing…' : 'Share post'}</button>
