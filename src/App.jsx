@@ -96,8 +96,8 @@ function App() {
           <QuickExitButton />
           <div className="section-intro">
             <p className="section-kicker">SUPPORT & RESOURCES</p>
-            <h2>My Safety Tools</h2>
-            <p>Explore support options and practical tools. If a device may be monitored, consider using a safer device before viewing sensitive information.</p>
+            <h2>Safety, Crisis &amp; Immediate Support</h2>
+            <p>Find crisis contacts, mental health resources, domestic violence support, recovery services, and practical safety tools. If a device may be monitored, consider using a safer device before viewing sensitive information.</p>
           </div>
           <MentalHealthServices />
           <StateResourceDirectory />
