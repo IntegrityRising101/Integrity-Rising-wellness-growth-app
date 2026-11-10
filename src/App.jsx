@@ -64,8 +64,8 @@ function App() {
             <h2>My Dashboard</h2>
             <p>Start with a check-in, choose a small step, and keep your goals moving at a pace that works for you.</p>
           </div>
-          <MotivationForTheWeek />
           <MemberAccount />
+          <MotivationForTheWeek />
           <PersonalWellnessDashboard />
           <GoalCenter />
           <GratitudeJournal />
