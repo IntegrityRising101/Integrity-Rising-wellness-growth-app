@@ -21,3 +21,80 @@
 .mental-health-disclaimer { margin-top: 18px; padding: 15px 17px; border: 1px solid #e3dfd1; border-radius: 10px; background: #fbfaf6; line-height: 1.55; font-size: .92rem; }
 .mental-health-search input:focus-visible, .mental-health-search select:focus-visible, .mental-health-card a:focus-visible, .mental-health-start a:focus-visible { outline: 3px solid #c9a64b; outline-offset: 3px; }
 @media (max-width: 600px) { .mental-health-services { padding: 20px 16px; } .mental-health-card { align-items: flex-start; flex-direction: column; } }
+
+
+/* Immediate crisis and practical support directory */
+.urgent-support-panel {
+  margin: 20px 0 26px;
+  padding: 22px;
+  border: 1px solid rgba(182, 74, 74, .3);
+  border-radius: 16px;
+  background: linear-gradient(135deg, #fff8f6 0%, #f5fbfa 100%);
+}
+.urgent-support-kicker {
+  margin: 0 0 5px;
+  color: #9a6e2d;
+  font-size: .75rem;
+  font-weight: 800;
+  letter-spacing: .12em;
+}
+.urgent-support-panel > h3 {
+  margin: 0 0 7px;
+  color: #155b59;
+  font-size: 1.35rem;
+}
+.urgent-support-intro { margin: 0; line-height: 1.55; }
+.urgent-support-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+.urgent-support-card {
+  padding: 15px;
+  border: 1px solid #dce7e4;
+  border-radius: 11px;
+  background: #fff;
+}
+.urgent-support-card h4 {
+  margin: 0 0 7px;
+  color: #155b59;
+  font-size: 1rem;
+}
+.urgent-support-card p {
+  margin: 0 0 10px;
+  line-height: 1.5;
+  font-size: .91rem;
+}
+.urgent-support-card > a,
+.urgent-support-card div a {
+  display: inline-block;
+  margin: 3px 10px 3px 0;
+  color: #075e60;
+  font-weight: 750;
+  text-underline-offset: 3px;
+}
+.urgent-support-crisis {
+  border-color: rgba(182, 74, 74, .4);
+  background: #fffdfc;
+}
+.urgent-support-reassurance {
+  margin: 17px 0 0;
+  color: #155b59;
+  font-weight: 700;
+  line-height: 1.5;
+}
+.urgent-support-privacy {
+  margin: 9px 0 0;
+  color: #657674;
+  font-size: .82rem;
+  line-height: 1.5;
+}
+.urgent-support-card a:focus-visible {
+  outline: 3px solid #c9a64b;
+  outline-offset: 3px;
+}
+@media (max-width: 640px) {
+  .urgent-support-panel { padding: 17px 14px; }
+  .urgent-support-grid { grid-template-columns: 1fr; }
+}
