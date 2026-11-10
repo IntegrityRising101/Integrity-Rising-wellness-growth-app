@@ -396,3 +396,38 @@
 @media (max-width: 760px) {
   .community-activity-grid { grid-template-columns: 1fr; }
 }
+
+
+/* Safe-sharing reminder required before a community post is submitted */
+.community-posting-checklist {
+  display: grid;
+  gap: .65rem;
+  margin: 1rem 0 .25rem;
+  padding: .9rem 1rem;
+  border: 1px solid #d8e7e3;
+  border-radius: 11px;
+  background: #fff;
+}
+.community-posting-checklist legend {
+  padding: 0 .35rem;
+  color: #155b59;
+  font-size: .9rem;
+  font-weight: 750;
+}
+.community-posting-checklist label {
+  display: flex;
+  align-items: flex-start;
+  gap: .6rem;
+  margin: 0;
+  color: #526663;
+  font-size: .86rem;
+  line-height: 1.45;
+  font-weight: 500;
+}
+.community-posting-checklist input {
+  flex: 0 0 auto;
+  width: 1rem;
+  height: 1rem;
+  margin: .1rem 0 0;
+  accent-color: #176c68;
+}
