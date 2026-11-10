@@ -19,6 +19,7 @@ import GoalCenter from './components/GoalCenter';
 import MemberAccount from './components/MemberAccount';
 import ModerationDashboard from './components/ModerationDashboard';
 import AppDirectory from './components/AppDirectory';
+import MotivationForTheWeek from './components/MotivationForTheWeek';
 
 const navigation = [
   { label: 'My Dashboard', target: 'dashboard' },
@@ -60,6 +61,7 @@ function App() {
             <h2>My Dashboard</h2>
             <p>Start with a check-in, choose a small step, and keep your goals moving at a pace that works for you.</p>
           </div>
+          <MotivationForTheWeek />
           <MemberAccount />
           <PersonalWellnessDashboard />
           <GoalCenter />
