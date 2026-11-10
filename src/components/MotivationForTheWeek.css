@@ -1,0 +1,56 @@
+.weekly-motivation {
+  max-width: 1050px;
+  margin: 28px auto 34px;
+  padding: 30px;
+  color: #203234;
+  background: #fff;
+  border: 1px solid #dce7e4;
+  border-radius: 20px;
+  box-shadow: 0 5px 18px rgba(18, 54, 53, .07);
+}
+.weekly-motivation-heading { text-align: center; margin-bottom: 24px; }
+.weekly-motivation-heading h2 { margin: 0 0 10px; color: #075e60; }
+.weekly-motivation-heading > p:last-child { margin: 0; line-height: 1.6; }
+.weekly-motivation-feature {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 18px;
+  align-items: start;
+  padding: 22px;
+  margin-bottom: 20px;
+  background: linear-gradient(120deg, #edf7f5, #fff9e9);
+  border: 1px solid #d9e8df;
+  border-left: 5px solid #c9a64b;
+  border-radius: 15px;
+}
+.weekly-motivation-icon { font-size: 2.3rem; line-height: 1.2; }
+.weekly-motivation-today {
+  margin: 0 0 7px;
+  color: #987323;
+  font-size: .75rem;
+  font-weight: 800;
+  letter-spacing: .1em;
+}
+.weekly-motivation-feature h3,
+.weekly-motivation-card h3 { margin: 0 0 5px; color: #075e60; }
+.weekly-motivation-feature p:last-child,
+.weekly-motivation-card p:last-child { margin: 8px 0 0; line-height: 1.6; }
+.weekly-motivation-theme { margin: 0; color: #765d25; font-weight: 700; }
+.weekly-motivation-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.weekly-motivation-card {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 13px;
+  padding: 17px;
+  background: #f7faf9;
+  border: 1px solid #e0e9e6;
+  border-radius: 13px;
+}
+.weekly-motivation-card > span { font-size: 1.6rem; }
+.weekly-motivation-card.is-today { border: 2px solid #c9a64b; background: #fffaf0; }
+.weekly-motivation-signoff { margin: 22px 0 0; color: #075e60; text-align: center; font-weight: 800; }
+@media (max-width: 650px) {
+  .weekly-motivation { margin: 22px 12px; padding: 21px 16px; }
+  .weekly-motivation-grid { grid-template-columns: 1fr; }
+  .weekly-motivation-feature { padding: 17px; }
+}
