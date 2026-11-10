@@ -510,7 +510,7 @@ function CommunityDiscussions() {
           <li>Share from your own experience; do not diagnose or pressure others.</li>
           <li>Reports are private. This app is not monitored around the clock.</li>
         </ul>
-        <p><strong>Need urgent help?</strong> If you are in immediate danger in the U.S., call 911. For confidential domestic violence support, contact the National Domestic Violence Hotline at 1-800-799-SAFE (7233) or text START to 88788.</p>
+        <p><strong>Need urgent help?</strong> If you are in immediate danger, call <a href="tel:911">911</a>. For suicide or emotional crisis support, call or text <a href="tel:988">988</a>. For domestic violence support, call <a href="tel:18007997233">1-800-799-SAFE (7233)</a> or text START to <a href="sms:88788">88788</a>. For housing, food, and local services, call <a href="tel:211">211</a>. Visit <a href="#safety">Crisis & Immediate Support in Safety & Support</a> for more resources. This community is not monitored for emergencies.</p>
       </aside>
       {notice && <p className="discussion-notice" role="status">{notice}</p>}
       <p className="discussion-privacy">Community content is available to signed-in members. Reports are private to the person submitting them. A trained, actively available moderation team must be in place before this community is opened to the public. Do not share sensitive identifying information.</p>
