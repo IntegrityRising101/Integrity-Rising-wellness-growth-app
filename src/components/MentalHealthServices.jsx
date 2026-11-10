@@ -97,11 +97,40 @@ export default function MentalHealthServices() {
         <p>Explore trusted starting points for counseling, psychiatric care, affordable treatment, recovery, and support.</p>
       </div>
 
-      <div className="mental-health-crisis" role="note">
-        <strong>Need help right now?</strong>
-        <p>If you or someone else is in immediate danger, call 911 or go to the nearest emergency department.</p>
-        <p>For emotional distress or a mental health crisis, call or text <a href="tel:988">988</a> or visit <a href="https://988lifeline.org/" target="_blank" rel="noreferrer">988lifeline.org</a>. You do not have to be suicidal to contact 988.</p>
-      </div>
+      <section className="urgent-support-panel" aria-labelledby="urgent-support-title">
+        <p className="urgent-support-kicker">YOU DESERVE SUPPORT</p>
+        <h3 id="urgent-support-title">Need Immediate Support?</h3>
+        <p className="urgent-support-intro">If you or someone you know is struggling, help is available. You do not have to face a difficult moment alone.</p>
+        <div className="urgent-support-grid">
+          <article className="urgent-support-card urgent-support-crisis">
+            <h4>Suicide & Mental Health Crisis</h4>
+            <p>Call or text <strong>988</strong> any time, day or night, for free, confidential support. You do not have to be suicidal to reach out.</p>
+            <div><a href="tel:988">Call 988</a><a href="sms:988">Text 988</a><a href="https://988lifeline.org/chat/" target="_blank" rel="noreferrer">Chat online ↗</a></div>
+          </article>
+          <article className="urgent-support-card">
+            <h4>Immediate Danger</h4>
+            <p>If someone is in immediate danger or needs urgent medical help, call 911 or go to the nearest emergency department.</p>
+            <a href="tel:911">Call 911</a>
+          </article>
+          <article className="urgent-support-card">
+            <h4>Domestic Violence Support</h4>
+            <p>Confidential support, safety planning, and help exploring options.</p>
+            <div><a href="tel:18007997233">Call 1-800-799-SAFE</a><a href="sms:88788">Text START to 88788</a><a href="https://www.thehotline.org/" target="_blank" rel="noreferrer">Visit the hotline ↗</a></div>
+          </article>
+          <article className="urgent-support-card">
+            <h4>Substance Use & Recovery</h4>
+            <p>Free, confidential treatment referral and information, available 24/7.</p>
+            <a href="tel:18006624357">Call 1-800-662-HELP (4357)</a>
+          </article>
+          <article className="urgent-support-card">
+            <h4>Local Help: Housing, Food & More</h4>
+            <p>Call 211 to connect with local community services. Availability and services vary by area.</p>
+            <div><a href="tel:211">Call 211</a><a href="https://www.211.org/" target="_blank" rel="noreferrer">Visit 211 ↗</a></div>
+          </article>
+        </div>
+        <p className="urgent-support-reassurance">You are not alone. Reaching out for help is a sign of strength. You deserve support, compassion, and a chance to heal.</p>
+        <p className="urgent-support-privacy">If you are concerned that someone monitors your device or messages, consider using a safer device. Do not rely on this app for emergency monitoring or crisis response.</p>
+      </section>
 
       <div className="mental-health-search">
         <label htmlFor="mental-health-category">Filter by type of support</label>
