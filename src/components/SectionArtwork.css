@@ -1,0 +1,49 @@
+.section-artwork {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(230px, .8fr);
+  align-items: center;
+  gap: 1.2rem;
+  max-width: 1100px;
+  min-height: 150px;
+  margin: 1.1rem auto 1.5rem;
+  overflow: hidden;
+  border: 1px solid rgba(198,154,75,.38);
+  border-radius: 17px;
+  background: linear-gradient(115deg,#073f43,#176c68 62%,#e5d19a);
+  box-shadow: 0 7px 22px rgba(20,55,58,.09);
+}
+.section-artwork svg {
+  display: block;
+  width: 100%;
+  height: 160px;
+}
+.section-artwork figcaption {
+  display: grid;
+  gap: .45rem;
+  padding: 1rem 1.4rem 1rem .2rem;
+  color: #fff;
+}
+.section-artwork figcaption span {
+  color: #fff;
+  font-size: clamp(1.1rem,2.5vw,1.55rem);
+  font-weight: 800;
+  line-height: 1.2;
+}
+.section-artwork figcaption small {
+  color: #f2ead7;
+  font-size: .9rem;
+  line-height: 1.5;
+}
+@media (max-width: 640px) {
+  .section-artwork {
+    grid-template-columns: 1fr;
+    gap: 0;
+    margin: .8rem 0 1.2rem;
+  }
+  .section-artwork svg { height: 125px; }
+  .section-artwork figcaption { padding: .15rem 1rem 1rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .section-artwork { scroll-behavior: auto; }
+}
