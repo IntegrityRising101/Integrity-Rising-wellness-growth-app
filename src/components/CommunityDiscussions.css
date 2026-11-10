@@ -431,3 +431,138 @@
   margin: .1rem 0 0;
   accent-color: #176c68;
 }
+
+
+/* Community events and self-guided growth challenges */
+.community-events-center {
+  margin: 1.25rem 0 1.5rem;
+  padding: 1.35rem;
+  border: 1px solid rgba(31, 153, 148, .3);
+  border-radius: 16px;
+  background: linear-gradient(145deg, #f0f8f6 0%, #fffaf0 100%);
+}
+.community-events-kicker {
+  margin: 0 0 .35rem;
+  color: #a4772d;
+  font-size: .74rem;
+  font-weight: 800;
+  letter-spacing: .12em;
+}
+.community-events-center > h3 {
+  margin: .2rem 0 .45rem;
+  color: #155b59;
+  font-size: 1.25rem;
+}
+.community-events-intro {
+  max-width: 850px;
+  color: #526663;
+  line-height: 1.55;
+}
+.community-challenge-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: .85rem;
+  margin: 1rem 0 1.2rem;
+}
+.community-challenge-card {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  border: 1px solid #dce9e6;
+  border-radius: 12px;
+  background: #fff;
+}
+.community-challenge-type {
+  color: #a4772d;
+  font-size: .72rem;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+.community-challenge-card h4 {
+  margin: .45rem 0;
+  color: #155b59;
+  font-size: 1rem;
+}
+.community-challenge-card > p {
+  color: #5b6e69;
+  font-size: .88rem;
+  line-height: 1.5;
+}
+.community-challenge-card .community-challenge-prompt {
+  flex: 1;
+  padding: .7rem;
+  border-left: 3px solid #c69a4b;
+  background: #fbf8f1;
+  color: #455b56;
+  font-weight: 650;
+}
+.community-challenge-check {
+  display: flex;
+  align-items: flex-start;
+  gap: .55rem;
+  margin-top: .5rem;
+  color: #155b59;
+  font-size: .85rem;
+  font-weight: 700;
+  line-height: 1.4;
+  cursor: pointer;
+}
+.community-challenge-check input {
+  width: 1rem;
+  height: 1rem;
+  margin: .1rem 0 0;
+  accent-color: #176c68;
+}
+.community-events-schedule {
+  padding: 1rem;
+  border: 1px solid rgba(198, 154, 75, .35);
+  border-radius: 12px;
+  background: rgba(255,255,255,.78);
+}
+.community-events-schedule h4 {
+  margin: 0 0 .25rem;
+  color: #155b59;
+}
+.community-events-schedule > p {
+  margin: .2rem 0 .75rem;
+  color: #71817e;
+  font-size: .82rem;
+}
+.community-event-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .7rem;
+}
+.community-event-item {
+  display: flex;
+  align-items: flex-start;
+  gap: .7rem;
+  padding: .75rem;
+  border-radius: 9px;
+  background: #f5f9f8;
+}
+.community-event-item > span {
+  min-width: 5.5rem;
+  color: #a4772d;
+  font-size: .72rem;
+  font-weight: 800;
+  letter-spacing: .06em;
+}
+.community-event-item strong { color: #155b59; font-size: .9rem; }
+.community-event-item p {
+  margin: .2rem 0 0;
+  color: #5b6e69;
+  font-size: .83rem;
+  line-height: 1.45;
+}
+.community-events-privacy {
+  margin: .9rem 0 0;
+  color: #687875;
+  font-size: .8rem;
+  line-height: 1.5;
+}
+@media (max-width: 760px) {
+  .community-challenge-grid, .community-event-list { grid-template-columns: 1fr; }
+  .community-events-center { padding: 1rem; }
+}
