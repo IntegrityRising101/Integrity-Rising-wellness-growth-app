@@ -253,3 +253,59 @@
   color: #687875;
   font-size: .84rem;
 }
+
+
+/* Daily encouragement feature for community connection */
+.daily-encouragement-card {
+  margin: 1.2rem 0 1.4rem;
+  padding: 1.35rem;
+  border: 1px solid rgba(31, 153, 148, .3);
+  border-radius: 15px;
+  background: linear-gradient(135deg, #edf8f6 0%, #fff9eb 100%);
+}
+.daily-encouragement-kicker {
+  margin: 0 0 .35rem;
+  color: #a4772d;
+  font-size: .74rem;
+  font-weight: 800;
+  letter-spacing: .12em;
+}
+.daily-encouragement-card h3 {
+  margin: .2rem 0 .6rem;
+  color: #155b59;
+  font-size: 1.2rem;
+}
+.daily-encouragement-card blockquote {
+  margin: .7rem 0;
+  padding: .85rem 1rem;
+  border-left: 3px solid #c69a4b;
+  border-radius: 8px;
+  background: rgba(255,255,255,.8);
+  color: #344946;
+  font-size: 1.02rem;
+  font-weight: 650;
+  line-height: 1.55;
+}
+.daily-encouragement-card > p:not(.daily-encouragement-kicker) {
+  line-height: 1.5;
+}
+.daily-encouragement-card button {
+  margin-top: .35rem;
+  border: 0;
+  border-radius: 9px;
+  padding: .75rem 1rem;
+  background: #176c68;
+  color: #fff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+.daily-encouragement-card button:hover { background: #105653; }
+.daily-encouragement-card button:focus-visible {
+  outline: 3px solid #c9a64b;
+  outline-offset: 3px;
+}
+.daily-encouragement-signin {
+  color: #657674;
+  font-size: .88rem;
+}
