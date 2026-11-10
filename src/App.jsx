@@ -21,6 +21,7 @@ import ModerationDashboard from './components/ModerationDashboard';
 import AppDirectory from './components/AppDirectory';
 import MotivationForTheWeek from './components/MotivationForTheWeek';
 import GratitudeJournal from './components/GratitudeJournal';
+import StressReliefCenter from './components/StressReliefCenter';
 
 const navigation = [
   { label: 'My Dashboard', target: 'dashboard' },
@@ -75,6 +76,7 @@ function App() {
           <WellnessChat />
           <WellnessAI />
           <GuidedWellnessPractices />
+          <StressReliefCenter />
           <SelfReflectionCheck />
           <WomensWellness />
         </section>
