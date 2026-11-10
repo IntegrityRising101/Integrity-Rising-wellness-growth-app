@@ -3,6 +3,7 @@ import { isSupabaseConfigured, supabase } from '../lib/supabase';
 import './CommunityDiscussions.css';
 
 const categories = [
+  'Introductions',
   'Encouragement',
   'Healing & Growth',
   'Healthy Relationships',
@@ -282,6 +283,17 @@ function CommunityDiscussions() {
         </div>
         <span className="discussion-status">Members</span>
       </div>
+
+      <section className="community-welcome-card" aria-labelledby="community-welcome-title">
+        <p className="community-welcome-kicker">YOU BELONG HERE</p>
+        <h3 id="community-welcome-title">A community built on encouragement, respect, and growth.</h3>
+        <p>Whether you are taking your first step or continuing a long journey, you are welcome to learn, share, listen, and grow at your own pace.</p>
+        <div className="community-welcome-prompts">
+          <strong>New here? Start with an introduction.</strong>
+          <span>Share only what feels comfortable: what name you would like members to use, one thing you are working toward, or what kind of encouragement helps you feel supported.</span>
+        </div>
+        <p className="community-welcome-reminder">You never have to share your personal history, contact details, location, or anything that does not feel safe.</p>
+      </section>
 
       {!user ? (
         <div className="discussion-guidelines">
