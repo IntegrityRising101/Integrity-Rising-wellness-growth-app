@@ -22,6 +22,7 @@ import AppDirectory from './components/AppDirectory';
 import MotivationForTheWeek from './components/MotivationForTheWeek';
 import GratitudeJournal from './components/GratitudeJournal';
 import StressReliefCenter from './components/StressReliefCenter';
+import AchievementCenter from './components/AchievementCenter';
 
 const navigation = [
   { label: 'My Dashboard', target: 'dashboard' },
@@ -68,6 +69,7 @@ function App() {
           <PersonalWellnessDashboard />
           <GoalCenter />
           <GratitudeJournal />
+          <AchievementCenter />
         </section>
 
         <section id="wellness" className="app-area">
