@@ -23,6 +23,7 @@ import MotivationForTheWeek from './components/MotivationForTheWeek';
 import GratitudeJournal from './components/GratitudeJournal';
 import StressReliefCenter from './components/StressReliefCenter';
 import AchievementCenter from './components/AchievementCenter';
+import SectionArtwork from './components/SectionArtwork';
 
 const navigation = [
   { label: 'My Dashboard', target: 'dashboard' },
@@ -64,6 +65,7 @@ function App() {
             <h2>My Dashboard</h2>
             <p>Start with a check-in, choose a small step, and keep your goals moving at a pace that works for you.</p>
           </div>
+          <SectionArtwork variant="dashboard" />
           <MemberAccount />
           <MotivationForTheWeek />
           <PersonalWellnessDashboard />
@@ -73,6 +75,7 @@ function App() {
         </section>
 
         <section id="wellness" className="app-area">
+          <SectionArtwork variant="wellness" />
           <AIHub />
           <AIPrivacyNotice />
           <WellnessChat />
@@ -84,11 +87,13 @@ function App() {
         </section>
 
         <section id="community" className="app-area">
+          <SectionArtwork variant="community" />
           <CommunityDiscussions />
           <ModerationDashboard />
         </section>
 
         <section id="academy" className="app-area">
+          <SectionArtwork variant="academy" />
           <Academy />
         </section>
 
@@ -99,6 +104,7 @@ function App() {
             <h2>Safety, Crisis &amp; Immediate Support</h2>
             <p>Find crisis contacts, mental health resources, domestic violence support, recovery services, and practical safety tools. If a device may be monitored, consider using a safer device before viewing sensitive information.</p>
           </div>
+          <SectionArtwork variant="safety" />
           <MentalHealthServices />
           <StateResourceDirectory />
           <LocalSupportFinder />
