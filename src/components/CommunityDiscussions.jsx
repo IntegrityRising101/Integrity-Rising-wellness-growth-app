@@ -295,6 +295,22 @@ function CommunityDiscussions() {
         <p className="community-welcome-reminder">You never have to share your personal history, contact details, location, or anything that does not feel safe.</p>
       </section>
 
+      <section className="daily-encouragement-card" aria-labelledby="daily-encouragement-title">
+        <p className="daily-encouragement-kicker">A LITTLE HOPE FOR TODAY</p>
+        <h3 id="daily-encouragement-title">Daily Encouragement</h3>
+        <blockquote>“You do not have to have it all figured out. One honest step forward is still progress.”</blockquote>
+        <p>What is one kind word, helpful reminder, or small victory you could share to encourage someone today?</p>
+        {user ? (
+          <button type="button" onClick={() => {
+            setCategory('Encouragement');
+            document.getElementById('discussion-title')?.focus();
+            document.getElementById('discussion-title')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }}>Share an encouraging message</button>
+        ) : (
+          <p className="daily-encouragement-signin">Sign in above to share an encouraging message with the community.</p>
+        )}
+      </section>
+
       {!user ? (
         <div className="discussion-guidelines">
           <h3>Sign in to join the community</h3>
