@@ -20,6 +20,7 @@ import MemberAccount from './components/MemberAccount';
 import ModerationDashboard from './components/ModerationDashboard';
 import AppDirectory from './components/AppDirectory';
 import MotivationForTheWeek from './components/MotivationForTheWeek';
+import GratitudeJournal from './components/GratitudeJournal';
 
 const navigation = [
   { label: 'My Dashboard', target: 'dashboard' },
@@ -65,6 +66,7 @@ function App() {
           <MemberAccount />
           <PersonalWellnessDashboard />
           <GoalCenter />
+          <GratitudeJournal />
         </section>
 
         <section id="wellness" className="app-area">
