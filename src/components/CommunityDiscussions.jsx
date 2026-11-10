@@ -26,6 +26,7 @@ function CommunityDiscussions() {
   const [mySubmissions, setMySubmissions] = useState([]);
   const [blockedUsers, setBlockedUsers] = useState([]);
   const [category, setCategory] = useState(categories[0]);
+  const [feedCategory, setFeedCategory] = useState('All topics');
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
   const [replyDrafts, setReplyDrafts] = useState({});
@@ -248,6 +249,10 @@ function CommunityDiscussions() {
     setBusy(false);
   }
 
+  const filteredPosts = feedCategory === 'All topics'
+    ? posts
+    : posts.filter(post => post.category === feedCategory);
+
   if (!isSupabaseConfigured) {
     return (
       <section className="discussions-section" aria-labelledby="discussions-title">
@@ -345,13 +350,20 @@ function CommunityDiscussions() {
           <div className="discussion-feed">
             <div className="discussion-feed-heading">
               <h3>Community conversations</h3>
-              <span>{posts.length} recent posts</span>
+              <span>{filteredPosts.length} recent posts</span>
+            </div>
+            <div className="discussion-feed-filter">
+              <label htmlFor="community-feed-category">Browse conversations by topic</label>
+              <select id="community-feed-category" value={feedCategory} onChange={event => setFeedCategory(event.target.value)}>
+                <option>All topics</option>
+                {categories.map(item => <option key={item} value={item}>{item}</option>)}
+              </select>
             </div>
             {loading ? (
               <p role="status">Loading community conversations…</p>
-            ) : posts.length === 0 ? (
-              <p>There are no posts yet. You can start the first conversation.</p>
-            ) : posts.map(post => (
+            ) : filteredPosts.length === 0 ? (
+              <p>{posts.length === 0 ? 'There are no posts yet. You can start the first conversation.' : 'No conversations in this topic yet. Choose another topic or view all topics.'}</p>
+            ) : filteredPosts.map(post => (
               <article className="discussion-post" key={post.id}>
                 <div className="discussion-post-meta">
                   <span className="discussion-category">{post.category}</span>
