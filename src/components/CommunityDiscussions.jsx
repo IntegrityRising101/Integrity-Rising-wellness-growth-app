@@ -20,6 +20,83 @@ const reportReasons = [
   ['other', 'Other']
 ];
 
+
+const weeklyCommunityChallenges = [
+  { id: 'kindness', title: 'Kindness in Action', type: 'Kindness challenge', description: 'Offer one sincere compliment, check in on someone, or do a small helpful act without expecting anything in return.', prompt: 'What small act of kindness can you offer this week?' },
+  { id: 'growth', title: 'One Step Forward', type: 'Personal growth challenge', description: 'Choose one realistic action that supports your well-being, learning, or a healthy boundary. Keep it small enough to complete.', prompt: 'What is one step you can take for yourself?' },
+  { id: 'encouragement', title: 'Pass Along Encouragement', type: 'Community challenge', description: 'Share a supportive message, celebrate someone’s progress, or remind another person that small steps count.', prompt: 'What encouraging words would you like someone to hear?' }
+];
+
+const communityGatherings = [
+  { day: 'MONDAY', title: 'Set an Intention', detail: 'Choose one value to guide your week and one small action to match it.' },
+  { day: 'WEDNESDAY', title: 'Midweek Kindness', detail: 'Pause to offer encouragement or do one thoughtful thing for someone.' },
+  { day: 'FRIDAY', title: 'Celebrate Progress', detail: 'Notice a win, lesson, or moment of resilience from the week.' },
+  { day: 'SUNDAY', title: 'Reset & Prepare', detail: 'Take a few minutes to rest, reflect privately, and choose a gentle next step.' }
+];
+
+function CommunityEventsCenter() {
+  const storageKey = 'integrity-rising-community-challenges-v1';
+  const [completed, setCompleted] = useState([]);
+
+  useEffect(() => {
+    try {
+      const saved = window.localStorage.getItem(storageKey);
+      if (saved) setCompleted(JSON.parse(saved));
+    } catch {
+      setCompleted([]);
+    }
+  }, []);
+
+  function toggleChallenge(id) {
+    setCompleted(current => {
+      const next = current.includes(id) ? current.filter(item => item !== id) : [...current, id];
+      try {
+        window.localStorage.setItem(storageKey, JSON.stringify(next));
+      } catch {
+        // The checklist remains usable for this session if browser storage is unavailable.
+      }
+      return next;
+    });
+  }
+
+  return (
+    <section className="community-events-center" aria-labelledby="community-events-title">
+      <p className="community-events-kicker">TAKE PART • GROW TOGETHER</p>
+      <h3 id="community-events-title">Community Events &amp; Challenges</h3>
+      <p className="community-events-intro">Simple, self-guided activities help us build connection through kindness, encouragement, and personal growth. Join in at your own pace—every activity is optional.</p>
+
+      <div className="community-challenge-grid">
+        {weeklyCommunityChallenges.map(challenge => (
+          <article className="community-challenge-card" key={challenge.id}>
+            <span className="community-challenge-type">{challenge.type}</span>
+            <h4>{challenge.title}</h4>
+            <p>{challenge.description}</p>
+            <p className="community-challenge-prompt">{challenge.prompt}</p>
+            <label className="community-challenge-check">
+              <input type="checkbox" checked={completed.includes(challenge.id)} onChange={() => toggleChallenge(challenge.id)} />
+              <span>{completed.includes(challenge.id) ? 'Completed — well done!' : 'Mark this challenge complete'}</span>
+            </label>
+          </article>
+        ))}
+      </div>
+
+      <div className="community-events-schedule">
+        <h4>Our Weekly Community Rhythm</h4>
+        <p>These are self-guided community moments, not scheduled live meetings.</p>
+        <div className="community-event-list">
+          {communityGatherings.map(event => (
+            <article className="community-event-item" key={event.day}>
+              <span>{event.day}</span>
+              <div><strong>{event.title}</strong><p>{event.detail}</p></div>
+            </article>
+          ))}
+        </div>
+      </div>
+      <p className="community-events-privacy">Your completion checklist is saved only in this browser on this device. It is not posted to the community or shared with other members. Please do not use challenges to pressure anyone to disclose personal information.</p>
+    </section>
+  );
+}
+
 function CommunityDiscussions() {
   const [user, setUser] = useState(null);
   const [posts, setPosts] = useState([]);
@@ -355,6 +432,8 @@ function CommunityDiscussions() {
         </div>
         {!user && <p className="community-activity-signin">Sign in to take part. You can also simply read along—participation is always optional.</p>}
       </section>
+
+      <CommunityEventsCenter />
 
       {!user ? (
         <div className="discussion-guidelines">
