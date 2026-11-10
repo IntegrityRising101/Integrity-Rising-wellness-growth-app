@@ -311,6 +311,51 @@ function CommunityDiscussions() {
         )}
       </section>
 
+      <section className="community-connection-card" aria-labelledby="community-connection-title">
+        <p className="community-connection-kicker">GROW TOGETHER</p>
+        <h3 id="community-connection-title">Community Connection Activities</h3>
+        <p>Small, optional activities help members encourage one another without pressure to share personal details.</p>
+        <div className="community-activity-grid">
+          <article className="community-activity">
+            <span className="community-activity-number">01</span>
+            <h4>Celebrate a Small Win</h4>
+            <p>Recognize one step forward, no matter how small. Progress deserves to be noticed.</p>
+            <button type="button" disabled={!user} onClick={() => {
+              setCategory('Encouragement');
+              setTitle('A small win I want to celebrate');
+              setBody('One small step I took recently was…');
+              document.getElementById('discussion-title')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              document.getElementById('discussion-title')?.focus({ preventScroll: true });
+            }}>Share a small win</button>
+          </article>
+          <article className="community-activity">
+            <span className="community-activity-number">02</span>
+            <h4>Pass Along Kindness</h4>
+            <p>Offer a kind word or practical reminder that someone might need to hear today.</p>
+            <button type="button" disabled={!user} onClick={() => {
+              setCategory('Encouragement');
+              setTitle('A kind reminder for someone today');
+              setBody('If you need a reminder today, please know…');
+              document.getElementById('discussion-title')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              document.getElementById('discussion-title')?.focus({ preventScroll: true });
+            }}>Share a kind reminder</button>
+          </article>
+          <article className="community-activity">
+            <span className="community-activity-number">03</span>
+            <h4>Choose One Growth Step</h4>
+            <p>Name one healthy, realistic action you want to take this week. Keep it manageable.</p>
+            <button type="button" disabled={!user} onClick={() => {
+              setCategory('Healing & Growth');
+              setTitle('One growth step for this week');
+              setBody('One realistic step I want to take this week is…');
+              document.getElementById('discussion-title')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              document.getElementById('discussion-title')?.focus({ preventScroll: true });
+            }}>Share a growth step</button>
+          </article>
+        </div>
+        {!user && <p className="community-activity-signin">Sign in to take part. You can also simply read along—participation is always optional.</p>}
+      </section>
+
       {!user ? (
         <div className="discussion-guidelines">
           <h3>Sign in to join the community</h3>
