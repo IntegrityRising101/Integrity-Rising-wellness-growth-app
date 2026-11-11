@@ -374,6 +374,17 @@ function CommunityDiscussions() {
         <p className="community-welcome-kicker">YOU BELONG HERE</p>
         <h3 id="community-welcome-title">A community built on encouragement, respect, and growth.</h3>
         <p>Whether you are taking your first step or continuing a long journey, you are welcome to learn, share, listen, and grow at your own pace.</p>
+        {user ? (
+          <button type="button" className="community-introduction-button" onClick={() => {
+            setCategory('Introductions');
+            setTitle('A little about me');
+            setBody('The name I would like members to use is…\nOne thing I am working toward is…\nA kind of encouragement I appreciate is…');
+            document.getElementById('discussion-title')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            document.getElementById('discussion-title')?.focus({ preventScroll: true });
+          }}>Start my introduction</button>
+        ) : (
+          <a className="community-introduction-button" href="#dashboard">Sign in to introduce yourself</a>
+        )}
         <div className="community-welcome-prompts">
           <strong>New here? Start with an introduction.</strong>
           <span>Share only what feels comfortable: what name you would like members to use, one thing you are working toward, or what kind of encouragement helps you feel supported.</span>
