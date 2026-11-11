@@ -361,6 +361,15 @@ function CommunityDiscussions() {
         <span className="discussion-status">Members</span>
       </div>
 
+      <section className="community-join-card" aria-label="Join the Integrity Rising community">
+        <div>
+          <p className="community-join-kicker">READY TO CONNECT?</p>
+          <h3>Sign in to join the community</h3>
+          <p>Sign in or create your free member account to start conversations, share encouragement, join activities, and connect with other members.</p>
+        </div>
+        <a className="community-join-button" href="#dashboard">Sign in / Create an account</a>
+      </section>
+
       <section className="community-welcome-card" aria-labelledby="community-welcome-title">
         <p className="community-welcome-kicker">YOU BELONG HERE</p>
         <h3 id="community-welcome-title">A community built on encouragement, respect, and growth.</h3>
