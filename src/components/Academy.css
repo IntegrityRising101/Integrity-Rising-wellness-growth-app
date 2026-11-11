@@ -46,3 +46,28 @@
   .academy-progress-label { flex-direction: column; gap: .25rem; }
   .academy-lesson-body { padding-left: 1rem; }
 }
+
+
+/* Guided learning paths */
+.academy-paths { margin: 1.5rem 0 1.2rem; }
+.academy-paths-heading { display: flex; align-items: end; justify-content: space-between; gap: 1rem; margin-bottom: .9rem; }
+.academy-paths-kicker { margin: 0 0 .25rem; color: #9a7535; font-size: .72rem; font-weight: 800; letter-spacing: .13em; }
+.academy-paths-heading h3 { margin: 0; color: #155b59; font-size: 1.45rem; }
+.academy-paths-heading p:not(.academy-paths-kicker) { max-width: 680px; margin: .35rem 0 0; line-height: 1.5; }
+.academy-paths-progress { flex: 0 0 auto; padding: .45rem .7rem; border-radius: 999px; background: #f7f0df; color: #795c25; font-size: .78rem; font-weight: 750; }
+.academy-path-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem; }
+.academy-path-card { display: flex; flex-direction: column; align-items: flex-start; min-width: 0; padding: 1rem; border: 1px solid #dce7e4; border-radius: 13px; background: #fbfdfc; color: #263735; text-align: left; font: inherit; cursor: pointer; transition: border-color .18s ease, background .18s ease, transform .18s ease; }
+.academy-path-card:hover { border-color: #8bbdb6; transform: translateY(-1px); }
+.academy-path-card.active { border-color: #176c68; background: #edf7f5; box-shadow: inset 0 0 0 1px #176c68; }
+.academy-path-card-title { color: #155b59; font-weight: 800; font-size: 1.02rem; }
+.academy-path-card-description { margin-top: .4rem; line-height: 1.45; font-size: .9rem; }
+.academy-path-card-outcome { margin-top: .55rem; color: #795c25; font-size: .8rem; font-weight: 700; }
+.academy-path-mini-track { display: block; width: 100%; height: 6px; margin-top: .8rem; overflow: hidden; border-radius: 999px; background: #e5ece9; }
+.academy-path-mini-track span { display: block; height: 100%; border-radius: inherit; background: #b18a43; }
+.academy-path-card-footer { display: flex; justify-content: space-between; gap: .6rem; width: 100%; margin-top: .45rem; color: #657570; font-size: .75rem; }
+.academy-path-card-footer strong { color: #176c68; }
+.academy-path-card:focus-visible, .academy-course-choice:focus-visible, .academy-lesson-toggle:focus-visible, .academy-complete-button:focus-visible { outline: 3px solid #c49a4a; outline-offset: 3px; }
+@media (max-width: 700px) {
+  .academy-paths-heading { align-items: flex-start; flex-direction: column; }
+  .academy-path-grid { grid-template-columns: 1fr; }
+}
