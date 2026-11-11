@@ -20,9 +20,14 @@ function MemberAccount() {
     supabase.auth.getSession().then(({ data, error }) => {
       if (active && !error) setUser(data.session?.user ?? null);
     });
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: listener } = supabase.auth.onAuthStateChange((event, session) => {
       setUser(session?.user ?? null);
-      setMessage('');
+      if (event === 'PASSWORD_RECOVERY') {
+        setMode('update');
+        setMessage('Choose a new password for your account.');
+      } else {
+        setMessage('');
+      }
     });
     return () => {
       active = false;
@@ -72,7 +77,9 @@ function MemberAccount() {
     setMessage('');
     try {
       let result;
-      if (mode === 'signup') {
+      if (mode === 'update') {
+        result = await supabase.auth.updateUser({ password });
+      } else if (mode === 'signup') {
         result = await supabase.auth.signUp({
           email: email.trim(),
           password,
@@ -80,7 +87,10 @@ function MemberAccount() {
           emailRedirectTo: "https://integrityrising101.github.io/Integrity-Rising-wellness-growth-app/",
         });
       } else if (mode === 'reset') {
-        result = await supabase.auth.resetPasswordForEmail(email.trim());
+        const recoveryRedirect = `${window.location.origin}${import.meta.env.BASE_URL}`;
+        result = await supabase.auth.resetPasswordForEmail(email.trim(), {
+          redirectTo: recoveryRedirect,
+        });
       } else {
         result = await supabase.auth.signInWithPassword({ email: email.trim(), password });
       }
@@ -90,10 +100,14 @@ function MemberAccount() {
         setMessage('Account request received. Check your email for the confirmation link, then return here to sign in.');
       } else if (mode === 'reset') {
         setMessage('If an account exists for that email, a password reset link will be sent. Check your inbox.');
+      } else if (mode === 'update') {
+        setPassword('');
+        setMode('signin');
+        setMessage('Your password has been updated successfully.');
       } else {
         setMessage(mode === 'signup' ? 'Your account was created.' : 'You are signed in.');
       }
-      setPassword('');
+      if (mode !== 'update') setPassword('');
     } catch (error) {
       setMessage(error.message || 'We could not complete that request. Please try again.');
     } finally {
@@ -159,6 +173,24 @@ function MemberAccount() {
             the two environment variables described in the repository's <code>.env.example</code> file.
             Never place a service-role key or database password in this app.</p>
         </div>
+      ) : mode === 'update' ? (
+        <form className="member-account-form" onSubmit={handleSubmit}>
+          <h3>Set a new password</h3>
+          <p>Choose a new password with at least 8 characters.</p>
+          <label htmlFor="member-password">New password</label>
+          <input
+            id="member-password"
+            type="password"
+            autoComplete="new-password"
+            minLength={8}
+            required
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+          />
+          <button type="submit" disabled={busy}>
+            {busy ? 'Updating…' : 'Update password'}
+          </button>
+        </form>
       ) : user ? (
         <div className="account-signed-in">
           <p>You are signed in as <strong>{user.email}</strong>.</p>
