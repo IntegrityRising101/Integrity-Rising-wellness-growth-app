@@ -228,3 +228,16 @@ Progress is counted from verified checklist items—not estimates. A task only m
 **Next build steps**
 - [ ] Verify the latest GitHub Actions quality-check run after this change.
 - [ ] Improve dashboard usability and mobile navigation.
+
+
+## Authentication user-journey checks — November 10, 2026
+
+- [x] Add an explicit Supabase password-recovery redirect to the GitHub Pages app base path. — **Completed: Nov 10, 2026**
+- [x] Handle Supabase's `PASSWORD_RECOVERY` auth event and show a form for setting a new password. — **Completed: Nov 10, 2026**
+- [ ] In Supabase Authentication → URL Configuration, set the Site URL to `https://integrityrising101.github.io/Integrity-Rising-wellness-growth-app/` and add that exact URL to the Redirect URLs allowlist.
+- [ ] Verify the GitHub repository Actions secrets `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` are present; never reveal or commit their values.
+- [ ] Test the full journey with a test account: create account and confirm email, sign in, sign out, sign in again, request a password reset, open the email link, set a new password, and sign in with the new password.
+- [ ] Test invalid credentials, expired/used reset links, missing email, and mobile/desktop layouts; confirm messages are clear and do not expose whether an email address has an account.
+- [ ] Confirm the production GitHub Pages build succeeds after the authentication changes.
+
+**Verification note:** The source code now includes the password-recovery form and callback handling. This is a code-level correction, not proof that Supabase email delivery, redirect allowlisting, or live account flows have been tested. Complete the dashboard configuration and real test-account checks before calling authentication production-ready.
