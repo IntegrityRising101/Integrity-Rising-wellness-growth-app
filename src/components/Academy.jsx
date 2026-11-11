@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './Academy.css';
 
 const courses = [
@@ -69,17 +69,97 @@ const courses = [
     lessons: [
       ['Pause, notice, choose', 'Ask yourself: What matters today? What is one choice within my control? What is one small action I can take with honesty and care?']
     ]
+  },
+  {
+    id: 'emotional-wellness',
+    title: 'Emotional Wellness Foundations',
+    level: 'Beginner',
+    length: '5 guided lessons',
+    description: 'Build practical emotional-awareness skills, explore healthy coping options, and create a personal support routine.',
+    lessons: [
+      ['Notice and name emotions', 'Pause and identify what you are feeling without judging yourself. Emotions are information, not instructions.'],
+      ['Understand your stress signals', 'Notice changes in your thoughts, energy, body, or behavior that may signal stress.'],
+      ['Choose a healthy coping tool', 'Try a grounding activity, a short walk, journaling, music, or reaching out to someone you trust.'],
+      ['Practice self-compassion', 'Speak to yourself as you would to someone you care about. You can learn without insulting yourself.'],
+      ['Create a wellness routine', 'Choose one small daily action that supports rest, connection, nourishment, or movement.']
+    ]
+  },
+  {
+    id: 'recovery-resilience',
+    title: 'Recovery & Resilience: One Step at a Time',
+    level: 'Self-paced',
+    length: '5 guided lessons',
+    description: 'Explore supportive routines, setbacks, connection, and practical ways to keep moving toward the life you want.',
+    lessons: [
+      ['Define what progress means to you', 'Choose a meaningful goal that reflects your own values. Progress does not have to look like anyone else’s.'],
+      ['Identify your supports', 'List safe people, peer groups, services, or professionals you may choose to contact.'],
+      ['Plan for difficult moments', 'Identify a few warning signs and write down safe coping steps and support contacts.'],
+      ['Respond to setbacks with care', 'A setback does not erase the effort you have made. Consider what support or adjustment would help next.'],
+      ['Celebrate steady progress', 'Name one step you took and one realistic next step. Small actions can build momentum.']
+    ]
+  },
+  {
+    id: 'leadership-integrity',
+    title: 'Leadership Through Integrity',
+    level: 'Foundations',
+    length: '5 guided lessons',
+    description: 'Strengthen values-based decision-making, accountability, respectful communication, and service-minded leadership.',
+    lessons: [
+      ['Lead from your values', 'Identify the principles you want your decisions and actions to demonstrate.'],
+      ['Practice accountability', 'Own your choices, acknowledge impact, and focus on constructive repair when appropriate.'],
+      ['Communicate with respect', 'Listen to understand, speak clearly, and make room for different perspectives.'],
+      ['Build trust through consistency', 'Follow through on realistic commitments and be honest when plans need to change.'],
+      ['Use influence to serve', 'Look for a practical way to encourage, support, or make a positive contribution to others.']
+    ]
   }
 ];
 
+const learningPaths = [
+  { id: 'personal-growth', title: 'Personal Growth', description: 'Build confidence, purpose, self-awareness, and values-led habits.', courseIds: ['reset', 'journaling'], outcome: 'Create a foundation for meaningful change.' },
+  { id: 'emotional-wellness', title: 'Emotional Wellness', description: 'Explore emotional awareness, stress signals, and healthy coping skills.', courseIds: ['emotional-wellness', 'nervous-system'], outcome: 'Build a personal toolkit for everyday wellbeing.' },
+  { id: 'healthy-relationships', title: 'Healthy Relationships', description: 'Learn about boundaries, communication, consent, and mutual respect.', courseIds: ['relationships'], outcome: 'Recognize healthy patterns and make room for respect.' },
+  { id: 'recovery-resilience', title: 'Recovery & Resilience', description: 'Strengthen supportive routines and find your next step through challenges.', courseIds: ['recovery-resilience'], outcome: 'Move forward with practical tools and support.' },
+  { id: 'leadership-integrity', title: 'Leadership & Integrity', description: 'Practice accountability, trust, respectful leadership, and positive influence.', courseIds: ['leadership-integrity', 'integrity-check'], outcome: 'Put your values into action and lead by example.' }
+];
+
+const PROGRESS_KEY = 'integrity-rising-academy-progress-v1';
+
+function readSavedProgress() {
+  try {
+    return JSON.parse(window.localStorage.getItem(PROGRESS_KEY) || '{}');
+  } catch {
+    return {};
+  }
+}
+
 function Academy() {
-  const [selectedCourse, setSelectedCourse] = useState(courses[0].id);
-  const [completed, setCompleted] = useState({});
+  const [activePath, setActivePath] = useState(learningPaths[0].id);
+  const [selectedCourse, setSelectedCourse] = useState(learningPaths[0].courseIds[0]);
+  const [completed, setCompleted] = useState(readSavedProgress);
   const [expandedLesson, setExpandedLesson] = useState(0);
 
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(PROGRESS_KEY, JSON.stringify(completed));
+    } catch {
+      // Progress remains available for this page session if browser storage is unavailable.
+    }
+  }, [completed]);
+
+  const path = learningPaths.find(item => item.id === activePath) || learningPaths[0];
+  const pathCourses = courses.filter(item => path.courseIds.includes(item.id));
   const course = courses.find(item => item.id === selectedCourse) || courses[0];
   const doneCount = course.lessons.filter((_, index) => completed[`${course.id}-${index}`]).length;
   const progress = Math.round((doneCount / course.lessons.length) * 100);
+  const pathDone = pathCourses.reduce((total, item) => total + item.lessons.filter((_, index) => completed[`${item.id}-${index}`]).length, 0);
+  const pathTotal = pathCourses.reduce((total, item) => total + item.lessons.length, 0);
+  const pathProgress = pathTotal ? Math.round((pathDone / pathTotal) * 100) : 0;
+
+  function choosePath(item) {
+    setActivePath(item.id);
+    setSelectedCourse(item.courseIds[0]);
+    setExpandedLesson(0);
+  }
 
   function toggleComplete(key) {
     setCompleted(current => ({ ...current, [key]: !current[key] }));
@@ -93,10 +173,39 @@ function Academy() {
         <p>Practical learning for personal growth, emotional wellness, healthy relationships, and everyday integrity.</p>
       </div>
 
+      <div className="academy-paths" aria-labelledby="academy-paths-title">
+        <div className="academy-paths-heading">
+          <div>
+            <p className="academy-paths-kicker">CHOOSE YOUR NEXT STEP</p>
+            <h3 id="academy-paths-title">Learning Paths</h3>
+            <p>Choose the journey that feels most useful right now. You can move at your own pace and change paths whenever you like.</p>
+          </div>
+          <span className="academy-paths-progress">{pathProgress}% of this path complete</span>
+        </div>
+        <div className="academy-path-grid">
+          {learningPaths.map(item => {
+            const isActive = activePath === item.id;
+            const itemCourses = courses.filter(courseItem => item.courseIds.includes(courseItem.id));
+            const total = itemCourses.reduce((sum, courseItem) => sum + courseItem.lessons.length, 0);
+            const done = itemCourses.reduce((sum, courseItem) => sum + courseItem.lessons.filter((_, index) => completed[`${courseItem.id}-${index}`]).length, 0);
+            const percent = total ? Math.round((done / total) * 100) : 0;
+            return (
+              <button type="button" key={item.id} className={isActive ? 'academy-path-card active' : 'academy-path-card'} onClick={() => choosePath(item)} aria-pressed={isActive}>
+                <span className="academy-path-card-title">{item.title}</span>
+                <span className="academy-path-card-description">{item.description}</span>
+                <span className="academy-path-card-outcome">{item.outcome}</span>
+                <span className="academy-path-mini-track" aria-label={`${percent}% complete`}><span style={{ width: `${percent}%` }} /></span>
+                <span className="academy-path-card-footer">{percent}% complete <strong>{isActive ? 'Selected' : 'Explore path →'}</strong></span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
       <div className="academy-course-layout">
         <div className="academy-course-list">
-          <h3>Explore courses</h3>
-          {courses.map(item => (
+          <h3>{path.title} courses</h3>
+          {pathCourses.map(item => (
             <button
               type="button"
               key={item.id}
@@ -115,7 +224,7 @@ function Academy() {
           <h3>{course.title}</h3>
           <p>{course.description}</p>
           <div className="academy-progress-label">
-            <span>Your progress</span>
+            <span>Your course progress</span>
             <strong>{doneCount} of {course.lessons.length} complete · {progress}%</strong>
           </div>
           <div className="academy-progress-track" role="progressbar" aria-valuenow={progress} aria-valuemin="0" aria-valuemax="100" aria-label={`${course.title} progress`}>
@@ -162,7 +271,7 @@ function Academy() {
         <strong>A supportive learning space</strong>
         <p>These lessons provide general education and self-guided activities. They are not therapy, medical advice, crisis support, or a substitute for care from a qualified professional. You may pause or skip any activity. If you are in immediate danger, contact emergency services.</p>
       </aside>
-      <p className="academy-storage-note">Progress is stored only in this page session and resets when you refresh or close the page. Sign-in and secure progress saving can be added in a later phase.</p>
+      <p className="academy-storage-note">Your lesson progress is saved in this browser on this device. It is not yet synced across devices or connected to your member account.</p>
     </section>
   );
 }
