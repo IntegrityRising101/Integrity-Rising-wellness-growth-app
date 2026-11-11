@@ -381,6 +381,58 @@ function CommunityDiscussions() {
         <p className="community-welcome-reminder">You never have to share your personal history, contact details, location, or anything that does not feel safe.</p>
       </section>
 
+      <section className="new-member-guide" aria-labelledby="new-member-guide-title">
+        <p className="new-member-guide-kicker">YOUR FIRST STEPS</p>
+        <h3 id="new-member-guide-title">New Member Welcome Guide</h3>
+        <p className="new-member-guide-intro">Welcome to Integrity Rising. Start where you are, move at your own pace, and remember that you belong here.</p>
+        <div className="new-member-guide-grid">
+          <details open>
+            <summary>1. Get started</summary>
+            <ol>
+              <li>Use the sign-in invitation above to sign in or create your member account.</li>
+              <li>Explore the Dashboard and choose one small goal or wellness practice.</li>
+              <li>Visit Academy to explore learning paths and mark lessons as you complete them.</li>
+            </ol>
+          </details>
+          <details>
+            <summary>2. Join the conversation</summary>
+            <ul>
+              <li>Choose a topic such as Introductions, Encouragement, or Healing &amp; Growth.</li>
+              <li>Share only what feels comfortable and respond with kindness.</li>
+              <li>Posts and replies are reviewed by moderators before they appear.</li>
+            </ul>
+          </details>
+          <details>
+            <summary>3. Protect your privacy</summary>
+            <ul>
+              <li>Do not post your home address, phone number, passwords, exact location, or financial details.</li>
+              <li>Do not share another person's private information or identifying details.</li>
+              <li>Use block and report controls if a post or interaction makes you feel unsafe.</li>
+              <li>Wellness notes and some activity checklists are saved only in this browser and may not sync across devices.</li>
+            </ul>
+          </details>
+          <details>
+            <summary>4. Find the right support</summary>
+            <ul>
+              <li>Wellness &amp; AI includes grounding and stress-relief tools.</li>
+              <li>Academy offers self-paced learning and personal-growth paths.</li>
+              <li>Safety &amp; Support includes crisis contacts, domestic violence resources, recovery services, and practical help.</li>
+            </ul>
+          </details>
+          <details>
+            <summary>5. Know where to turn in a crisis</summary>
+            <ul>
+              <li>Immediate danger: call 911.</li>
+              <li>Suicide or emotional crisis: call or text 988.</li>
+              <li>Domestic violence support: call 1-800-799-SAFE (7233) or text START to 88788.</li>
+              <li>Housing, food, and local services: call 211.</li>
+            </ul>
+            <p className="new-member-guide-note">The community is not an emergency service and is not monitored around the clock. If you are in immediate danger, contact emergency services.</p>
+          </details>
+        </div>
+        <p className="new-member-guide-footer">You do not have to do everything today. One honest step forward is still progress.</p>
+      </section>
+
       <section className="daily-encouragement-card" aria-labelledby="daily-encouragement-title">
         <p className="daily-encouragement-kicker">A LITTLE HOPE FOR TODAY</p>
         <h3 id="daily-encouragement-title">Daily Encouragement</h3>
