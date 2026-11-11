@@ -83,8 +83,10 @@ function MemberAccount() {
         result = await supabase.auth.signUp({
           email: email.trim(),
           password,
-          options: { data: { display_name: displayName.trim() || 'Movement Member' } },
-          emailRedirectTo: "https://integrityrising101.github.io/Integrity-Rising-wellness-growth-app/",
+          options: {
+            data: { display_name: displayName.trim() || 'Movement Member' },
+            emailRedirectTo: `${window.location.origin}${import.meta.env.BASE_URL}`,
+          },
         });
       } else if (mode === 'reset') {
         const recoveryRedirect = `${window.location.origin}${import.meta.env.BASE_URL}`;
