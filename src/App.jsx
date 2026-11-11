@@ -13,6 +13,7 @@ import SelfReflectionCheck from './components/SelfReflectionCheck';
 import WellnessChat from './components/WellnessChat';
 import WomensWellness from './components/WomensWellness';
 import CommunityDiscussions from './components/CommunityDiscussions';
+import CommunityResourceLibrary from './components/CommunityResourceLibrary';
 import Academy from './components/Academy';
 import PersonalWellnessDashboard from './components/PersonalWellnessDashboard';
 import GoalCenter from './components/GoalCenter';
@@ -88,6 +89,7 @@ function App() {
 
         <section id="community" className="app-area">
           <SectionArtwork variant="community" />
+          <CommunityResourceLibrary />
           <CommunityDiscussions />
           <ModerationDashboard />
         </section>
