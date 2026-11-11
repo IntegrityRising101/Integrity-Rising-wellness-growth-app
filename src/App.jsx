@@ -18,6 +18,7 @@ import Academy from './components/Academy';
 import PersonalWellnessDashboard from './components/PersonalWellnessDashboard';
 import GoalCenter from './components/GoalCenter';
 import MemberAccount from './components/MemberAccount';
+import MemberPersonalization from './components/MemberPersonalization';
 import ModerationDashboard from './components/ModerationDashboard';
 import AppDirectory from './components/AppDirectory';
 import MotivationForTheWeek from './components/MotivationForTheWeek';
@@ -68,6 +69,7 @@ function App() {
           </div>
           <SectionArtwork variant="dashboard" />
           <MemberAccount />
+          <MemberPersonalization />
           <MotivationForTheWeek />
           <PersonalWellnessDashboard />
           <GoalCenter />
