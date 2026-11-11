@@ -566,3 +566,55 @@
   .community-challenge-grid, .community-event-list { grid-template-columns: 1fr; }
   .community-events-center { padding: 1rem; }
 }
+
+
+/* Prominent sign-in invitation near the top of Community */
+.community-join-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  margin: 1rem 0 1.25rem;
+  padding: 1.15rem 1.25rem;
+  border: 1px solid #d8c28f;
+  border-left: 5px solid #b18a43;
+  border-radius: 14px;
+  background: linear-gradient(110deg, #edf7f5 0%, #fffaf0 100%);
+}
+.community-join-kicker {
+  margin: 0 0 .25rem;
+  color: #8a682e;
+  font-size: .72rem;
+  font-weight: 800;
+  letter-spacing: .12em;
+}
+.community-join-card h3 {
+  margin: 0;
+  color: #155b59;
+  font-size: 1.2rem;
+}
+.community-join-card p:not(.community-join-kicker) {
+  margin: .35rem 0 0;
+  line-height: 1.5;
+}
+.community-join-button {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: .7rem 1rem;
+  border: 1px solid #155b59;
+  border-radius: 999px;
+  background: #155b59;
+  color: #fff;
+  font-weight: 750;
+  text-align: center;
+  text-decoration: none;
+}
+.community-join-button:hover { background: #0f4947; }
+.community-join-button:focus-visible { outline: 3px solid #c49a4a; outline-offset: 3px; }
+@media (max-width: 640px) {
+  .community-join-card { align-items: stretch; flex-direction: column; }
+  .community-join-button { width: 100%; box-sizing: border-box; }
+}
