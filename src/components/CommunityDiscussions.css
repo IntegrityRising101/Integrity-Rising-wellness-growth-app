@@ -618,3 +618,35 @@
   .community-join-card { align-items: stretch; flex-direction: column; }
   .community-join-button { width: 100%; box-sizing: border-box; }
 }
+
+
+/* First-visit orientation for new community members */
+.new-member-guide {
+  margin: 1.2rem 0 1.4rem;
+  padding: 1.3rem;
+  border: 1px solid rgba(31, 153, 148, .3);
+  border-radius: 15px;
+  background: linear-gradient(135deg, #f0f8f6 0%, #fffaf0 100%);
+}
+.new-member-guide-kicker {
+  margin: 0 0 .3rem;
+  color: #a4772d;
+  font-size: .74rem;
+  font-weight: 800;
+  letter-spacing: .12em;
+}
+.new-member-guide h3 { margin: .2rem 0 .4rem; color: #155b59; font-size: 1.2rem; }
+.new-member-guide-intro { color: #526663; line-height: 1.55; }
+.new-member-guide-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .7rem; margin-top: 1rem; }
+.new-member-guide details {
+  padding: .9rem 1rem;
+  border: 1px solid #dce9e6;
+  border-radius: 11px;
+  background: rgba(255,255,255,.9);
+}
+.new-member-guide summary { color: #155b59; font-weight: 750; cursor: pointer; }
+.new-member-guide details ul, .new-member-guide details ol { padding-left: 1.25rem; color: #526663; font-size: .88rem; line-height: 1.5; }
+.new-member-guide details li { margin: .35rem 0; }
+.new-member-guide-note { color: #7a4c32; font-size: .84rem; line-height: 1.5; }
+.new-member-guide-footer { margin: 1rem 0 0; color: #155b59; font-weight: 700; text-align: center; }
+@media (max-width: 650px) { .new-member-guide-grid { grid-template-columns: 1fr; } .new-member-guide { padding: 1rem; } }
