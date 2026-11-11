@@ -1,0 +1,40 @@
+.member-personalization {
+  width: min(100% - 2rem, 900px);
+  margin: 2rem auto;
+  padding: clamp(1.2rem, 3vw, 2rem);
+  box-sizing: border-box;
+  color: #263638;
+  background: #fff;
+  border: 1px solid #d6e2e1;
+  border-top: 4px solid #c9a64b;
+  border-radius: 18px;
+  box-shadow: 0 4px 14px rgba(0,0,0,.06);
+}
+.personalization-heading { margin-bottom: 1.4rem; }
+.personalization-kicker { color: #96701f; font-size: .78rem; font-weight: 700; letter-spacing: .12em; }
+.member-personalization h2 { margin: .35rem 0 .6rem; color: #075e60; }
+.personalization-heading p { max-width: 720px; line-height: 1.6; }
+.personalization-fieldset { margin: 1.25rem 0; padding: 1rem; border: 1px solid #dce7e4; border-radius: 12px; }
+.personalization-fieldset legend { padding: 0 .35rem; color: #075e60; font-weight: 700; }
+.personalization-help { color: #536164; font-size: .88rem; line-height: 1.5; }
+.personalization-interest-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .7rem; }
+.personalization-support-list { display: grid; gap: .7rem; }
+.personalization-choice { display: flex; align-items: flex-start; gap: .65rem; padding: .7rem; background: #f5f9f8; border: 1px solid #e1eae7; border-radius: 9px; line-height: 1.4; cursor: pointer; }
+.personalization-choice input { margin-top: .2rem; accent-color: #075e60; flex: 0 0 auto; }
+.personalization-choice:focus-within { outline: 3px solid #c9a64b; outline-offset: 2px; }
+.personalization-goal { display: grid; gap: .5rem; margin: 1.2rem 0; }
+.personalization-goal label { color: #075e60; font-weight: 700; }
+.personalization-goal textarea { width: 100%; box-sizing: border-box; padding: .8rem; border: 1px solid #b8caca; border-radius: 9px; font: inherit; resize: vertical; }
+.personalization-goal textarea:focus-visible { outline: 3px solid #c9a64b; outline-offset: 3px; }
+.personalization-actions { display: flex; flex-wrap: wrap; gap: .7rem; }
+.personalization-actions button { border: 1px solid #075e60; border-radius: 999px; padding: .75rem 1.1rem; background: #075e60; color: #fff; font: inherit; font-weight: 700; cursor: pointer; }
+.personalization-actions .personalization-clear-button { background: #fff; color: #075e60; }
+.personalization-actions button:focus-visible { outline: 3px solid #c9a64b; outline-offset: 3px; }
+.personalization-status { padding: .8rem; background: #f1f7f6; border-radius: 8px; line-height: 1.5; }
+.personalization-privacy { margin-top: 1.2rem; padding: .9rem; background: #f5f9f8; border-left: 3px solid #c9a64b; border-radius: 7px; color: #536164; font-size: .88rem; line-height: 1.55; }
+@media (max-width: 600px) {
+  .member-personalization { width: min(100% - 1rem, 900px); padding: 1rem; }
+  .personalization-interest-grid { grid-template-columns: 1fr; }
+  .personalization-actions { flex-direction: column; }
+  .personalization-actions button { width: 100%; }
+}
