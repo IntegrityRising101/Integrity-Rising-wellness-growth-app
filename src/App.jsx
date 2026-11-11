@@ -90,8 +90,8 @@ function App() {
         </section>
 
         <section id="community" className="app-area">
-          <SectionArtwork variant="community" />
           <CommunityDiscussions />
+          <SectionArtwork variant="community" />
           <CommunityResourceLibrary />
           <ModerationDashboard />
         </section>
