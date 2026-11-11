@@ -367,7 +367,7 @@ function CommunityDiscussions() {
           <h3>Sign in to join the community</h3>
           <p>Sign in or create your free member account to start conversations, share encouragement, join activities, and connect with other members.</p>
         </div>
-        <a className="community-join-button" href="#dashboard">Sign in / Create an account</a>
+        <a className="community-join-button" href="#member-account-title">Sign in / Create an account</a>
       </section>
 
       <section className="community-welcome-card" aria-labelledby="community-welcome-title">
@@ -383,7 +383,7 @@ function CommunityDiscussions() {
             document.getElementById('discussion-title')?.focus({ preventScroll: true });
           }}>Start my introduction</button>
         ) : (
-          <a className="community-introduction-button" href="#dashboard">Sign in to introduce yourself</a>
+          <a className="community-introduction-button" href="#member-account-title">Sign in to introduce yourself</a>
         )}
         <div className="community-welcome-prompts">
           <strong>New here? Start with an introduction.</strong>
