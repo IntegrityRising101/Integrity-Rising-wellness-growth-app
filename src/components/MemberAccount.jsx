@@ -8,6 +8,9 @@ function MemberAccount() {
   const [password, setPassword] = useState('');
   const [displayName, setDisplayName] = useState('');
   const [bio, setBio] = useState('');
+  const [avatarPath, setAvatarPath] = useState('');
+  const [avatarUrl, setAvatarUrl] = useState('');
+  const [avatarBusy, setAvatarBusy] = useState(false);
   const [user, setUser] = useState(null);
   const [profileLoading, setProfileLoading] = useState(false);
   const [profileBusy, setProfileBusy] = useState(false);
@@ -39,6 +42,8 @@ function MemberAccount() {
     if (!supabase || !user) {
       setDisplayName('');
       setBio('');
+      setAvatarPath('');
+      setAvatarUrl('');
       return undefined;
     }
 
@@ -47,7 +52,7 @@ function MemberAccount() {
       setProfileLoading(true);
       const { data, error } = await supabase
         .from('profiles')
-        .select('display_name, bio')
+        .select('display_name, bio, avatar_path')
         .eq('id', user.id)
         .maybeSingle();
 
@@ -57,9 +62,20 @@ function MemberAccount() {
       } else if (data) {
         setDisplayName(data.display_name || '');
         setBio(data.bio || '');
+        setAvatarPath(data.avatar_path || '');
+        if (data.avatar_path) {
+          const { data: signedImage } = await supabase.storage
+            .from('member-avatars')
+            .createSignedUrl(data.avatar_path, 3600);
+          if (active) setAvatarUrl(signedImage?.signedUrl || '');
+        } else {
+          setAvatarUrl('');
+        }
       } else {
         setDisplayName(user.user_metadata?.display_name || '');
         setBio('');
+        setAvatarPath('');
+        setAvatarUrl('');
       }
       setProfileLoading(false);
     }
@@ -149,6 +165,61 @@ function MemberAccount() {
     }
   }
 
+  async function handleAvatarUpload(event) {
+    const file = event.target.files?.[0];
+    event.target.value = '';
+    if (!file || !supabase || !user || avatarBusy) return;
+
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+    if (!allowedTypes.includes(file.type)) {
+      setMessage('Choose a JPG, PNG, or WebP image.');
+      return;
+    }
+    if (file.size > 2 * 1024 * 1024) {
+      setMessage('Please choose an image that is 2 MB or smaller.');
+      return;
+    }
+
+    setAvatarBusy(true);
+    setMessage('');
+    const extension = file.type === 'image/jpeg' ? 'jpg' : file.type === 'image/png' ? 'png' : 'webp';
+    const newPath = `${user.id}/${crypto.randomUUID()}.${extension}`;
+    try {
+      const { error: uploadError } = await supabase.storage
+        .from('member-avatars')
+        .upload(newPath, file, { contentType: file.type, upsert: false });
+      if (uploadError) throw uploadError;
+
+      const { error: profileError } = await supabase
+        .from('profiles')
+        .upsert(
+          { id: user.id, display_name: displayName.trim() || 'Movement Member', bio: bio.trim(), avatar_path: newPath },
+          { onConflict: 'id' },
+        );
+      if (profileError) {
+        await supabase.storage.from('member-avatars').remove([newPath]);
+        throw profileError;
+      }
+
+      const { data: signedImage, error: signedError } = await supabase.storage
+        .from('member-avatars')
+        .createSignedUrl(newPath, 3600);
+      if (signedError) throw signedError;
+
+      const previousPath = avatarPath;
+      setAvatarPath(newPath);
+      setAvatarUrl(signedImage.signedUrl);
+      if (previousPath) {
+        await supabase.storage.from('member-avatars').remove([previousPath]);
+      }
+      setMessage('Your profile photo has been updated.');
+    } catch (error) {
+      setMessage(error.message || 'We could not upload your photo. Please try again.');
+    } finally {
+      setAvatarBusy(false);
+    }
+  }
+
   async function handleSignOut() {
     if (!supabase) return;
     const { error } = await supabase.auth.signOut();
@@ -201,7 +272,27 @@ function MemberAccount() {
           {profileLoading ? (
             <p>Loading your profile…</p>
           ) : (
-            <form className="member-account-form" onSubmit={handleSaveProfile}>
+            <>
+              <div className="member-avatar-editor">
+                {avatarUrl ? (
+                  <img className="member-avatar-preview" src={avatarUrl} alt="Your current member profile" />
+                ) : (
+                  <div className="member-avatar-placeholder" aria-label="No profile photo selected">IR</div>
+                )}
+                <div className="member-avatar-controls">
+                  <label htmlFor="member-avatar-upload">Profile photo</label>
+                  <input
+                    id="member-avatar-upload"
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp"
+                    onChange={handleAvatarUpload}
+                    disabled={avatarBusy}
+                  />
+                  <p className="account-password-hint">JPG, PNG, or WebP. Maximum 2 MB. Visible to signed-in members.</p>
+                  {avatarBusy && <p role="status">Uploading photo…</p>}
+                </div>
+              </div>
+              <form className="member-account-form" onSubmit={handleSaveProfile}>
               <label htmlFor="member-display-name">Display name</label>
               <input
                 id="member-display-name"
@@ -224,7 +315,8 @@ function MemberAccount() {
               <button type="submit" disabled={profileBusy}>
                 {profileBusy ? 'Saving…' : 'Save profile'}
               </button>
-            </form>
+              </form>
+            </>
           )}
           <button type="button" onClick={handleSignOut}>Sign out</button>
         </div>
