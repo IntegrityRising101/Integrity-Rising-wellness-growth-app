@@ -59,6 +59,12 @@ returns trigger
 language plpgsql
 as $$
 begin
+  if new.requester_id <> old.requester_id or new.recipient_id <> old.recipient_id then
+    raise exception 'Connection participants cannot be changed';
+  end if;
+  if old.status <> 'pending' or new.status not in ('accepted', 'declined') then
+    raise exception 'Only pending requests can be accepted or declined';
+  end if;
   new.updated_at = now();
   return new;
 end;
