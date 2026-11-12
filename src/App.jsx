@@ -18,6 +18,7 @@ import Academy from './components/Academy';
 import PersonalWellnessDashboard from './components/PersonalWellnessDashboard';
 import GoalCenter from './components/GoalCenter';
 import MemberAccount from './components/MemberAccount';
+import MemberDirectory from './components/MemberDirectory';
 import MemberPersonalization from './components/MemberPersonalization';
 import ModerationDashboard from './components/ModerationDashboard';
 import AppDirectory from './components/AppDirectory';
@@ -90,6 +91,7 @@ function App() {
         </section>
 
         <section id="community" className="app-area">
+          <MemberDirectory />
           <CommunityDiscussions />
           <SectionArtwork variant="community" />
           <CommunityResourceLibrary />
