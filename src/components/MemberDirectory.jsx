@@ -5,7 +5,7 @@ import './MemberDirectory.css';
 function initials(name) {
   return (name || 'Movement Member')
     .trim()
-    .split(/\\s+/)
+    .split(/\s+/)
     .slice(0, 2)
     .map(part => part[0]?.toUpperCase() || '')
     .join('');
@@ -14,9 +14,27 @@ function initials(name) {
 function MemberDirectory() {
   const [user, setUser] = useState(null);
   const [members, setMembers] = useState([]);
+  const [connections, setConnections] = useState([]);
+  const [connectionReady, setConnectionReady] = useState(false);
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
+  const [busyMember, setBusyMember] = useState('');
   const [notice, setNotice] = useState('');
+
+  async function loadConnections(currentUser) {
+    if (!currentUser || !supabase) return;
+    const { data, error } = await supabase
+      .from('member_connections')
+      .select('id, requester_id, recipient_id, status')
+      .or(`requester_id.eq.${currentUser.id},recipient_id.eq.${currentUser.id}`);
+    if (error) {
+      setConnectionReady(false);
+      setConnections([]);
+      return;
+    }
+    setConnections(data || []);
+    setConnectionReady(true);
+  }
 
   useEffect(() => {
     if (!supabase) {
@@ -29,6 +47,8 @@ function MemberDirectory() {
     async function loadMembers(currentUser) {
       if (!currentUser) {
         setMembers([]);
+        setConnections([]);
+        setConnectionReady(false);
         setLoading(false);
         return;
       }
@@ -60,8 +80,18 @@ function MemberDirectory() {
         return { ...profile, avatarUrl };
       }));
 
+      const { data: connectionData, error: connectionError } = await supabase
+        .from('member_connections')
+        .select('id, requester_id, recipient_id, status')
+        .or(`requester_id.eq.${currentUser.id},recipient_id.eq.${currentUser.id}`);
+
       if (!active) return;
       setMembers(visibleMembers);
+      setConnections(connectionData || []);
+      setConnectionReady(!connectionError);
+      if (connectionError) {
+        setNotice('Member profiles are ready. Connection requests will be available after the community database update is applied.');
+      }
       setLoading(false);
     }
 
@@ -93,6 +123,104 @@ function MemberDirectory() {
       (member.bio || '').toLowerCase().includes(term)
     );
   }, [members, search]);
+
+  function connectionFor(memberId) {
+    return connections.find(connection =>
+      (connection.requester_id === user?.id && connection.recipient_id === memberId) ||
+      (connection.requester_id === memberId && connection.recipient_id === user?.id)
+    );
+  }
+
+  async function sendConnectionRequest(memberId) {
+    if (!user || !connectionReady || busyMember) return;
+    setBusyMember(memberId);
+    setNotice('');
+    const existing = connectionFor(memberId);
+
+    if (existing?.status === 'accepted' || (existing?.status === 'pending' && existing.requester_id === user.id)) {
+      setBusyMember('');
+      return;
+    }
+
+    if (existing?.status === 'pending' && existing.recipient_id === user.id) {
+      const { error } = await supabase
+        .from('member_connections')
+        .update({ status: 'accepted' })
+        .eq('id', existing.id);
+      if (error) setNotice('We could not accept that request. Please try again.');
+    } else {
+      if (existing) {
+        const { error: deleteError } = await supabase
+          .from('member_connections')
+          .delete()
+          .eq('id', existing.id);
+        if (deleteError) {
+          setNotice('We could not refresh that connection request. Please try again.');
+          setBusyMember('');
+          return;
+        }
+      }
+      const { error } = await supabase
+        .from('member_connections')
+        .insert({ requester_id: user.id, recipient_id: memberId, status: 'pending' });
+      if (error) setNotice('We could not send that connection request. It may already exist.');
+    }
+
+    await loadConnections(user);
+    setBusyMember('');
+  }
+
+  async function declineConnectionRequest(memberId) {
+    if (!user || busyMember) return;
+    const existing = connectionFor(memberId);
+    if (!existing || existing.recipient_id !== user.id || existing.status !== 'pending') return;
+    setBusyMember(memberId);
+    const { error } = await supabase
+      .from('member_connections')
+      .update({ status: 'declined' })
+      .eq('id', existing.id);
+    if (error) setNotice('We could not decline that request. Please try again.');
+    await loadConnections(user);
+    setBusyMember('');
+  }
+
+  function connectionActions(member) {
+    if (member.id === user?.id) {
+      return <span className="member-connection-self">Your profile</span>;
+    }
+    const connection = connectionFor(member.id);
+    if (!connectionReady) {
+      return <span className="member-connection-pending">Connections setting up</span>;
+    }
+    if (connection?.status === 'accepted') {
+      return <span className="member-connection-connected">✓ Connected</span>;
+    }
+    if (connection?.status === 'pending' && connection.requester_id === user?.id) {
+      return <span className="member-connection-pending">Request sent</span>;
+    }
+    if (connection?.status === 'pending' && connection.recipient_id === user?.id) {
+      return (
+        <div className="member-connection-actions">
+          <button type="button" onClick={() => sendConnectionRequest(member.id)} disabled={busyMember === member.id}>
+            {busyMember === member.id ? 'Working…' : 'Accept request'}
+          </button>
+          <button type="button" className="member-connection-decline" onClick={() => declineConnectionRequest(member.id)} disabled={busyMember === member.id}>
+            Decline
+          </button>
+        </div>
+      );
+    }
+    return (
+      <button
+        type="button"
+        className="member-connect-button"
+        onClick={() => sendConnectionRequest(member.id)}
+        disabled={Boolean(busyMember) || !connectionReady}
+      >
+        {busyMember === member.id ? 'Sending…' : 'Connect'}
+      </button>
+    );
+  }
 
   return (
     <section className="member-directory" aria-labelledby="member-directory-title">
@@ -138,6 +266,7 @@ function MemberDirectory() {
                     {member.created_at && (
                       <span>Member since {new Date(member.created_at).toLocaleDateString(undefined, { month: 'long', year: 'numeric' })}</span>
                     )}
+                    <div className="member-connection-control">{connectionActions(member)}</div>
                   </div>
                 </article>
               ))}
@@ -148,7 +277,7 @@ function MemberDirectory() {
               <p>{search.trim() ? 'Try another name or keyword.' : 'As members create profiles, they will appear here.'}</p>
             </div>
           )}
-          <p className="member-directory-privacy">Profiles are visible only to signed-in members. Share only information you are comfortable showing to the community.</p>
+          <p className="member-directory-privacy">Profiles are visible only to signed-in members. Connection requests are private to the two members involved. Share only information you are comfortable showing to the community.</p>
         </>
       )}
     </section>
