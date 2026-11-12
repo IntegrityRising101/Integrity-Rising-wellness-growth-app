@@ -38,3 +38,10 @@
 
 .member-account-form textarea { width: 100%; box-sizing: border-box; padding: .8rem; border: 1px solid #b8caca; border-radius: 9px; font: inherit; resize: vertical; }
 .member-account-form textarea:focus-visible { outline: 3px solid #c9a64b; outline-offset: 3px; }
+
+.member-avatar-editor { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; margin: .5rem 0 1rem; }
+.member-avatar-preview, .member-avatar-placeholder { width: 104px; height: 104px; border-radius: 50%; object-fit: cover; border: 3px solid #c9a64b; }
+.member-avatar-placeholder { display: grid; place-items: center; background: #075e60; color: #fff; font-size: 1.5rem; font-weight: 800; letter-spacing: .08em; }
+.member-avatar-controls { min-width: 0; flex: 1; }
+.member-avatar-controls label { display: block; margin-bottom: .4rem; color: #075e60; font-weight: 700; }
+.member-avatar-controls input[type="file"] { display: block; max-width: 100%; font: inherit; }
