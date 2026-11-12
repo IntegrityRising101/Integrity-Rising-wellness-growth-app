@@ -220,6 +220,45 @@ function MemberAccount() {
     }
   }
 
+  async function handleAvatarRemove() {
+    if (!supabase || !user || !avatarPath || avatarBusy) return;
+
+    const previousPath = avatarPath;
+    setAvatarBusy(true);
+    setMessage('');
+    try {
+      const { error: profileError } = await supabase
+        .from('profiles')
+        .upsert(
+          {
+            id: user.id,
+            display_name: displayName.trim() || 'Movement Member',
+            bio: bio.trim(),
+            avatar_path: null,
+            updated_at: new Date().toISOString(),
+          },
+          { onConflict: 'id' },
+        );
+      if (profileError) throw profileError;
+
+      setAvatarPath('');
+      setAvatarUrl('');
+      const { error: storageError } = await supabase.storage
+        .from('member-avatars')
+        .remove([previousPath]);
+
+      setMessage(
+        storageError
+          ? 'Your profile photo was removed. Its stored file could not be cleaned up, but it is no longer linked to your profile.'
+          : 'Your profile photo has been removed.',
+      );
+    } catch (error) {
+      setMessage(error.message || 'We could not remove your photo. Please try again.');
+    } finally {
+      setAvatarBusy(false);
+    }
+  }
+
   async function handleSignOut() {
     if (!supabase) return;
     const { error } = await supabase.auth.signOut();
@@ -289,7 +328,17 @@ function MemberAccount() {
                     disabled={avatarBusy}
                   />
                   <p className="account-password-hint">JPG, PNG, or WebP. Maximum 2 MB. Visible to signed-in members.</p>
-                  {avatarBusy && <p role="status">Uploading photo…</p>}
+                  {avatarPath && (
+                    <button
+                      type="button"
+                      className="member-avatar-remove-button"
+                      onClick={handleAvatarRemove}
+                      disabled={avatarBusy}
+                    >
+                      {avatarBusy ? 'Updating…' : 'Remove photo'}
+                    </button>
+                  )}
+                  {avatarBusy && <p role="status">Updating profile photo…</p>}
                 </div>
               </div>
               <form className="member-account-form" onSubmit={handleSaveProfile}>
