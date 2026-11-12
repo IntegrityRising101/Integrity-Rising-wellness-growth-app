@@ -21,11 +21,20 @@
 .member-directory-card { display: flex; align-items: flex-start; gap: .9rem; min-width: 0; padding: 1rem; border: 1px solid #dce7e4; border-radius: 14px; background: #f8fbfa; }
 .member-directory-avatar { flex: 0 0 64px; width: 64px; height: 64px; border-radius: 50%; object-fit: cover; border: 2px solid #c9a64b; }
 .member-directory-avatar-placeholder { display: grid; place-items: center; background: #075e60; color: #fff; font-weight: 800; font-size: 1.1rem; }
-.member-directory-card-copy { min-width: 0; }
+.member-directory-card-copy { min-width: 0; flex: 1; }
 .member-directory-card h4 { margin: .1rem 0 .35rem; color: #075e60; overflow-wrap: anywhere; }
 .member-directory-card p { margin: 0 0 .55rem; line-height: 1.5; overflow-wrap: anywhere; }
 .member-directory-card span { color: #657477; font-size: .82rem; }
 .member-directory-message { margin-top: 1rem; padding: 1rem; border: 1px solid #dce7e4; border-radius: 12px; background: #f1f7f6; line-height: 1.55; }
 .member-directory-message p { margin: .25rem 0 0; }
 .member-directory-privacy { margin: 1rem 0 0; color: #536164; font-size: .88rem; line-height: 1.5; }
+.member-connection-control { margin-top: .7rem; }
+.member-connect-button, .member-connection-actions button { border: 0; border-radius: 9px; padding: .55rem .85rem; background: #075e60; color: #fff; font: inherit; font-weight: 700; cursor: pointer; }
+.member-connect-button:hover, .member-connection-actions button:hover { background: #064b4d; }
+.member-connect-button:disabled, .member-connection-actions button:disabled { opacity: .6; cursor: wait; }
+.member-connection-actions { display: flex; flex-wrap: wrap; gap: .45rem; }
+.member-connection-actions .member-connection-decline { background: #eef3f2; color: #405254; border: 1px solid #cbd8d6; }
+.member-connection-connected, .member-connection-pending, .member-connection-self { display: inline-block; padding: .35rem .6rem; border-radius: 999px; font-size: .82rem; font-weight: 700; }
+.member-connection-connected { background: #e5f3ec; color: #246443; }
+.member-connection-pending, .member-connection-self { background: #f2f3f3; color: #536164; }
 @media (max-width: 560px) { .member-directory { width: min(100% - 1rem, 1000px); padding: 1rem; } }
