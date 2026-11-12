@@ -196,6 +196,7 @@ function MemberAccount() {
       ) : user ? (
         <div className="account-signed-in">
           <p>You are signed in as <strong>{user.email}</strong>.</p>
+          <p className="account-member-since">Member since <strong>{user.created_at ? new Date(user.created_at).toLocaleDateString(undefined, { year: 'numeric', month: 'long' }) : '—'}</strong></p>
           <h3>My Member Profile</h3>
           {profileLoading ? (
             <p>Loading your profile…</p>
