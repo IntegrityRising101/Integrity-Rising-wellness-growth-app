@@ -43,8 +43,11 @@ function MemberDirectory() {
     }
 
     let active = true;
+    // Ignore older directory requests when the signed-in account changes.
+    let requestVersion = 0;
 
     async function loadMembers(currentUser) {
+      const requestId = ++requestVersion;
       if (!currentUser) {
         setMembers([]);
         setConnections([]);
@@ -61,7 +64,7 @@ function MemberDirectory() {
         .order('created_at', { ascending: false })
         .limit(100);
 
-      if (!active) return;
+      if (!active || requestId !== requestVersion) return;
       if (error) {
         setNotice('The member directory could not be loaded. Please try again later.');
         setMembers([]);
@@ -85,7 +88,7 @@ function MemberDirectory() {
         .select('id, requester_id, recipient_id, status')
         .or(`requester_id.eq.${currentUser.id},recipient_id.eq.${currentUser.id}`);
 
-      if (!active) return;
+      if (!active || requestId !== requestVersion) return;
       setMembers(visibleMembers);
       setConnections(connectionData || []);
       setConnectionReady(!connectionError);
