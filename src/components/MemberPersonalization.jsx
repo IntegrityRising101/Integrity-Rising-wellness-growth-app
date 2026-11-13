@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { isSupabaseConfigured, supabase } from '../lib/supabase';
 import './MemberPersonalization.css';
 
 const STORAGE_KEY = 'integrity-rising-member-preferences-v1';
@@ -20,31 +21,124 @@ const supportOptions = [
   { value: 'community', label: 'Community connection and shared growth' },
 ];
 
+function readLocalPreferences() {
+  try {
+    const saved = window.localStorage.getItem(STORAGE_KEY);
+    return saved ? JSON.parse(saved) : null;
+  } catch {
+    return null;
+  }
+}
+
+function cleanPreferences(value = {}) {
+  return {
+    interests: Array.isArray(value.interests)
+      ? value.interests.filter((item) => interestOptions.includes(item))
+      : [],
+    supportStyle: supportOptions.some((option) => option.value === value.supportStyle)
+      ? value.supportStyle
+      : 'practical-steps',
+    personalGoal: typeof value.personalGoal === 'string' ? value.personalGoal.slice(0, 160) : '',
+    savedAt: value.savedAt || '',
+  };
+}
+
 function MemberPersonalization() {
   const [interests, setInterests] = useState([]);
   const [supportStyle, setSupportStyle] = useState('practical-steps');
   const [personalGoal, setPersonalGoal] = useState('');
   const [message, setMessage] = useState('');
   const [savedAt, setSavedAt] = useState('');
+  const [user, setUser] = useState(null);
+  const [ready, setReady] = useState(!isSupabaseConfigured);
+  const [saving, setSaving] = useState(false);
+
+  function applyPreferences(value) {
+    const preferences = cleanPreferences(value);
+    setInterests(preferences.interests);
+    setSupportStyle(preferences.supportStyle);
+    setPersonalGoal(preferences.personalGoal);
+    setSavedAt(preferences.savedAt);
+  }
 
   useEffect(() => {
-    try {
-      const saved = window.localStorage.getItem(STORAGE_KEY);
-      if (!saved) return;
-      const preferences = JSON.parse(saved);
-      if (Array.isArray(preferences.interests)) {
-        setInterests(preferences.interests.filter((item) => interestOptions.includes(item)));
-      }
-      if (supportOptions.some((option) => option.value === preferences.supportStyle)) {
-        setSupportStyle(preferences.supportStyle);
-      }
-      if (typeof preferences.personalGoal === 'string') {
-        setPersonalGoal(preferences.personalGoal.slice(0, 160));
-      }
-      if (preferences.savedAt) setSavedAt(preferences.savedAt);
-    } catch {
-      setMessage('Your saved preferences could not be read. You can choose them again and save.');
+    applyPreferences(readLocalPreferences() || {});
+    if (!isSupabaseConfigured || !supabase) {
+      setMessage('Preferences are saved on this device. Sign-in syncing is not configured yet.');
+      return undefined;
     }
+
+    let active = true;
+    async function loadMemberPreferences(currentUser) {
+      if (!active) return;
+      setUser(currentUser || null);
+      if (!currentUser) {
+        setReady(true);
+        setMessage('Sign in to keep your preferences with your member account. Your device copy remains available here.');
+        return;
+      }
+
+      setReady(false);
+      setMessage('Loading your member preferences…');
+      const { data, error } = await supabase
+        .from('member_preferences')
+        .select('preferences')
+        .eq('user_id', currentUser.id)
+        .maybeSingle();
+
+      if (!active) return;
+      if (error) {
+        setMessage('We could not load account preferences. Your device copy is still available.');
+        setReady(true);
+        return;
+      }
+
+      if (data?.preferences && Object.keys(data.preferences).length > 0) {
+        applyPreferences(data.preferences);
+        setMessage('Your preferences were loaded from your member account.');
+      } else {
+        const local = readLocalPreferences();
+        if (local) {
+          const migrated = { ...cleanPreferences(local), savedAt: local.savedAt || new Date().toISOString() };
+          const { error: saveError } = await supabase.from('member_preferences').upsert({
+            user_id: currentUser.id,
+            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'America/Chicago',
+            preferences: migrated,
+          }, { onConflict: 'user_id' });
+          if (!active) return;
+          if (saveError) {
+            applyPreferences(local);
+            setMessage('Your device preferences are available, but could not yet be copied to your member account.');
+          } else {
+            applyPreferences(migrated);
+            setMessage('Your existing device preferences have been copied to your member account.');
+          }
+        } else {
+          applyPreferences({});
+          setMessage('Choose your preferences and save them to your member account.');
+        }
+      }
+      setReady(true);
+    }
+
+    supabase.auth.getSession().then(({ data, error }) => {
+      if (error) {
+        if (active) {
+          setMessage('We could not check your sign-in status. Your device preferences remain available.');
+          setReady(true);
+        }
+        return;
+      }
+      loadMemberPreferences(data.session?.user || null);
+    });
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      loadMemberPreferences(session?.user || null);
+    });
+
+    return () => {
+      active = false;
+      listener.subscription.unsubscribe();
+    };
   }, []);
 
   function toggleInterest(interest) {
@@ -56,34 +150,67 @@ function MemberPersonalization() {
     setMessage('');
   }
 
-  function handleSave(event) {
+  async function handleSave(event) {
     event.preventDefault();
+    if (saving || !ready) return;
+    setSaving(true);
     const preferences = {
       interests,
       supportStyle,
       personalGoal: personalGoal.trim(),
       savedAt: new Date().toISOString(),
     };
+
     try {
       window.localStorage.setItem(STORAGE_KEY, JSON.stringify(preferences));
-      setSavedAt(preferences.savedAt);
-      setMessage('Your preferences have been saved on this device.');
     } catch {
-      setMessage('We could not save your preferences in this browser. Check your browser storage settings and try again.');
+      if (!user) {
+        setMessage('We could not save your preferences in this browser. Check your browser storage settings and try again.');
+        setSaving(false);
+        return;
+      }
     }
+
+    if (user && supabase) {
+      const { error } = await supabase.from('member_preferences').upsert({
+        user_id: user.id,
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'America/Chicago',
+        preferences,
+      }, { onConflict: 'user_id' });
+      if (error) {
+        setMessage('Your device copy was saved, but account syncing failed. Please try saving again.');
+        setSaving(false);
+        return;
+      }
+      setMessage('Your preferences are saved to your member account and this device.');
+    } else {
+      setMessage('Your preferences have been saved on this device. Sign in to sync them across devices.');
+    }
+    setSavedAt(preferences.savedAt);
+    setSaving(false);
   }
 
-  function handleClear() {
+  async function handleClear() {
+    if (saving) return;
+    setSaving(true);
+    if (user && supabase) {
+      const { error } = await supabase.from('member_preferences').delete().eq('user_id', user.id);
+      if (error) {
+        setMessage('We could not clear your account preferences. Please try again.');
+        setSaving(false);
+        return;
+      }
+    }
     try {
       window.localStorage.removeItem(STORAGE_KEY);
-      setInterests([]);
-      setSupportStyle('practical-steps');
-      setPersonalGoal('');
-      setSavedAt('');
-      setMessage('Your saved personalization preferences have been cleared from this device.');
+      applyPreferences({});
+      setMessage(user
+        ? 'Your saved preferences have been cleared from your member account and this device.'
+        : 'Your saved personalization preferences have been cleared from this device.');
     } catch {
-      setMessage('We could not clear the saved preferences. Please try again.');
+      setMessage('Your account preferences were cleared, but this device could not clear its local copy.');
     }
+    setSaving(false);
   }
 
   return (
@@ -101,11 +228,7 @@ function MemberPersonalization() {
           <div className="personalization-interest-grid">
             {interestOptions.map((interest) => (
               <label className="personalization-choice" key={interest}>
-                <input
-                  type="checkbox"
-                  checked={interests.includes(interest)}
-                  onChange={() => toggleInterest(interest)}
-                />
+                <input type="checkbox" checked={interests.includes(interest)} onChange={() => toggleInterest(interest)} />
                 <span>{interest}</span>
               </label>
             ))}
@@ -122,10 +245,7 @@ function MemberPersonalization() {
                   name="preferred-support-style"
                   value={option.value}
                   checked={supportStyle === option.value}
-                  onChange={() => {
-                    setSupportStyle(option.value);
-                    setMessage('');
-                  }}
+                  onChange={() => { setSupportStyle(option.value); setMessage(''); }}
                 />
                 <span>{option.label}</span>
               </label>
@@ -140,18 +260,15 @@ function MemberPersonalization() {
             rows={3}
             maxLength={160}
             value={personalGoal}
-            onChange={(event) => {
-              setPersonalGoal(event.target.value);
-              setMessage('');
-            }}
+            onChange={(event) => { setPersonalGoal(event.target.value); setMessage(''); }}
             placeholder="Example: Build a healthier daily routine."
           />
           <span className="personalization-help">{personalGoal.length}/160 characters</span>
         </div>
 
         <div className="personalization-actions">
-          <button type="submit">Save my preferences</button>
-          <button type="button" className="personalization-clear-button" onClick={handleClear}>Clear saved preferences</button>
+          <button type="submit" disabled={!ready || saving}>{saving ? 'Saving…' : 'Save my preferences'}</button>
+          <button type="button" className="personalization-clear-button" onClick={handleClear} disabled={saving}>Clear saved preferences</button>
         </div>
       </form>
 
@@ -159,7 +276,7 @@ function MemberPersonalization() {
       {savedAt && <p className="personalization-help">Last saved: {new Date(savedAt).toLocaleString()}</p>}
 
       <p className="personalization-privacy">
-        Privacy note: these personalization choices are stored only in this browser on this device. They are not added to your member profile, shared with other members, or synced across devices. Your display name and short bio can be managed in Member Account above.
+        Privacy note: when you are signed in, these choices are stored in your private member account and on this device. Account access is restricted to you. When signed out, they are stored only in this browser on this device. Your display name and short bio can be managed in Member Account above.
       </p>
     </section>
   );
