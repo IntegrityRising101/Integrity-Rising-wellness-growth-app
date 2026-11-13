@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { isSupabaseConfigured, supabase } from '../lib/supabase';
 
 const practices = [
   {
@@ -62,18 +63,110 @@ const practices = [
   }
 ];
 
+function getLocalDate() {
+  const now = new Date();
+  const local = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
+  return local.toISOString().slice(0, 10);
+}
+
 function GuidedWellnessPractices() {
   const [activeSlug, setActiveSlug] = useState(practices[0].slug);
   const [completed, setCompleted] = useState([]);
+  const [userId, setUserId] = useState(null);
+  const [status, setStatus] = useState('Loading your practice tracker…');
+  const [saving, setSaving] = useState(false);
   const active = practices.find((practice) => practice.slug === activeSlug);
   const isComplete = completed.includes(activeSlug);
+  const today = getLocalDate();
 
-  function toggleComplete() {
-    setCompleted((current) =>
-      current.includes(activeSlug)
+  useEffect(() => {
+    if (!isSupabaseConfigured || !supabase) {
+      setStatus('Practice completions are kept for this visit only because account storage is not configured.');
+      return undefined;
+    }
+
+    let mounted = true;
+    const loadMemberPractices = async (sessionUser) => {
+      if (!sessionUser) {
+        if (mounted) {
+          setUserId(null);
+          setCompleted([]);
+          setStatus('Sign in to save completed practices to your member account. Signed-out progress lasts only for this visit.');
+        }
+        return;
+      }
+
+      if (mounted) {
+        setUserId(sessionUser.id);
+        setStatus('Loading your saved practices…');
+      }
+      const { data, error } = await supabase
+        .from('wellness_practice_logs')
+        .select('practice_key')
+        .eq('user_id', sessionUser.id)
+        .eq('completed_on', today);
+
+      if (!mounted) return;
+      if (error) {
+        setStatus('We could not load your saved practices. You can still use the exercises; please try again later.');
+        return;
+      }
+      setCompleted((data || []).map((row) => row.practice_key));
+      setStatus('Your completed practices are saved privately to your member account for today.');
+    };
+
+    supabase.auth.getSession().then(({ data, error }) => {
+      if (error) {
+        if (mounted) setStatus('We could not check your sign-in. Please refresh and try again.');
+        return;
+      }
+      loadMemberPractices(data.session?.user || null);
+    });
+
+    const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
+      loadMemberPractices(session?.user || null);
+    });
+
+    return () => {
+      mounted = false;
+      authListener.subscription.unsubscribe();
+    };
+  }, [today]);
+
+  async function toggleComplete() {
+    if (saving) return;
+    const wasComplete = isComplete;
+    setSaving(true);
+
+    if (!userId || !isSupabaseConfigured || !supabase) {
+      setCompleted((current) => wasComplete
         ? current.filter((slug) => slug !== activeSlug)
-        : [...current, activeSlug]
-    );
+        : [...current, activeSlug]);
+      setStatus('Updated for this visit. Sign in to save practice completions to your member account.');
+      setSaving(false);
+      return;
+    }
+
+    const result = wasComplete
+      ? await supabase.from('wellness_practice_logs')
+          .delete()
+          .eq('user_id', userId)
+          .eq('practice_key', activeSlug)
+          .eq('completed_on', today)
+      : await supabase.from('wellness_practice_logs')
+          .insert({ user_id: userId, practice_key: activeSlug, completed_on: today });
+
+    if (result.error) {
+      setStatus('We could not save that change. Please try again.');
+    } else {
+      setCompleted((current) => wasComplete
+        ? current.filter((slug) => slug !== activeSlug)
+        : [...current, activeSlug]);
+      setStatus(wasComplete
+        ? 'Practice marked as not completed. Your account was updated.'
+        : 'Practice completed and saved to your member account.');
+    }
+    setSaving(false);
   }
 
   return (
@@ -129,16 +222,17 @@ function GuidedWellnessPractices() {
           {active.steps.map((step) => <li key={step}>{step}</li>)}
         </ol>
         <p className="guided-practice-note">{active.note}</p>
-        <button className="guided-practices-done" type="button" onClick={toggleComplete}>
-          {isComplete ? 'Mark as not completed' : 'Mark practice complete'}
+        <button className="guided-practices-done" type="button" onClick={toggleComplete} disabled={saving}>
+          {saving ? 'Saving…' : isComplete ? 'Mark as not completed' : 'Mark practice complete'}
         </button>
-        <span className="guided-practices-status" role="status">
-          {isComplete ? '✓ Completed during this visit' : ''}
+        <span className="guided-practices-status" role="status" aria-live="polite">
+          {isComplete ? '✓ Completed today' : ''}
         </span>
+        <p className="guided-practices-footer" role="status" aria-live="polite">{status}</p>
       </article>
 
       <p className="guided-practices-footer">
-        These educational exercises are not therapy, diagnosis, or emergency support. Completion is kept only in this page session and is cleared when the page is refreshed or closed. Avoid entering private or identifying information.
+        These educational exercises are not therapy, diagnosis, or emergency support. Signed-in members' completion dates are saved in their private account. When signed out, completion is kept only for this visit. Avoid entering private or identifying information.
       </p>
     </section>
   );
