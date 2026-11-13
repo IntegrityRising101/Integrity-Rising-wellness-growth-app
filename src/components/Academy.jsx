@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { isSupabaseConfigured, supabase } from '../lib/supabase';
 import './Academy.css';
 
 const courses = [
@@ -133,18 +134,72 @@ function readSavedProgress() {
 }
 
 function Academy() {
+  const [user, setUser] = useState(null);
+  const [syncMessage, setSyncMessage] = useState('');
   const [activePath, setActivePath] = useState(learningPaths[0].id);
   const [selectedCourse, setSelectedCourse] = useState(learningPaths[0].courseIds[0]);
   const [completed, setCompleted] = useState(readSavedProgress);
   const [expandedLesson, setExpandedLesson] = useState(0);
 
   useEffect(() => {
-    try {
-      window.localStorage.setItem(PROGRESS_KEY, JSON.stringify(completed));
-    } catch {
-      // Progress remains available for this page session if browser storage is unavailable.
+    if (!user) {
+      try {
+        window.localStorage.setItem(PROGRESS_KEY, JSON.stringify(completed));
+      } catch {
+        // Progress remains available for this page session if browser storage is unavailable.
+      }
     }
-  }, [completed]);
+  }, [completed, user]);
+
+  useEffect(() => {
+    if (!isSupabaseConfigured || !supabase) return undefined;
+    let active = true;
+    async function loadMemberProgress(currentUser) {
+      if (!active) return;
+      setUser(currentUser || null);
+      if (!currentUser) {
+        setCompleted(readSavedProgress());
+        setSyncMessage('Progress is saved on this device. Sign in to sync it to your member account.');
+        return;
+      }
+      setSyncMessage('Loading your Academy progress…');
+      const { data, error } = await supabase.from('academy_lesson_progress')
+        .select('course_key, lesson_key, is_completed').eq('user_id', currentUser.id);
+      if (!active) return;
+      if (error) {
+        setSyncMessage('Could not load account progress. Your device-saved progress is still available.');
+        return;
+      }
+      const cloudProgress = {};
+      (data || []).forEach(row => {
+        if (row.is_completed) cloudProgress[`${row.course_key}-${row.lesson_key}`] = true;
+      });
+      const localProgress = readSavedProgress();
+      setCompleted({ ...localProgress, ...cloudProgress });
+      const pendingRows = Object.keys(localProgress).filter(key => localProgress[key] && !cloudProgress[key]).map(key => {
+        const separator = key.lastIndexOf('-');
+        return { user_id: currentUser.id, course_key: key.slice(0, separator), lesson_key: key.slice(separator + 1),
+          is_completed: true, completed_at: new Date().toISOString() };
+      });
+      if (pendingRows.length) {
+        const { error: syncError } = await supabase.from('academy_lesson_progress')
+          .upsert(pendingRows, { onConflict: 'user_id,course_key,lesson_key' });
+        if (!active) return;
+        setSyncMessage(syncError ? 'Account progress loaded, but some earlier device progress could not sync.' : 'Academy progress synced to your member account.');
+      } else {
+        setSyncMessage('Academy progress synced to your member account.');
+      }
+    }
+    supabase.auth.getSession().then(({ data, error }) => {
+      if (error) {
+        setSyncMessage('Sign-in status could not be checked. Device-saved progress remains available.');
+        return;
+      }
+      loadMemberProgress(data.session?.user || null);
+    });
+    const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => loadMemberProgress(session?.user || null));
+    return () => { active = false; authListener.subscription.unsubscribe(); };
+  }, []);
 
   const path = learningPaths.find(item => item.id === activePath) || learningPaths[0];
   const pathCourses = courses.filter(item => path.courseIds.includes(item.id));
@@ -161,8 +216,23 @@ function Academy() {
     setExpandedLesson(0);
   }
 
-  function toggleComplete(key) {
-    setCompleted(current => ({ ...current, [key]: !current[key] }));
+  async function toggleComplete(key) {
+    const nextValue = !completed[key];
+    setCompleted(current => ({ ...current, [key]: nextValue }));
+    if (!user || !isSupabaseConfigured || !supabase) {
+      setSyncMessage('Progress saved on this device. Sign in to sync across devices.');
+      return;
+    }
+    const separator = key.lastIndexOf('-');
+    const courseKey = key.slice(0, separator);
+    const lessonKey = key.slice(separator + 1);
+    const { error } = await supabase.from('academy_lesson_progress').upsert({
+      user_id: user.id, course_key: courseKey, lesson_key: lessonKey,
+      is_completed: nextValue, completed_at: nextValue ? new Date().toISOString() : null
+    }, { onConflict: 'user_id,course_key,lesson_key' });
+    setSyncMessage(error
+      ? 'The change is shown here, but could not be saved to your account. Please try again.'
+      : 'Academy progress saved to your member account.');
   }
 
   return (
@@ -271,7 +341,7 @@ function Academy() {
         <strong>A supportive learning space</strong>
         <p>These lessons provide general education and self-guided activities. They are not therapy, medical advice, crisis support, or a substitute for care from a qualified professional. You may pause or skip any activity. If you are in immediate danger, contact emergency services.</p>
       </aside>
-      <p className="academy-storage-note">Your lesson progress is saved in this browser on this device. It is not yet synced across devices or connected to your member account.</p>
+      <p className="academy-storage-note" role="status">{syncMessage || (user ? "Your Academy progress is connected to your member account." : "Your lesson progress is saved in this browser on this device.")}</p>
     </section>
   );
 }
