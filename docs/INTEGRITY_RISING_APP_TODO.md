@@ -9,7 +9,7 @@ This checklist tracks work still required before the Integrity Rising / The Inte
 - [ ] Connect the project to the GitHub app configuration.
 - [ ] Add the Supabase project URL and public anon key to the app's deployment environment.
 - [x] Apply database migrations in order: 001 schema, 002 moderation hardening, 003 member blocking. — **Completed: Nov 5, 2026 (owner-confirmed).**
-- [ ] Verify row-level security and test member-versus-moderator permissions.
+- [ ] Apply migration 008 for community chat rooms in Supabase, then verify row-level security and test member-versus-moderator permissions.
 - [ ] Assign trusted moderators through a secure admin process; never expose service-role credentials in the app.
 - [ ] Configure Edge Function secrets: APP_ORIGIN, AI_API_URL, AI_API_KEY, and AI_MODEL.
 - [ ] Review, deploy, and test the authenticated ai-assistant Edge Function.
