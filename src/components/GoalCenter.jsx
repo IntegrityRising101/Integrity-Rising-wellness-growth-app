@@ -25,6 +25,7 @@ function fromDatabase(goalRows, taskRows) {
     nextStep: goal.first_step || '',
     targetDate: goal.target_date || '',
     done: Boolean(goal.is_completed),
+    completedAt: goal.completed_at?.slice(0, 10) || null,
     createdAt: goal.created_on || goal.created_at?.slice(0, 10) || today(),
     tasks: (taskRows || []).filter(task => task.goal_id === goal.id).map(task => ({
       id: task.id,
@@ -137,6 +138,7 @@ function GoalCenter() {
       nextStep: nextStep.trim(),
       targetDate,
       done: false,
+      completedAt: null,
       createdAt: today(),
       tasks: []
     };
@@ -228,7 +230,7 @@ function GoalCenter() {
         return;
       }
     }
-    setGoals(current => current.map(item => item.id === id ? { ...item, done } : item));
+    setGoals(current => current.map(item => item.id === id ? { ...item, done, completedAt: done ? today() : null } : item));
     setMessage('');
   }
 
@@ -299,7 +301,7 @@ function GoalCenter() {
                 <button type="button" className="goal-remove" onClick={() => removeGoal(goal.id)} aria-label={`Remove goal: ${goal.title}`}>Remove</button>
               </div>
               {goal.nextStep && <p><strong>First step:</strong> {goal.nextStep}</p>}
-              <div className="goal-card-meta"><span>Started {goal.createdAt}</span>{goal.targetDate && <span>Target {goal.targetDate}</span>}<span>{goal.done ? 'Goal completed' : 'In progress'}</span></div>
+              <div className="goal-card-meta"><span>Started {goal.createdAt}</span>{goal.targetDate && <span>Target {goal.targetDate}</span>}<span>{goal.done ? `Goal completed${goal.completedAt ? ` · ${goal.completedAt}` : ''}` : 'In progress'}</span></div>
               <div className="goal-progress-line"><span>{progress}% complete</span><span>{taskDone} of {tasks.length} actions</span></div>
               <div className="goal-card-progress" role="progressbar" aria-label={`${goal.title} progress`} aria-valuemin="0" aria-valuemax="100" aria-valuenow={progress}><span style={{ width: `${progress}%` }} /></div>
               <div className="goal-task-list">
