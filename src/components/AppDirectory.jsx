@@ -7,6 +7,7 @@ const destinations = [
   { title: 'Wellness Support', category: 'Wellness', target: 'wellness', description: 'Explore guided coping tools and supportive wellness conversations.', keywords: 'stress anxiety grounding journaling' },
   { title: 'AI Tools & Providers', category: 'Wellness', target: 'wellness', description: 'Find the AI resource hub and review privacy information before using external tools.', keywords: 'chatgpt meta muse grok gemini manus deepseek' },
   { title: 'Women’s Wellness', category: 'Wellness', target: 'wellness', description: 'Open women’s wellness check-in resources.', keywords: 'women health wellbeing' },
+  { title: 'Community Chat Rooms', category: 'Community', target: 'community', description: 'Choose a topic-based room for healing, recovery, wellness, growth, and accountability.', keywords: 'chat rooms trauma healing addiction recovery toxic relationships mental wellness' },
   { title: 'Community Discussions', category: 'Community', target: 'community', description: 'Connect, share support, and take part in moderated discussions.', keywords: 'posts comments connection support' },
   { title: 'Integrity Rising Academy', category: 'Learning', target: 'academy', description: 'Explore learning resources, courses, and personal growth tools.', keywords: 'courses workbook education learn grow' },
   { title: 'Mental Health Services', category: 'Safety & Support', target: 'safety', description: 'Find mental health and crisis support information.', keywords: 'therapy counseling crisis help' },
