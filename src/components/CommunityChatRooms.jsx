@@ -5,10 +5,10 @@ import './CommunityChatRooms.css';
 const fallbackRooms = [
   { id: 'trauma-healing', name: 'Trauma & Healing', description: 'A compassionate space for healing at your own pace.' },
   { id: 'addiction-recovery', name: 'Addiction Recovery', description: 'Encouragement and support through recovery.' },
-  { id: 'mental-wellness', name: 'Mental Wellness', description: 'Stress, emotions, and everyday well-being.' },
   { id: 'toxic-relationships', name: 'Toxic Relationships', description: 'Boundaries, self-worth, and healthy relationships.' },
+  { id: 'mental-wellness', name: 'Mental Wellness', description: 'Stress, emotions, and everyday well-being.' },
   { id: 'personal-growth', name: 'Personal Growth', description: 'Goals, habits, and small wins.' },
-  { id: 'purpose-legacy', name: 'Purpose & Legacy', description: 'Leadership, values, and making a difference.' }
+  { id: 'accountability-leadership', name: 'Accountability & Leadership', description: 'Integrity, responsibility, and making a positive difference.' }
 ];
 
 export default function CommunityChatRooms() {
