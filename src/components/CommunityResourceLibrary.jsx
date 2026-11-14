@@ -129,7 +129,7 @@ function CommunityResourceLibrary() {
         <label><span>Choose a topic</span><select value={category} onChange={(event) => setCategory(event.target.value)}>{categories.map((item) => <option key={item} value={item}>{item}</option>)}</select></label>
       </div>
       <div className="resource-library-actions">
-        <button type="button" className={savedOnly ? 'resource-saved-filter active' : 'resource-saved-filter'} onClick={() => setSavedOnly((current) => !current)} disabled={!user || loadingSaved}>
+        <button type="button" className={savedOnly ? 'resource-saved-filter active' : 'resource-saved-filter'} onClick={() => setSavedOnly((current) => !current)} disabled={!user || loadingSaved} aria-pressed={savedOnly}>
           {loadingSaved ? 'Loading saved resources…' : savedOnly ? 'Show all resources' : `My saved resources (${savedResources.length})`}
         </button>
         {!user && <span>Sign in to save resources to your member account.</span>}
@@ -144,7 +144,7 @@ function CommunityResourceLibrary() {
             <span className="resource-library-source">Provided by {resource.source}</span>
             <div className="resource-library-card-actions">
               <a href={resource.url} target="_blank" rel="noopener noreferrer">Visit resource <span aria-hidden="true">↗</span></a>
-              <button type="button" className={isSaved ? 'resource-save-button is-saved' : 'resource-save-button'} onClick={() => toggleSaved(resource)} disabled={!user || loadingSaved || busyResource === resource.url}>
+              <button type="button" className={isSaved ? 'resource-save-button is-saved' : 'resource-save-button'} onClick={() => toggleSaved(resource)} disabled={!user || loadingSaved || busyResource === resource.url} aria-pressed={isSaved} aria-label={isSaved ? `Remove ${resource.title} from saved resources` : `Save ${resource.title}`}>
                 {busyResource === resource.url ? 'Saving…' : isSaved ? '♥ Saved' : '＋ Save'}
               </button>
             </div>
