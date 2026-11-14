@@ -11,7 +11,12 @@ const resources = [
   { title: 'Love Is Respect', category: 'Healthy relationships & safety', description: 'Understand healthy relationships, boundaries, warning signs, and ways to get support.', url: 'https://www.loveisrespect.org/', source: 'Love Is Respect' },
   { title: '211 — Find Local Help', category: 'Practical support', description: 'Connect with local help for housing, food, bills, transportation, and other essential needs.', url: 'https://www.211.org/', source: '211' },
   { title: 'MedlinePlus — Mental Health', category: 'Learning & personal growth', description: 'Reliable, plain-language health information from the U.S. National Library of Medicine.', url: 'https://medlineplus.gov/mentalhealth.html', source: 'MedlinePlus' },
-  { title: 'CDC — Coping with Stress', category: 'Learning & personal growth', description: 'Evidence-informed information about stress, coping, and caring for emotional well-being.', url: 'https://www.cdc.gov/mental-health/living-with/index.html', source: 'Centers for Disease Control and Prevention' }
+  { title: 'CDC — Coping with Stress', category: 'Learning & personal growth', description: 'Evidence-informed information about stress, coping, and caring for emotional well-being.', url: 'https://www.cdc.gov/mental-health/living-with/index.html', source: 'Centers for Disease Control and Prevention' },
+  { title: 'FindTreatment.gov', category: 'Recovery', description: 'Search for licensed substance use and mental health treatment services across the United States.', url: 'https://findtreatment.gov/', source: 'U.S. Department of Health and Human Services' },
+  { title: 'HUD — Find Housing Assistance', category: 'Practical support', description: 'Find housing assistance and resources for people experiencing or at risk of homelessness.', url: 'https://www.hud.gov/helping-americans/housing', source: 'U.S. Department of Housing and Urban Development' },
+  { title: 'Childhelp National Child Abuse Hotline', category: 'Healthy relationships & safety', description: 'Get help, information, and support related to child abuse or concerns about a child’s safety.', url: 'https://www.childhelphotline.org/', source: 'Childhelp' },
+  { title: 'National Runaway Safeline', category: 'Crisis support', description: 'Confidential support and connection to resources for youth who are experiencing or considering running away.', url: 'https://www.1800runaway.org/', source: 'National Runaway Safeline' },
+  { title: 'Veterans Crisis Line', category: 'Crisis support', description: 'Confidential crisis support for veterans, service members, and their loved ones; call 988 and press 1.', url: 'https://www.veteranscrisisline.net/', source: 'U.S. Department of Veterans Affairs' }
 ];
 const categories = ['All resources', ...new Set(resources.map((resource) => resource.category))];
 
@@ -21,19 +26,27 @@ function CommunityResourceLibrary() {
   const [user, setUser] = useState(null);
   const [savedResources, setSavedResources] = useState([]);
   const [savedOnly, setSavedOnly] = useState(false);
+  const [loadingSaved, setLoadingSaved] = useState(true);
   const [busyResource, setBusyResource] = useState('');
   const [message, setMessage] = useState('');
 
   useEffect(() => {
-    if (!supabase) return undefined;
+    if (!supabase) {
+      setLoadingSaved(false);
+      setMessage('Member saving is unavailable until the app connection is configured.');
+      return undefined;
+    }
     let active = true;
 
     async function loadSaved(currentUser) {
       setUser(currentUser || null);
       if (!currentUser) {
         setSavedResources([]);
+        setSavedOnly(false);
+        setLoadingSaved(false);
         return;
       }
+      setLoadingSaved(true);
       const { data, error } = await supabase
         .from('saved_resources')
         .select('resource_key')
@@ -42,10 +55,12 @@ function CommunityResourceLibrary() {
       if (!active) return;
       if (error) {
         setMessage('We could not load your saved resources. Please refresh and try again.');
+        setLoadingSaved(false);
         return;
       }
       setSavedResources((data || []).map((row) => row.resource_key));
       setMessage('');
+      setLoadingSaved(false);
     }
 
     supabase.auth.getSession().then(({ data, error }) => {
@@ -107,12 +122,12 @@ function CommunityResourceLibrary() {
         <label><span>Choose a topic</span><select value={category} onChange={(event) => setCategory(event.target.value)}>{categories.map((item) => <option key={item} value={item}>{item}</option>)}</select></label>
       </div>
       <div className="resource-library-actions">
-        <button type="button" className={savedOnly ? 'resource-saved-filter active' : 'resource-saved-filter'} onClick={() => setSavedOnly((current) => !current)} disabled={!user}>
-          {savedOnly ? 'Show all resources' : `My saved resources (${savedResources.length})`}
+        <button type="button" className={savedOnly ? 'resource-saved-filter active' : 'resource-saved-filter'} onClick={() => setSavedOnly((current) => !current)} disabled={!user || loadingSaved}>
+          {loadingSaved ? 'Loading saved resources…' : savedOnly ? 'Show all resources' : `My saved resources (${savedResources.length})`}
         </button>
         {!user && <span>Sign in to save resources to your member account.</span>}
       </div>
-      {message && <p className="resource-library-status" role="status">{message}</p>}
+      {message && <p className="resource-library-status" role="status" aria-live="polite">{message}</p>}
       <p className="resource-library-count" aria-live="polite">{visibleResources.length} {visibleResources.length === 1 ? 'resource' : 'resources'} found</p>
       <div className="resource-library-grid">
         {visibleResources.map((resource) => {
@@ -122,7 +137,7 @@ function CommunityResourceLibrary() {
             <span className="resource-library-source">Provided by {resource.source}</span>
             <div className="resource-library-card-actions">
               <a href={resource.url} target="_blank" rel="noopener noreferrer">Visit resource <span aria-hidden="true">↗</span></a>
-              <button type="button" className={isSaved ? 'resource-save-button is-saved' : 'resource-save-button'} onClick={() => toggleSaved(resource)} disabled={!user || busyResource === resource.url}>
+              <button type="button" className={isSaved ? 'resource-save-button is-saved' : 'resource-save-button'} onClick={() => toggleSaved(resource)} disabled={!user || loadingSaved || busyResource === resource.url}>
                 {busyResource === resource.url ? 'Saving…' : isSaved ? '♥ Saved' : '＋ Save'}
               </button>
             </div>
