@@ -20,6 +20,9 @@ export default function CommunityChatRooms() {
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
   const [notice, setNotice] = useState('');
+  const [reportingMessage, setReportingMessage] = useState(null);
+  const [reportReason, setReportReason] = useState('other');
+  const [reportDetails, setReportDetails] = useState('');
 
   useEffect(() => {
     if (!supabase) { setLoading(false); return undefined; }
@@ -91,11 +94,25 @@ export default function CommunityChatRooms() {
     setBusy(false);
   }
 
-  async function reportMessage(messageId) {
-    if (!user) return;
-    const { error } = await supabase.from('community_room_reports')
-      .insert({ message_id: messageId, reporter_id: user.id, reason: 'other' });
-    setNotice(error ? 'We could not submit that report. It may already have been reported.' : 'Thank you. Your report was sent privately for review.');
+  async function reportMessage(event) {
+    event.preventDefault();
+    if (!user || !reportingMessage || busy) return;
+    setBusy(true);
+    const { error } = await supabase.from('community_room_reports').insert({
+      message_id: reportingMessage,
+      reporter_id: user.id,
+      reason: reportReason,
+      details: reportDetails.trim()
+    });
+    setNotice(error
+      ? 'We could not submit that report. It may already have been reported, or the connection may have failed.'
+      : 'Thank you. Your report was submitted privately for review.');
+    if (!error) {
+      setReportingMessage(null);
+      setReportReason('other');
+      setReportDetails('');
+    }
+    setBusy(false);
   }
 
   const room = rooms.find(item => item.id === activeRoom);
@@ -106,7 +123,7 @@ export default function CommunityChatRooms() {
         <h2 id="member-chat-title">Community Chat Rooms</h2>
         <p>Choose a space, join the conversation, and support one another with respect.</p>
       </div>
-      {!user ? (
+      {loading && !user ? <p role="status">Checking your member session…</p> : !user ? (
         <div className="chat-room-signin"><h3>Member conversations</h3><p>Sign in to enter the private community chat rooms.</p><a href="#member-account-title">Sign in / Create an account</a></div>
       ) : (
         <>
@@ -122,7 +139,21 @@ export default function CommunityChatRooms() {
               {loading ? <p role="status">Loading conversation…</p> : messages.length === 0 ? <p className="chat-empty">This room is ready. Start with a kind welcome or supportive message.</p> : messages.map(message => <article className={message.user_id === user.id ? 'chat-message mine' : 'chat-message'} key={message.id}>
                 <div><strong>{message.user_id === user.id ? 'You' : 'Community member'}</strong><time>{new Date(message.created_at).toLocaleString()}</time></div>
                 <p>{message.body}</p>
-                {message.user_id !== user.id && <button type="button" className="chat-report" onClick={() => reportMessage(message.id)}>Report message</button>}
+                {message.user_id !== user.id && <button type="button" className="chat-report" onClick={() => { setReportingMessage(current => current === message.id ? null : message.id); setNotice(''); }}>Report message</button>}
+                {reportingMessage === message.id && <form className="chat-report-form" onSubmit={reportMessage}>
+                  <label htmlFor={`report-reason-${message.id}`}>Why are you reporting this?</label>
+                  <select id={`report-reason-${message.id}`} value={reportReason} onChange={event => setReportReason(event.target.value)}>
+                    <option value="harassment">Harassment or bullying</option>
+                    <option value="threat">Threat or intimidation</option>
+                    <option value="hate">Hateful or discriminatory content</option>
+                    <option value="personal_information">Personal information shared</option>
+                    <option value="spam">Spam or repeated promotion</option>
+                    <option value="other">Something else</option>
+                  </select>
+                  <label htmlFor={`report-details-${message.id}`}>Additional details (optional)</label>
+                  <textarea id={`report-details-${message.id}`} value={reportDetails} onChange={event => setReportDetails(event.target.value)} maxLength={1000} rows={2} placeholder="Tell us what we should review…" />
+                  <div><button type="button" onClick={() => setReportingMessage(null)}>Cancel</button><button type="submit" disabled={busy}>{busy ? 'Sending…' : 'Submit report'}</button></div>
+                </form>}
               </article>)}
             </div>
             <form className="chat-compose" onSubmit={sendMessage}>
