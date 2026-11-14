@@ -13,6 +13,7 @@ import SelfReflectionCheck from './components/SelfReflectionCheck';
 import WellnessChat from './components/WellnessChat';
 import WomensWellness from './components/WomensWellness';
 import CommunityDiscussions from './components/CommunityDiscussions';
+import CommunityChatRooms from './components/CommunityChatRooms';
 import CommunityResourceLibrary from './components/CommunityResourceLibrary';
 import Academy from './components/Academy';
 import PersonalWellnessDashboard from './components/PersonalWellnessDashboard';
@@ -91,6 +92,7 @@ function App() {
         </section>
 
         <section id="community" className="app-area">
+          <CommunityChatRooms />
           <MemberDirectory />
           <CommunityDiscussions />
           <SectionArtwork variant="community" />
