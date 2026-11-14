@@ -13,6 +13,7 @@ function MemberAccount() {
   const [avatarBusy, setAvatarBusy] = useState(false);
   const [user, setUser] = useState(null);
   const [profileLoading, setProfileLoading] = useState(false);
+  const [profileUserId, setProfileUserId] = useState(null);
   const [profileBusy, setProfileBusy] = useState(false);
   const [message, setMessage] = useState('');
   const [busy, setBusy] = useState(false);
@@ -44,12 +45,19 @@ function MemberAccount() {
       setBio('');
       setAvatarPath('');
       setAvatarUrl('');
+      setProfileUserId(null);
+      setProfileLoading(false);
       return undefined;
     }
 
     let active = true;
+    setProfileLoading(true);
+    setProfileUserId(null);
+    setDisplayName('');
+    setBio('');
+    setAvatarPath('');
+    setAvatarUrl('');
     async function loadProfile() {
-      setProfileLoading(true);
       const { data, error } = await supabase
         .from('profiles')
         .select('display_name, bio, avatar_path')
@@ -77,6 +85,7 @@ function MemberAccount() {
         setAvatarPath('');
         setAvatarUrl('');
       }
+      setProfileUserId(user.id);
       setProfileLoading(false);
     }
 
@@ -308,7 +317,7 @@ function MemberAccount() {
           <p>You are signed in as <strong>{user.email}</strong>.</p>
           <p className="account-member-since">Member since <strong>{user.created_at ? new Date(user.created_at).toLocaleDateString(undefined, { year: 'numeric', month: 'long' }) : '—'}</strong></p>
           <h3>My Member Profile</h3>
-          {profileLoading ? (
+          {profileLoading || profileUserId !== user.id ? (
             <p>Loading your profile…</p>
           ) : (
             <>
