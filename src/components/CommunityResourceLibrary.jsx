@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { isSupabaseConfigured, supabase } from '../lib/supabase';
+import { supabase } from '../lib/supabase';
 import './CommunityResourceLibrary.css';
 
 const resources = [
@@ -96,9 +96,16 @@ function CommunityResourceLibrary() {
     setBusyResource(resource.url);
     setMessage('');
     const isSaved = savedResources.includes(resource.url);
-    const result = isSaved
-      ? await supabase.from('saved_resources').delete().eq('user_id', user.id).eq('resource_key', resource.url)
-      : await supabase.from('saved_resources').insert({ user_id: user.id, resource_key: resource.url, resource_type: 'community' });
+    let result;
+    try {
+      result = isSaved
+        ? await supabase.from('saved_resources').delete().eq('user_id', user.id).eq('resource_key', resource.url)
+        : await supabase.from('saved_resources').insert({ user_id: user.id, resource_key: resource.url, resource_type: 'community' });
+    } catch {
+      setMessage('A connection issue prevented that change. Please try again.');
+      setBusyResource('');
+      return;
+    }
     if (result.error) {
       setMessage('We could not update your saved resources. Please try again.');
     } else {
@@ -144,7 +151,7 @@ function CommunityResourceLibrary() {
           </article>;
         })}
       </div>
-      {visibleResources.length === 0 && <p className="resource-library-empty">{savedOnly ? 'You have no saved resources matching these filters yet.' : 'No resources match that search. Try another word or choose All resources.'}</p>}
+      {visibleResources.length === 0 && <div className="resource-library-empty"><p>{savedOnly ? 'You have no saved resources matching these filters yet.' : 'No resources match that search. Try another word or choose All resources.'}</p><button type="button" className="resource-saved-filter" onClick={() => { setSearch(''); setCategory('All resources'); setSavedOnly(false); }}>Clear filters</button></div>}
       <div className="resource-library-note"><strong>A note about support:</strong> These links lead to independent organizations and are shared for education and connection. Integrity Rising does not control their services or guarantee their availability. If someone is in immediate danger, call 911. In the U.S., call or text 988 for suicide or emotional crisis support. This library is not monitored for emergencies.</div>
     </section>
   );
