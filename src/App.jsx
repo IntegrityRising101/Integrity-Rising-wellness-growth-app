@@ -70,6 +70,12 @@ function App() {
             <p>Start with a check-in, choose a small step, and keep your goals moving at a pace that works for you.</p>
           </div>
           <SectionArtwork variant="dashboard" />
+          <div className="dashboard-quick-actions" aria-label="Dashboard shortcuts">
+            <a href="#wellness"><span aria-hidden="true">✦</span><strong>Daily Wellness</strong><small>Check in and explore supportive practices</small></a>
+            <a href="#community"><span aria-hidden="true">♡</span><strong>Community Rooms</strong><small>Connect with people around shared topics</small></a>
+            <a href="#academy"><span aria-hidden="true">▤</span><strong>Learning & Academy</strong><small>Continue learning and building your skills</small></a>
+            <a href="#safety"><span aria-hidden="true">盾</span><strong>Safety & Support</strong><small>Find practical help and support resources</small></a>
+          </div>
           <MemberAccount />
           <MemberPersonalization />
           <MotivationForTheWeek />
