@@ -106,7 +106,7 @@ export default function CommunityChatRooms() {
     });
     setNotice(error
       ? 'We could not submit that report. It may already have been reported, or the connection may have failed.'
-      : 'Thank you. Your report was submitted privately for review.');
+      : 'Thank you. Your report was submitted privately. Do not wait for an in-app response if someone may be in immediate danger.');
     if (!error) {
       setReportingMessage(null);
       setReportReason('other');
