@@ -40,7 +40,7 @@ export default function CommunityChatRooms() {
   useEffect(() => {
     if (!supabase || !user) return undefined;
     let alive = true;
-    supabase.from('community_rooms').select('id,name,description,sort_order')
+    supabase.from('community_rooms').select('id,name,description,guidelines,sort_order')
       .eq('is_active', true).order('sort_order')
       .then(({ data, error }) => {
         if (!alive) return;
