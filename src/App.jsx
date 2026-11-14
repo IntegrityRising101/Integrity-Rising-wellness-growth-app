@@ -30,12 +30,24 @@ import AchievementCenter from './components/AchievementCenter';
 import SectionArtwork from './components/SectionArtwork';
 
 const navigation = [
-  { label: 'My Dashboard', target: 'dashboard' },
-  { label: 'Wellness & AI', target: 'wellness' },
-  { label: 'Community', target: 'community' },
-  { label: 'Academy', target: 'academy' },
-  { label: 'Safety & Support', target: 'safety' },
+  { label: 'Home', target: 'dashboard', icon: '⌂' },
+  { label: 'Community', target: 'community', icon: '♡' },
+  { label: 'Wellness', target: 'wellness', icon: '✦' },
+  { label: 'Academy', target: 'academy', icon: '▤' },
+  { label: 'Safety', target: 'safety', icon: '＋' },
+  { label: 'My Growth', target: 'growth', icon: '↗' },
+  { label: 'Account', target: 'account', icon: '◎' },
 ];
+
+function SectionHeading({ kicker, title, description }) {
+  return (
+    <div className="section-intro app-section-heading">
+      <p className="section-kicker">{kicker}</p>
+      <h2>{title}</h2>
+      <p>{description}</p>
+    </div>
+  );
+}
 
 function App() {
   return (
@@ -50,80 +62,90 @@ function App() {
 
       <nav className="main-navigation" aria-label="Main navigation">
         {navigation.map((item) => (
-          <a key={item.target} href={`#${item.target}`}>{item.label}</a>
+          <a key={item.target} href={`#${item.target}`}>
+            <span className="nav-icon" aria-hidden="true">{item.icon}</span>
+            {item.label}
+          </a>
         ))}
       </nav>
 
-      <main>
+      <main className="app-main">
         <section className="community-section welcome-section">
-          <p className="section-kicker">WELCOME</p>
+          <p className="section-kicker">WELCOME TO YOUR SPACE</p>
           <h2>Your next step starts here.</h2>
           <p>Build healthy habits, find practical support, learn new skills, and connect with a community rooted in respect and accountability.</p>
+          <div className="welcome-actions">
+            <a href="#growth">Explore my growth <span aria-hidden="true">→</span></a>
+            <a href="#community">Find your community <span aria-hidden="true">→</span></a>
+          </div>
         </section>
 
         <AppDirectory />
 
-        <section id="dashboard" className="app-area">
-          <div className="section-intro dashboard-section-intro">
-            <p className="section-kicker">YOUR PERSONAL GROWTH HUB</p>
-            <h2>My Dashboard</h2>
-            <p>Start with a check-in, choose a small step, and keep your goals moving at a pace that works for you.</p>
-          </div>
+        <section id="dashboard" className="app-area dashboard-area">
+          <SectionHeading kicker="YOUR PERSONAL HOME" title="Welcome to your Dashboard" description="A clear starting point for your daily check-in, encouragement, and next steps." />
           <SectionArtwork variant="dashboard" />
           <div className="dashboard-quick-actions" aria-label="Dashboard shortcuts">
-            <a href="#wellness"><span aria-hidden="true">✦</span><strong>Daily Wellness</strong><small>Check in and explore supportive practices</small></a>
-            <a href="#community"><span aria-hidden="true">♡</span><strong>Community Rooms</strong><small>Connect with people around shared topics</small></a>
-            <a href="#academy"><span aria-hidden="true">▤</span><strong>Learning & Academy</strong><small>Continue learning and building your skills</small></a>
-            <a href="#safety"><span aria-hidden="true">盾</span><strong>Safety & Support</strong><small>Find practical help and support resources</small></a>
+            <a href="#community"><span aria-hidden="true">♡</span><strong>Community</strong><small>Find a room, connect, and feel supported.</small></a>
+            <a href="#wellness"><span aria-hidden="true">✦</span><strong>Wellness Center</strong><small>Explore tools and practices for well-being.</small></a>
+            <a href="#academy"><span aria-hidden="true">▤</span><strong>Academy</strong><small>Learn new skills at your own pace.</small></a>
+            <a href="#safety"><span aria-hidden="true">＋</span><strong>Safety &amp; Support</strong><small>Find resources and practical support.</small></a>
           </div>
-          <MemberAccount />
-          <MemberPersonalization />
           <MotivationForTheWeek />
-          <PersonalWellnessDashboard />
-          <GoalCenter />
-          <GratitudeJournal />
-          <AchievementCenter />
-        </section>
-
-        <section id="wellness" className="app-area">
-          <SectionArtwork variant="wellness" />
-          <AIHub />
-          <AIPrivacyNotice />
-          <WellnessChat />
-          <WellnessAI />
-          <GuidedWellnessPractices />
-          <StressReliefCenter />
-          <SelfReflectionCheck />
-          <WomensWellness />
         </section>
 
         <section id="community" className="app-area">
-          <CommunityChatRooms />
-          <MemberDirectory />
-          <CommunityDiscussions />
+          <SectionHeading kicker="CONNECT & BELONG" title="Community" description="Find your people, join a topic-based room, share encouragement, and grow together with respect." />
           <SectionArtwork variant="community" />
+          <CommunityChatRooms />
+          <CommunityDiscussions />
+          <MemberDirectory />
           <CommunityResourceLibrary />
           <ModerationDashboard />
         </section>
 
+        <section id="wellness" className="app-area">
+          <SectionHeading kicker="CARE FOR YOUR WHOLE SELF" title="Wellness Center" description="Explore supportive tools for emotional wellness, reflection, stress relief, and everyday growth." />
+          <SectionArtwork variant="wellness" />
+          <PersonalWellnessDashboard />
+          <GuidedWellnessPractices />
+          <StressReliefCenter />
+          <SelfReflectionCheck />
+          <WomensWellness />
+          <WellnessAI />
+          <WellnessChat />
+          <AIHub />
+          <AIPrivacyNotice />
+        </section>
+
         <section id="academy" className="app-area">
+          <SectionHeading kicker="LEARN • GROW • HEAL • RISE" title="Integrity Rising Academy" description="Build knowledge, strengthen life skills, and keep moving toward the legacy you want to create." />
           <SectionArtwork variant="academy" />
           <Academy />
         </section>
 
         <section id="safety" className="safety-section app-area">
           <QuickExitButton />
-          <div className="section-intro">
-            <p className="section-kicker">SUPPORT & RESOURCES</p>
-            <h2>Safety, Crisis &amp; Immediate Support</h2>
-            <p>Find crisis contacts, mental health resources, domestic violence support, recovery services, and practical safety tools. If a device may be monitored, consider using a safer device before viewing sensitive information.</p>
-          </div>
+          <SectionHeading kicker="YOU DESERVE SUPPORT" title="Safety &amp; Support" description="Find crisis contacts, mental health resources, domestic violence support, recovery services, and practical safety tools. If a device may be monitored, consider using a safer device before viewing sensitive information." />
           <SectionArtwork variant="safety" />
           <MentalHealthServices />
           <StateResourceDirectory />
           <LocalSupportFinder />
           <PersonalSafetyPlan />
           <IncidentVault />
+        </section>
+
+        <section id="growth" className="app-area">
+          <SectionHeading kicker="YOUR JOURNEY, YOUR PACE" title="My Growth" description="Set meaningful goals, track your progress, celebrate milestones, and save the resources that support your next chapter." />
+          <GoalCenter />
+          <GratitudeJournal />
+          <AchievementCenter />
+        </section>
+
+        <section id="account" className="app-area account-area">
+          <SectionHeading kicker="MAKE THIS SPACE YOURS" title="My Account" description="Manage your member profile and personal app preferences." />
+          <MemberAccount />
+          <MemberPersonalization />
         </section>
       </main>
 
