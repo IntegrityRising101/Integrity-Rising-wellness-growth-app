@@ -37,14 +37,15 @@ function ModerationDashboard() {
         .limit(100)
     ]);
 
-    if (postResult.error || commentResult.error || reportResult.error || chatReportResult.error) {
+    if (postResult.error || commentResult.error || reportResult.error) {
       setNotice('The review queue could not be loaded. Check that the moderation database migration has been applied.');
       return;
     }
     setPosts(postResult.data || []);
     setComments(commentResult.data || []);
     setReports(reportResult.data || []);
-    setChatReports(chatReportResult.data || []);
+    setChatReports(chatReportResult.error ? [] : (chatReportResult.data || []));
+    if (chatReportResult.error) setNotice('Chat-room reports will appear after the chat moderation migration is applied. Existing post and comment review remains available.');
   }, []);
 
   useEffect(() => {
