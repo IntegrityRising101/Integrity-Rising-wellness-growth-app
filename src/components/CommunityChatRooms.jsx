@@ -85,6 +85,7 @@ export default function CommunityChatRooms() {
   const [draft, setDraft] = useState('');
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
+  const [deletingId, setDeletingId] = useState('');
   const [notice, setNotice] = useState('');
   const [reportingMessage, setReportingMessage] = useState(null);
   const [reportReason, setReportReason] = useState('other');
@@ -160,6 +161,26 @@ export default function CommunityChatRooms() {
     setBusy(false);
   }
 
+  async function deleteMessage(message) {
+    if (!user || !message || deletingId) return;
+    const confirmed = window.confirm('Delete this message? This cannot be undone.');
+    if (!confirmed) return;
+    setDeletingId(message.id);
+    setNotice('');
+    const { error } = await supabase
+      .from('community_room_messages')
+      .delete()
+      .eq('id', message.id)
+      .eq('user_id', user.id);
+    if (error) {
+      setNotice('That message could not be deleted. Please try again.');
+    } else {
+      setMessages(current => current.filter(item => item.id !== message.id));
+      setNotice('Your message was deleted.');
+    }
+    setDeletingId('');
+  }
+
   async function reportMessage(event) {
     event.preventDefault();
     if (!user || !reportingMessage || busy) return;
@@ -209,7 +230,7 @@ export default function CommunityChatRooms() {
               {loading ? <p role="status">Loading conversation…</p> : messages.length === 0 ? <p className="chat-empty">This room is ready. Start with a kind welcome or supportive message.</p> : messages.map(message => <article className={message.user_id === user.id ? 'chat-message mine' : 'chat-message'} key={message.id}>
                 <div><strong>{message.user_id === user.id ? 'You' : 'Community member'}</strong><time>{new Date(message.created_at).toLocaleString()}</time></div>
                 <p>{message.body}</p>
-                {message.user_id !== user.id && <button type="button" className="chat-report" onClick={() => { setReportingMessage(current => current === message.id ? null : message.id); setNotice(''); }}>Report message</button>}
+                {message.user_id === user.id ? <button type="button" className="chat-report" disabled={Boolean(deletingId)} onClick={() => deleteMessage(message)}>{deletingId === message.id ? 'Deleting…' : 'Delete my message'}</button> : <button type="button" className="chat-report" onClick={() => { setReportingMessage(current => current === message.id ? null : message.id); setNotice(''); }}>Report message</button>}
                 {reportingMessage === message.id && <form className="chat-report-form" onSubmit={reportMessage}>
                   <label htmlFor={`report-reason-${message.id}`}>Why are you reporting this?</label>
                   <select id={`report-reason-${message.id}`} value={reportReason} onChange={event => setReportReason(event.target.value)}>
