@@ -6,6 +6,7 @@ function ModerationDashboard() {
   const [authorized, setAuthorized] = useState(false);
   const [checked, setChecked] = useState(false);
   const [posts, setPosts] = useState([]);
+  const [publishedPosts, setPublishedPosts] = useState([]);
   const [comments, setComments] = useState([]);
   const [reports, setReports] = useState([]);
   const [chatReports, setChatReports] = useState([]);
@@ -14,11 +15,16 @@ function ModerationDashboard() {
 
   const loadQueue = useCallback(async () => {
     if (!supabase) return;
-    const [postResult, commentResult, reportResult, chatReportResult] = await Promise.all([
+    const [postResult, publishedPostResult, commentResult, reportResult, chatReportResult] = await Promise.all([
       supabase.from('community_posts')
         .select('id, category, title, body, created_at')
         .eq('status', 'pending')
         .order('created_at', { ascending: true })
+        .limit(100),
+      supabase.from('community_posts')
+        .select('id, category, title, body, created_at')
+        .eq('status', 'published')
+        .order('created_at', { ascending: false })
         .limit(100),
       supabase.from('community_comments')
         .select('id, post_id, body, created_at')
@@ -37,11 +43,12 @@ function ModerationDashboard() {
         .limit(100)
     ]);
 
-    if (postResult.error || commentResult.error || reportResult.error) {
+    if (postResult.error || publishedPostResult.error || commentResult.error || reportResult.error) {
       setNotice('The review queue could not be loaded. Check that the moderation database migration has been applied.');
       return;
     }
     setPosts(postResult.data || []);
+    setPublishedPosts(publishedPostResult.data || []);
     setComments(commentResult.data || []);
     setReports(reportResult.data || []);
     setChatReports(chatReportResult.error ? [] : (chatReportResult.data || []));
@@ -88,6 +95,24 @@ function ModerationDashboard() {
     setBusyId('');
   }
 
+  async function removePublishedPost(post) {
+    if (!authorized || busyId) return;
+    const confirmed = window.confirm('Remove this published post from Community Conversations? Members will no longer see it.');
+    if (!confirmed) return;
+    setBusyId(post.id);
+    setNotice('');
+    const { error } = await supabase.from('community_posts')
+      .update({ status: 'removed' })
+      .eq('id', post.id)
+      .eq('status', 'published');
+    if (error) {
+      setNotice('That published post could not be removed. Check moderator database permissions and try again.');
+    } else {
+      setNotice('Published post removed from Community Conversations.');
+      await loadQueue();
+    }
+    setBusyId('');
+  }
   async function updateReportStatus(id, status) {
     if (!authorized || busyId) return;
     setBusyId(id);
@@ -145,6 +170,20 @@ function ModerationDashboard() {
         ))}
       </div>
 
+      <div className="moderation-queue">
+        <h3>Published posts <span>{publishedPosts.length}</span></h3>
+        <p>Authorized moderators can remove posts from Community Conversations. Removal changes the post status; it does not permanently erase the record.</p>
+        {publishedPosts.length === 0 ? <p>No published posts are available to manage.</p> : publishedPosts.map(post => (
+          <article className="moderation-item" key={post.id}>
+            <p className="moderation-item-meta">{post.category} · Published · {new Date(post.created_at).toLocaleString()}</p>
+            <h4>{post.title}</h4>
+            <p>{post.body}</p>
+            <div className="moderation-actions">
+              <button type="button" className="moderation-remove" disabled={Boolean(busyId)} onClick={() => removePublishedPost(post)}>Remove published post</button>
+            </div>
+          </article>
+        ))}
+      </div>
       <div className="moderation-queue">
         <h3>Replies awaiting review <span>{comments.length}</span></h3>
         {comments.length === 0 ? <p>No replies are waiting for review.</p> : comments.map(comment => (
