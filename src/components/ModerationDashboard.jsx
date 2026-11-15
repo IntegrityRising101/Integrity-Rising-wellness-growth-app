@@ -8,12 +8,13 @@ function ModerationDashboard() {
   const [posts, setPosts] = useState([]);
   const [comments, setComments] = useState([]);
   const [reports, setReports] = useState([]);
+  const [chatReports, setChatReports] = useState([]);
   const [notice, setNotice] = useState('');
   const [busyId, setBusyId] = useState('');
 
   const loadQueue = useCallback(async () => {
     if (!supabase) return;
-    const [postResult, commentResult, reportResult] = await Promise.all([
+    const [postResult, commentResult, reportResult, chatReportResult] = await Promise.all([
       supabase.from('community_posts')
         .select('id, category, title, body, created_at')
         .eq('status', 'pending')
@@ -28,16 +29,22 @@ function ModerationDashboard() {
         .select('id, post_id, comment_id, reason, details, status, created_at')
         .in('status', ['open', 'reviewing'])
         .order('created_at', { ascending: true })
+        .limit(100),
+      supabase.from('community_room_reports')
+        .select('id, message_id, reporter_id, reason, details, status, created_at, community_room_messages!inner(body, room_id)')
+        .in('status', ['open', 'reviewing'])
+        .order('created_at', { ascending: true })
         .limit(100)
     ]);
 
-    if (postResult.error || commentResult.error || reportResult.error) {
+    if (postResult.error || commentResult.error || reportResult.error || chatReportResult.error) {
       setNotice('The review queue could not be loaded. Check that the moderation database migration has been applied.');
       return;
     }
     setPosts(postResult.data || []);
     setComments(commentResult.data || []);
     setReports(reportResult.data || []);
+    setChatReports(chatReportResult.data || []);
   }, []);
 
   useEffect(() => {
@@ -89,6 +96,20 @@ function ModerationDashboard() {
       setNotice('The report status could not be updated. Please try again.');
     } else {
       setNotice(`Report marked ${status}.`);
+      await loadQueue();
+    }
+    setBusyId('');
+  }
+
+  async function updateChatReportStatus(id, status) {
+    if (!authorized || busyId) return;
+    setBusyId(id);
+    setNotice('');
+    const { error } = await supabase.from('community_room_reports').update({ status }).eq('id', id);
+    if (error) {
+      setNotice('The chat-room report status could not be updated. Check that migration 009 has been applied.');
+    } else {
+      setNotice(`Chat-room report marked ${status}.`);
       await loadQueue();
     }
     setBusyId('');
@@ -151,6 +172,24 @@ function ModerationDashboard() {
               {report.status === 'open' && <button type="button" disabled={Boolean(busyId)} onClick={() => updateReportStatus(report.id, 'reviewing')}>Mark reviewing</button>}
               <button type="button" disabled={Boolean(busyId)} onClick={() => updateReportStatus(report.id, 'resolved')}>Resolve</button>
               <button type="button" className="moderation-secondary" disabled={Boolean(busyId)} onClick={() => updateReportStatus(report.id, 'dismissed')}>Dismiss</button>
+            </div>
+          </article>
+        ))}
+      </div>
+      <div className="moderation-queue moderation-reports-queue">
+        <h3>Private chat-room reports <span>{chatReports.length}</span></h3>
+        <p className="moderation-report-warning">These reports come from the private topic-based chat rooms. Review reporter details only as needed for safety and policy enforcement.</p>
+        {chatReports.length === 0 ? <p>No open chat-room reports are waiting for review.</p> : chatReports.map(report => (
+          <article className="moderation-item" key={report.id}>
+            <p className="moderation-item-meta">{new Date(report.created_at).toLocaleString()} · Room: {report.community_room_messages?.room_id || 'Community chat'}</p>
+            <h4>{report.reason.replaceAll('_', ' ')}</h4>
+            <p><strong>Reported message:</strong> {report.community_room_messages?.body || 'Message unavailable'}</p>
+            {report.details && <p><strong>Report details:</strong> {report.details}</p>}
+            <p className="moderation-report-current">Current status: {report.status}</p>
+            <div className="moderation-actions">
+              {report.status === 'open' && <button type="button" disabled={Boolean(busyId)} onClick={() => updateChatReportStatus(report.id, 'reviewing')}>Mark reviewing</button>}
+              <button type="button" disabled={Boolean(busyId)} onClick={() => updateChatReportStatus(report.id, 'resolved')}>Resolve</button>
+              <button type="button" className="moderation-secondary" disabled={Boolean(busyId)} onClick={() => updateChatReportStatus(report.id, 'dismissed')}>Dismiss</button>
             </div>
           </article>
         ))}
