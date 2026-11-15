@@ -199,6 +199,14 @@ function MemberAccount() {
         .upload(newPath, file, { contentType: file.type, upsert: false });
       if (uploadError) throw uploadError;
 
+      const { data: signedImage, error: signedError } = await supabase.storage
+        .from('member-avatars')
+        .createSignedUrl(newPath, 3600);
+      if (signedError) {
+        await supabase.storage.from('member-avatars').remove([newPath]);
+        throw signedError;
+      }
+
       const { error: profileError } = await supabase
         .from('profiles')
         .upsert(
@@ -209,11 +217,6 @@ function MemberAccount() {
         await supabase.storage.from('member-avatars').remove([newPath]);
         throw profileError;
       }
-
-      const { data: signedImage, error: signedError } = await supabase.storage
-        .from('member-avatars')
-        .createSignedUrl(newPath, 3600);
-      if (signedError) throw signedError;
 
       const previousPath = avatarPath;
       setAvatarPath(newPath);
