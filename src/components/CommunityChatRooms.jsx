@@ -11,6 +11,72 @@ const fallbackRooms = [
   { id: 'accountability-leadership', name: 'Accountability & Leadership', description: 'Integrity, responsibility, and making a positive difference.' }
 ];
 
+const roomWelcomeMessages = {
+  'trauma-healing': {
+    title: 'Welcome to Trauma & Healing',
+    paragraphs: [
+      'You are welcome here, exactly as you are. Healing is not a race, and there is no timeline you have to follow. You can participate at your own pace without sharing more than feels safe.',
+      'We believe your past does not define your future, your feelings deserve respect, and small steps forward matter.',
+      'Please respect boundaries, avoid judgment and pressure, protect privacy, and offer encouragement rather than unsolicited criticism. This is peer support, not therapy or crisis care.',
+      'You are not broken. You are not alone. Your story is not over. United by Truth, Driven by Purpose.'
+    ]
+  },
+  'addiction-recovery': {
+    title: 'Welcome to Addiction Recovery',
+    paragraphs: [
+      'You do not have to have everything figured out to belong here. Whether you are beginning recovery, rebuilding after a setback, or supporting someone you love, there is room for you.',
+      'We stand for progress over perfection, honesty without shame, accountability without humiliation, and support without judgment.',
+      'Respect each person’s path, protect privacy, avoid shaming or glorifying substance use, and encourage qualified professional care when needed. This is peer support, not addiction treatment.',
+      'You are worthy of recovery, support, and a future filled with purpose. One day, one decision, one step at a time.'
+    ]
+  },
+  'toxic-relationships': {
+    title: 'Welcome to Toxic Relationships',
+    paragraphs: [
+      'You deserve relationships built on respect, honesty, trust, and kindness. This is a place to recognize unhealthy patterns, rebuild self-worth, and learn about healthy boundaries.',
+      'Love should never require losing yourself. You are not responsible for changing another person’s behavior, and you deserve to feel safe being yourself.',
+      'Respect each person’s choices. Do not blame someone for being mistreated or pressure anyone to leave or stay. Protect privacy and encourage safety planning and professional support when appropriate.',
+      'You deserve peace. Your past relationships do not determine your future.'
+    ]
+  },
+  'mental-wellness': {
+    title: 'Welcome to Mental Wellness',
+    paragraphs: [
+      'Your mental well-being matters. You can learn, ask questions, and feel supported without judgment. You do not have to pretend everything is okay here.',
+      'We encourage healthy habits, emotional awareness, resilience, rest, and asking for help when you need it.',
+      'Listen with kindness, respect privacy, avoid diagnosing or prescribing treatment to others, and encourage professional support when appropriate. This is peer support, not mental health care or crisis response.',
+      'You matter. One breath, one choice, one step forward.'
+    ]
+  },
+  'personal-growth': {
+    title: 'Welcome to Personal Growth',
+    paragraphs: [
+      'This is a space for becoming stronger, wiser, and more intentional about the life you want to build. Growth is not about perfection; it is about taking meaningful steps.',
+      'We believe you are capable of learning and changing. Consistency matters, mistakes can teach us, and small victories deserve to be celebrated.',
+      'Encourage without comparing or shaming. Be honest, respectful, and accountable, and remember that every member chooses their own pace.',
+      'Your next chapter begins with the decisions you make today. Keep moving forward.'
+    ]
+  },
+  'purpose-legacy': {
+    title: 'Welcome to Purpose & Legacy',
+    paragraphs: [
+      'Your life has purpose, your choices have meaning, and the legacy you leave begins with how you live today.',
+      'Legacy is more than what you own or accomplish. It is also the lives you touch, the lessons you share, and the positive changes you create.',
+      'Lead with honesty, humility, compassion, and accountability. Encourage others, respect different perspectives, and build one another up.',
+      'Start where you are. Use what you have learned. Make a difference. United by Truth, Driven by Purpose.'
+    ]
+  },
+  'accountability-leadership': {
+    title: 'Welcome to Accountability & Leadership',
+    paragraphs: [
+      'Welcome to a space for leading with integrity, taking responsibility, and making a positive difference.',
+      'Leadership begins with our choices. Accountability is about learning and making things right, never shaming or humiliating others.',
+      'Share constructively, respect different perspectives, and encourage one another with honesty and compassion.',
+      'United by Truth, Driven by Purpose. Learn • Grow • Heal • Rise.'
+    ]
+  }
+};
+
 export default function CommunityChatRooms() {
   const [user, setUser] = useState(null);
   const [rooms, setRooms] = useState(fallbackRooms);
@@ -133,6 +199,10 @@ export default function CommunityChatRooms() {
             </button>)}
           </div>
           <div className="chat-room-panel">
+            {roomWelcomeMessages[activeRoom] && <aside className="chat-room-welcome" aria-label="Room welcome message">
+              <h4>{roomWelcomeMessages[activeRoom].title}</h4>
+              {roomWelcomeMessages[activeRoom].paragraphs.map((paragraph, index) => <p key={index}>{paragraph}</p>)}
+            </aside>}
             <div className="chat-room-panel-heading"><div><span>YOU ARE IN</span><h3>{room?.name || 'Community Room'}</h3></div><span className="chat-live-label">Member chat</span></div>
             <p className="chat-room-guideline">{room?.guidelines || 'Be respectful. Share only what feels safe. Protect your privacy.'}</p>
             <div className="chat-message-list" aria-live="polite">
