@@ -673,3 +673,11 @@
   outline: 3px solid #c9a64b;
   outline-offset: 3px;
 }
+
+
+.my-submission-actions{display:flex;align-items:center;gap:.55rem;flex-wrap:wrap}
+.my-submission-delete{border:1px solid #a65c52;border-radius:8px;padding:.35rem .65rem;background:#fff;color:#87463f;font:inherit;font-size:.78rem;font-weight:700;cursor:pointer}
+.my-submission-delete:hover{background:#fff5f3}
+.my-submission-delete:disabled{opacity:.55;cursor:not-allowed}
+.my-submission-delete:focus-visible{outline:3px solid #c9a64b;outline-offset:3px}
+@media(max-width:600px){.my-submission-actions{width:100%;justify-content:space-between}}
