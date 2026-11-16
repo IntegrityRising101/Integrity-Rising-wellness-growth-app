@@ -270,6 +270,8 @@ function GoalCenter() {
   }
 
   async function removeGoal(id) {
+    const goalToRemove = goals.find(goal => goal.id === id);
+    if (!goalToRemove || !window.confirm(`Remove "${goalToRemove.title}" and all of its action steps? This cannot be undone.`)) return;
     if (user) {
       const { error } = await supabase.from('member_goals').delete().eq('id', id).eq('user_id', user.id);
       if (error) {
