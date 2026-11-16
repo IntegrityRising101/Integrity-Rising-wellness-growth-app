@@ -170,3 +170,25 @@
   .wellness-save-row { align-items: stretch; flex-direction: column; }
   .wellness-save-row button { width: 100%; }
 }
+
+
+/* Daily Growth Planner */
+.growth-planner-form { display: grid; grid-template-columns: minmax(0, 1fr) minmax(150px, .55fr) auto; align-items: end; gap: .65rem; margin: .8rem 0 1rem; }
+.growth-planner-form label { display: grid; gap: .35rem; color: #263735; font-size: .82rem; font-weight: 700; }
+.growth-planner-form input { box-sizing: border-box; width: 100%; min-height: 2.65rem; padding: .65rem .75rem; border: 1px solid #cbd9d7; border-radius: 8px; background: #fff; color: #263735; font: inherit; }
+.growth-planner-form input:focus-visible { outline: 2px solid #075e60; outline-offset: 2px; }
+.growth-planner-form button { min-height: 2.65rem; padding: .65rem .9rem; border: 0; border-radius: 8px; background: #075e60; color: #fff; font: inherit; font-weight: 700; cursor: pointer; }
+.growth-planner-form button:disabled { opacity: .5; cursor: not-allowed; }
+.growth-planner-list { display: grid; gap: .6rem; margin: .8rem 0 0; padding: 0; list-style: none; }
+.growth-planner-task { display: flex; align-items: center; justify-content: space-between; gap: .75rem; padding: .8rem; border: 1px solid #e1e9e5; border-radius: 10px; background: #fff; }
+.growth-planner-task label { display: flex; align-items: flex-start; gap: .65rem; min-width: 0; cursor: pointer; }
+.growth-planner-task label span { display: grid; gap: .2rem; min-width: 0; overflow-wrap: anywhere; }
+.growth-planner-task label strong { color: #263735; font-size: .9rem; }
+.growth-planner-task label small { color: #647572; font-size: .76rem; }
+.growth-planner-task.is-complete label strong { color: #647572; text-decoration: line-through; }
+.growth-planner-task input { accent-color: #075e60; margin-top: .2rem; }
+.growth-planner-delete { flex: 0 0 auto; padding: .4rem .6rem; border: 1px solid #d8c9c4; border-radius: 7px; background: #fff; color: #75443b; font: inherit; font-size: .76rem; cursor: pointer; }
+@media (max-width: 650px) {
+  .growth-planner-form { grid-template-columns: 1fr; }
+  .growth-planner-form button { width: 100%; }
+}
