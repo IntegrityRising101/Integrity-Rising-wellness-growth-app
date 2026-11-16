@@ -311,6 +311,38 @@ function CommunityDiscussions() {
     setBusy(false);
   }
 
+  async function deleteSubmission(item) {
+    if (!user || !item?.id || busy) return;
+    const label = item.kind === 'Post' ? 'this post' : 'this reply';
+    if (!window.confirm(`Delete ${label}? This cannot be undone.`)) return;
+
+    setBusy(true);
+    setNotice('');
+    const table = item.kind === 'Post' ? 'community_posts' : 'community_comments';
+    const { error } = await supabase.from(table).delete().eq('id', item.id).eq('user_id', user.id);
+
+    if (error) {
+      setNotice(`We could not delete ${label}. Please try again.`);
+    } else {
+      setMySubmissions(current => current.filter(entry => !(entry.kind === item.kind && entry.id === item.id)));
+      if (item.kind === 'Post') {
+        setPosts(current => current.filter(post => post.id !== item.id));
+        setComments(current => {
+          const next = { ...current };
+          delete next[item.id];
+          return next;
+        });
+        setNotice('Your post was deleted from the community.');
+      } else {
+        setComments(current => Object.fromEntries(
+          Object.entries(current).map(([postId, entries]) => [postId, entries.filter(comment => comment.id !== item.id)])
+        ));
+        setNotice('Your reply was deleted from the community.');
+      }
+    }
+    setBusy(false);
+  }
+
   async function reportPost(postId) {
     const reason = reportChoices[postId] || 'other';
     if (!user || busy) return;
@@ -568,9 +600,12 @@ function CommunityDiscussions() {
                       <strong>{item.kind}: {item.kind === 'Post' ? item.title : item.body}</strong>
                       <span>{new Date(item.created_at).toLocaleDateString()}</span>
                     </div>
-                    <span className={`submission-status submission-status-${item.status || 'pending'}`}>
-                      {item.status === 'published' ? 'Approved · Published' : item.status === 'rejected' ? 'Not approved' : item.status === 'hidden' ? 'Hidden by moderators' : 'Pending review'}
-                    </span>
+                    <div className="my-submission-actions">
+                      <span className={`submission-status submission-status-${item.status || 'pending'}`}>
+                        {item.status === 'published' ? 'Approved · Published' : item.status === 'rejected' ? 'Not approved' : item.status === 'hidden' ? 'Hidden by moderators' : 'Pending review'}
+                      </span>
+                      <button type="button" className="my-submission-delete" disabled={busy} onClick={() => deleteSubmission(item)}>Delete</button>
+                    </div>
                   </li>
                 ))}
               </ul>
