@@ -42,8 +42,8 @@ Apply migrations `008_community_chat_rooms.sql` and `012_chat_room_consistency.s
 
 **Do not announce the chat rooms as fully launched until these items are completed:**
 
-- The current Community Review Dashboard has not yet been connected to `community_room_reports`.
-- Implement a moderator-only chat-report review queue using the established `public.is_community_moderator()` authorization function. Never grant all authenticated members access to every report.
+- The `ModerationDashboard` component already queries `community_room_reports` and provides moderator status actions in the repository. This is code-level integration, not proof of live permissions.
+- Verify the moderator-only queue using a trusted moderator account and a regular member account; confirm regular members cannot read or update reports.
 - Establish a documented response process and staffed coverage expectations. The app must not imply that reports are monitored 24/7.
 - Test reporting, duplicate reports, unauthorized access, and mobile layouts with separate member accounts.
 
