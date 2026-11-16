@@ -51,6 +51,21 @@ function PersonalWellnessDashboard() {
       return saved.date === getToday() ? saved.checked || {} : {};
     } catch { return {}; }
   });
+  const nervousOptions = [
+    { value: "grounded", label: "Grounded", detail: "Calm and present", symbol: "●" },
+    { value: "alert", label: "Alert", detail: "Active and focused", symbol: "●" },
+    { value: "alarm", label: "Alarm ringing", detail: "Overwhelmed or tense", symbol: "●" }
+  ];
+  const [nervousState, setNervousState] = useState(() => {
+    try {
+      const saved = JSON.parse(window.localStorage.getItem("integrity-rising-nervous-checkin") || "{}");
+      return saved.date === getToday() ? saved.value || "" : "";
+    } catch { return ""; }
+  });
+  function chooseNervousState(value) {
+    setNervousState(value);
+    try { window.localStorage.setItem("integrity-rising-nervous-checkin", JSON.stringify({ date: getToday(), value })); } catch {}
+  }
   function togglePromise(item) {
     setPromises(current => {
       const updated = { ...current, [item]: !current[item] };
@@ -160,6 +175,15 @@ function PersonalWellnessDashboard() {
         {saved && <div className="wellness-saved-summary" role="status" aria-live="polite"><div className="wellness-saved-summary-heading"><span aria-hidden="true">✓</span><strong>Today's check-in is saved on this device</strong></div><p><strong>Feeling:</strong> {selectedMood?.emoji} {selectedMood?.label}</p><p><strong>Stress:</strong> {stress}/5 · <strong>Energy:</strong> {energy}/5</p></div>}
         {storageError && <p className="wellness-storage-error" role="alert">Your browser could not save this check-in. Check available device storage and try again.</p>}
       </form>
+
+      <div className="wellness-practice-card nervous-system-card">
+        <h3>Current State Check-in</h3>
+        <p>Where does your body and mind feel right now? Choose the option that feels closest. There is no wrong answer.</p>
+        <div className="wellness-mood-options" role="group" aria-label="Choose your current state">
+          {nervousOptions.map(option => <button key={option.value} type="button" className={nervousState === option.value ? "wellness-mood-option selected" : "wellness-mood-option"} onClick={() => chooseNervousState(option.value)} aria-pressed={nervousState === option.value}><span aria-hidden="true">{option.symbol}</span><span>{option.label}<small>{option.detail}</small></span></button>)}
+        </div>
+        {nervousState && <div className="wellness-kind-message" role="status"><strong>Your 30-second reset:</strong> If it feels comfortable, let your shoulders soften. Breathe in gently, then breathe out slowly. Repeat at your own pace. You can stop whenever you wish.</div>}
+      </div>
 
       <div className="wellness-practice-card daily-promises-card">
         <div className="wellness-practice-heading"><div><h3>Today's Promises</h3><p>Small steps. Big change.</p></div><strong>{promiseItems.filter(item => promises[item]).length}/2</strong></div>
