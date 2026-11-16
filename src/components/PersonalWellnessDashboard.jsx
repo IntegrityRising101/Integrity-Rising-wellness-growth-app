@@ -44,6 +44,20 @@ function PersonalWellnessDashboard() {
   const [checked, setChecked] = useState({});
   const [saved, setSaved] = useState(false);
   const [storageError, setStorageError] = useState(false);
+  const promiseItems = ["15-minute reading and reflection", "Complete one high-priority task before checking email"];
+  const [promises, setPromises] = useState(() => {
+    try {
+      const saved = JSON.parse(window.localStorage.getItem("integrity-rising-daily-promises") || "{}");
+      return saved.date === getToday() ? saved.checked || {} : {};
+    } catch { return {}; }
+  });
+  function togglePromise(item) {
+    setPromises(current => {
+      const updated = { ...current, [item]: !current[item] };
+      try { window.localStorage.setItem("integrity-rising-daily-promises", JSON.stringify({ date: getToday(), checked: updated })); } catch {}
+      return updated;
+    });
+  }
 
   const today = getToday();
   const completedCount = Object.values(checked).filter(Boolean).length;
@@ -146,6 +160,12 @@ function PersonalWellnessDashboard() {
         {saved && <div className="wellness-saved-summary" role="status" aria-live="polite"><div className="wellness-saved-summary-heading"><span aria-hidden="true">✓</span><strong>Today's check-in is saved on this device</strong></div><p><strong>Feeling:</strong> {selectedMood?.emoji} {selectedMood?.label}</p><p><strong>Stress:</strong> {stress}/5 · <strong>Energy:</strong> {energy}/5</p></div>}
         {storageError && <p className="wellness-storage-error" role="alert">Your browser could not save this check-in. Check available device storage and try again.</p>}
       </form>
+
+      <div className="wellness-practice-card daily-promises-card">
+        <div className="wellness-practice-heading"><div><h3>Today's Promises</h3><p>Small steps. Big change.</p></div><strong>{promiseItems.filter(item => promises[item]).length}/2</strong></div>
+        <ul>{promiseItems.map(item => <li key={item}><label><input type="checkbox" checked={Boolean(promises[item])} onChange={() => togglePromise(item)} /><span>{item}</span></label></li>)}</ul>
+        <p className="wellness-dashboard-privacy">Integrity is built one promise at a time.</p>
+      </div>
 
       <div className="wellness-practice-card">
         <div className="wellness-practice-heading"><div><h3>Small steps for today</h3><p>Choose only what feels realistic and comfortable.</p></div><strong>{completedCount}/{practices.length}</strong></div>
