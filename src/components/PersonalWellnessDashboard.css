@@ -156,3 +156,17 @@
 @media (max-width: 600px) {
   .wellness-rating-grid { grid-template-columns: 1fr; }
 }
+
+
+/* Nervous-system choices and evening reflection form controls. */
+.nervous-system-card .wellness-mood-option { min-height: 5rem; }
+.nervous-system-card .wellness-mood-option small { display: block; margin-top: .2rem; color: #647572; font-size: .72rem; line-height: 1.3; }
+.evening-alignment-card > p { color: #647572; line-height: 1.5; }
+.evening-alignment-card > label { display: block; margin: .9rem 0 .45rem; color: #263735; font-weight: 700; line-height: 1.5; }
+.evening-alignment-card textarea { box-sizing: border-box; width: 100%; min-height: 7rem; padding: .85rem; border: 1px solid #cbd9d7; border-radius: 9px; background: #fff; color: #263735; font: inherit; line-height: 1.5; resize: vertical; }
+.evening-alignment-card textarea:focus-visible { outline: 2px solid #075e60; outline-offset: 2px; }
+@media (max-width: 600px) {
+  .nervous-system-card .wellness-mood-options { grid-template-columns: 1fr; }
+  .wellness-save-row { align-items: stretch; flex-direction: column; }
+  .wellness-save-row button { width: 100%; }
+}
