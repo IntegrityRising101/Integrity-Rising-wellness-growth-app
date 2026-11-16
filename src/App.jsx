@@ -27,6 +27,7 @@ import MotivationForTheWeek from './components/MotivationForTheWeek';
 import GratitudeJournal from './components/GratitudeJournal';
 import StressReliefCenter from './components/StressReliefCenter';
 import AchievementCenter from './components/AchievementCenter';
+import ThirtyDayChallenge from './components/ThirtyDayChallenge';
 import SectionArtwork from './components/SectionArtwork';
 
 const navigation = [
@@ -140,6 +141,7 @@ function App() {
           <GoalCenter />
           <GratitudeJournal />
           <AchievementCenter />
+          <ThirtyDayChallenge />
         </section>
 
         <section id="account" className="app-area account-area">
