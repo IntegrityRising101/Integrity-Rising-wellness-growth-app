@@ -63,6 +63,32 @@ function PersonalWellnessDashboard() {
       setReflectionError(true);
     }
   }
+  const [plannerTitle, setPlannerTitle] = useState('');
+  const [plannerDue, setPlannerDue] = useState(getToday());
+  const [plannerTasks, setPlannerTasks] = useState(() => {
+    try {
+      const saved = JSON.parse(window.localStorage.getItem('integrity-rising-growth-planner') || '[]');
+      return Array.isArray(saved) ? saved : [];
+    } catch { return []; }
+  });
+  function savePlannerTasks(next) {
+    setPlannerTasks(next);
+    try { window.localStorage.setItem('integrity-rising-growth-planner', JSON.stringify(next)); } catch {}
+  }
+  function addPlannerTask(event) {
+    event.preventDefault();
+    const title = plannerTitle.trim();
+    if (!title) return;
+    savePlannerTasks([{ id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`, title, due: plannerDue || getToday(), done: false, created: getToday() }, ...plannerTasks]);
+    setPlannerTitle('');
+    setPlannerDue(getToday());
+  }
+  function togglePlannerTask(id) {
+    savePlannerTasks(plannerTasks.map(task => task.id === id ? { ...task, done: !task.done } : task));
+  }
+  function deletePlannerTask(id) {
+    savePlannerTasks(plannerTasks.filter(task => task.id !== id));
+  }
   const promiseItems = ["15-minute reading and reflection", "Complete one high-priority task before checking email"];
   const [promises, setPromises] = useState(() => {
     try {
@@ -203,6 +229,28 @@ function PersonalWellnessDashboard() {
         </div>
         {nervousState && <div className="wellness-kind-message" role="status"><strong>Your 30-second reset:</strong> If it feels comfortable, let your shoulders soften. Breathe in gently, then breathe out slowly. Repeat at your own pace. You can stop whenever you wish.</div>}
       </div>
+
+      <section className="wellness-practice-card growth-planner-card" aria-labelledby="growth-planner-title">
+        <div className="wellness-practice-heading">
+          <div><h3 id="growth-planner-title">Daily Growth Planner</h3><p>Choose your priorities. Make room for progress.</p></div>
+          <strong>{plannerTasks.filter(task => task.done).length}/{plannerTasks.length} done</strong>
+        </div>
+        <div className="wellness-practice-progress" aria-label={`${plannerTasks.filter(task => task.done).length} of ${plannerTasks.length} planner tasks completed`}>
+          <span style={{ width: `${plannerTasks.length ? (plannerTasks.filter(task => task.done).length / plannerTasks.length) * 100 : 0}%` }} />
+        </div>
+        <form className="growth-planner-form" onSubmit={addPlannerTask}>
+          <label htmlFor="growth-planner-task">Add a priority or goal</label>
+          <input id="growth-planner-task" type="text" maxLength="120" value={plannerTitle} onChange={event => setPlannerTitle(event.target.value)} placeholder="What would you like to accomplish?" />
+          <label htmlFor="growth-planner-due">Completion date</label>
+          <input id="growth-planner-due" type="date" min={getToday()} value={plannerDue} onChange={event => setPlannerDue(event.target.value)} />
+          <button type="submit" disabled={!plannerTitle.trim()}>Add to my planner</button>
+        </form>
+        {plannerTasks.length ? <ul className="growth-planner-list">{plannerTasks.map(task => <li key={task.id} className={task.done ? 'growth-planner-task is-complete' : 'growth-planner-task'}>
+          <label><input type="checkbox" checked={Boolean(task.done)} onChange={() => togglePlannerTask(task.id)} /><span><strong>{task.title}</strong><small>Due {new Date(`${task.due}T12:00:00`).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}</small></span></label>
+          <button type="button" className="growth-planner-delete" onClick={() => deletePlannerTask(task.id)} aria-label={`Delete ${task.title}`}>Delete</button>
+        </li>)}</ul> : <p className="wellness-history-empty">Your priorities will appear here. Start with one small, meaningful step.</p>}
+        <p className="wellness-dashboard-privacy">Planner items are saved in this browser on this device only. They are not synced to a member account yet.</p>
+      </section>
 
       <div className="wellness-practice-card daily-promises-card">
         <div className="wellness-practice-heading"><div><h3>Today's Promises</h3><p>Small steps. Big change.</p></div><strong>{promiseItems.filter(item => promises[item]).length}/2</strong></div>
