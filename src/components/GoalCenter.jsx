@@ -54,6 +54,8 @@ function GoalCenter() {
   const [accountReady, setAccountReady] = useState(!isSupabaseConfigured);
   const [message, setMessage] = useState('');
   const [localGoalsAvailable, setLocalGoalsAvailable] = useState(false);
+  const [editingGoal, setEditingGoal] = useState(null);
+  const [editDraft, setEditDraft] = useState({ title: '', nextStep: '', targetDate: '' });
 
   useEffect(() => {
     if (!isSupabaseConfigured || !supabase) return undefined;
@@ -234,6 +236,39 @@ function GoalCenter() {
     setMessage('');
   }
 
+  function beginEdit(goal) {
+    setEditingGoal(goal.id);
+    setEditDraft({ title: goal.title, nextStep: goal.nextStep || '', targetDate: goal.targetDate || '' });
+    setMessage('');
+  }
+
+  function cancelEdit() {
+    setEditingGoal(null);
+    setEditDraft({ title: '', nextStep: '', targetDate: '' });
+  }
+
+  async function saveGoalEdit(event, id) {
+    event.preventDefault();
+    if (!editDraft.title.trim() || !accountReady) return;
+    const updated = {
+      title: editDraft.title.trim(),
+      first_step: editDraft.nextStep.trim(),
+      target_date: editDraft.targetDate || null
+    };
+    if (user) {
+      const { error } = await supabase.from('member_goals').update(updated).eq('id', id).eq('user_id', user.id);
+      if (error) {
+        setMessage('Your changes could not be saved. Please try again.');
+        return;
+      }
+    }
+    setGoals(current => current.map(goal => goal.id === id
+      ? { ...goal, title: updated.title, nextStep: updated.first_step, targetDate: updated.target_date || '' }
+      : goal));
+    cancelEdit();
+    setMessage('Your goal details have been updated.');
+  }
+
   async function removeGoal(id) {
     if (user) {
       const { error } = await supabase.from('member_goals').delete().eq('id', id).eq('user_id', user.id);
@@ -296,11 +331,25 @@ function GoalCenter() {
           const progress = tasks.length ? Math.round((taskDone / tasks.length) * 100) : goal.done ? 100 : 0;
           return (
             <article className={goal.done ? 'goal-card goal-card-done' : 'goal-card'} key={goal.id}>
-              <div className="goal-card-top">
-                <label className="goal-card-check"><input type="checkbox" checked={goal.done} onChange={() => toggleGoal(goal.id)} /><span>{goal.title}</span></label>
-                <button type="button" className="goal-remove" onClick={() => removeGoal(goal.id)} aria-label={`Remove goal: ${goal.title}`}>Remove</button>
-              </div>
-              {goal.nextStep && <p><strong>First step:</strong> {goal.nextStep}</p>}
+              {editingGoal === goal.id ? (
+                <form className="goal-edit-form" onSubmit={event => saveGoalEdit(event, goal.id)}>
+                  <label>Goal title<input value={editDraft.title} onChange={event => setEditDraft(current => ({ ...current, title: event.target.value }))} maxLength="100" required /></label>
+                  <label>First step<input value={editDraft.nextStep} onChange={event => setEditDraft(current => ({ ...current, nextStep: event.target.value }))} maxLength="180" /></label>
+                  <label>Target date<input type="date" min={today()} value={editDraft.targetDate} onChange={event => setEditDraft(current => ({ ...current, targetDate: event.target.value }))} /></label>
+                  <div><button type="submit" disabled={!accountReady || !editDraft.title.trim()}>Save changes</button><button type="button" onClick={cancelEdit}>Cancel</button></div>
+                </form>
+              ) : (
+                <>
+                  <div className="goal-card-top">
+                    <label className="goal-card-check"><input type="checkbox" checked={goal.done} onChange={() => toggleGoal(goal.id)} /><span>{goal.title}</span></label>
+                    <div className="goal-card-actions">
+                      <button type="button" className="goal-edit" onClick={() => beginEdit(goal)}>Edit</button>
+                      <button type="button" className="goal-remove" onClick={() => removeGoal(goal.id)} aria-label={`Remove goal: ${goal.title}`}>Remove</button>
+                    </div>
+                  </div>
+                  {goal.nextStep && <p><strong>First step:</strong> {goal.nextStep}</p>}
+                </>
+              )}
               <div className="goal-card-meta"><span>Started {goal.createdAt}</span>{goal.targetDate && <span>Target {goal.targetDate}</span>}<span>{goal.done ? `Goal completed${goal.completedAt ? ` · ${goal.completedAt}` : ''}` : 'In progress'}</span></div>
               <div className="goal-progress-line"><span>{progress}% complete</span><span>{taskDone} of {tasks.length} actions</span></div>
               <div className="goal-card-progress" role="progressbar" aria-label={`${goal.title} progress`} aria-valuemin="0" aria-valuemax="100" aria-valuenow={progress}><span style={{ width: `${progress}%` }} /></div>
