@@ -4,30 +4,49 @@
 *Learn • Grow • Heal • Rise*  
 **United by Truth, Driven by Purpose**
 
-Integrity Rising is a wellness, personal-growth, education, community, and support platform. The app is designed to make practical tools and resources easier to find in one welcoming place.
+Integrity Rising is a wellness, personal-growth, education, community, and support platform. It is designed to make practical tools and resources easier to find in one welcoming place.
+
+## Why I created Integrity Rising
+
+I created Integrity Rising because I believe everyone deserves an opportunity to change their life, regardless of where they've been or what they've experienced.
+
+Life isn't always easy. People face addiction, trauma, unhealthy relationships, mental health challenges, financial struggles, loss, and moments when they feel alone or uncertain about their future.
+
+I wanted to build something meaningful—something that could provide practical resources, encouragement, education, and opportunities for personal development. I believe our past does not have to determine our future. We do not have to be perfect to make a difference; we can still be learning, healing, and rebuilding while helping others find hope.
+
+Integrity Rising is my commitment to creating something bigger than myself: a movement that encourages people to take responsibility for their growth, recognize their worth, and discover what is possible when they refuse to give up.
+
+**This isn't just an app. It's a movement built around the belief that people can grow, heal, change, and rise.**
 
 ## App areas
 
-- **Member dashboard:** account access, personal wellness check-ins, and daily practices.
-- **Quick Access Directory:** searchable shortcuts to the app's main tools and resources.
-- **Wellness & AI:** guided wellness tools, AI provider directory, privacy information, and a prototype support chat.
-- **Community:** member discussions and moderation workflows.
-- **Integrity Rising Academy:** educational content for learning and personal growth.
-- **Safety & Support:** mental health services, state-by-state domestic violence resources, local support search, personal safety planning, and incident documentation.
-
-## Brand
-
-- App name: **Integrity Rising — The Wellness & Growth App**
-- Community: **The Integrity Movement**
-- Colors: teal and gold, with light neutral backgrounds for readability.
-- Slogan: **United by Truth, Driven by Purpose**
+- **Dashboard:** personal home, shortcuts, encouragement, and progress.
+- **Community:** topic rooms, discussions, member connections, resources, and moderation.
+- **Wellness Center:** guided wellness tools, self-reflection, stress relief, and AI resources.
+- **Integrity Rising Academy:** education and personal development.
+- **Safety & Support:** mental health resources, domestic violence support links, safety planning, and incident tools.
+- **My Growth:** goals, gratitude, achievements, and challenges.
+- **My Account:** member profile and personalization.
 
 ## Technology
 
-- React
-- Vite
-- Supabase client for planned authentication and private data services
-- Supabase Edge Function scaffold for a future authenticated AI endpoint
+- React and Vite
+- JavaScript and CSS
+- Supabase client, database, authentication, and Edge Functions (where configured)
+- GitHub Actions and GitHub Pages
+
+## Development and launch plan
+
+The master project record is maintained here:
+
+**[Integrity Rising App Development and Launch Plan](docs/INTEGRITY_RISING_APP_DEVELOPMENT_AND_LAUNCH_PLAN/README.md)**
+
+It includes the founder vision, feature map, current status, development priorities, launch gates, test matrix, daily progress record, and links to detailed technical documents.
+
+Supporting documents:
+- [Detailed task checklist and progress log](docs/INTEGRITY_RISING_APP_TODO.md)
+- [Secure AI backend setup](docs/SECURE_AI_BACKEND.md)
+- [Community chat rooms release checklist](docs/CHAT_ROOMS_RELEASE_CHECKLIST.md)
 
 ## Local development
 
@@ -43,20 +62,25 @@ Start the development server:
 npm run dev
 ```
 
-Create a production build:
+Run quality checks and create a production build:
 
 ```bash
-npm run build
+npm run check
 ```
 
-## Configuration and launch status
+## Configuration and safety
 
-The repository includes a launch checklist at [docs/INTEGRITY_RISING_APP_TODO.md](docs/INTEGRITY_RISING_APP_TODO.md) and secure AI setup notes at [docs/SECURE_AI_BACKEND.md](docs/SECURE_AI_BACKEND.md).
+The Supabase browser client reads `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`. These are public client configuration values; never place a service-role key or AI provider secret in frontend code, GitHub source files, or browser storage.
 
-The Supabase project, database migrations, authentication configuration, moderator access, and AI provider connection must be configured and tested before their related features can be treated as production-ready. The current guided wellness and chat experiences are prototypes; they are not clinical services or emergency monitoring.
+The `ai-assistant` Edge Function is an initial authenticated scaffold. It must be configured, deployed, privacy-reviewed, rate-limited, and tested before being treated as a live service. Guided wellness and chat features must be described accurately as tools or prototypes where applicable.
 
-Never commit API keys, service-role keys, passwords, or private member information. Use server-side secrets for backend integrations. Review privacy, consent, access controls, and crisis guidance before launch.
+The app provides educational and peer-support resources. It is not a substitute for emergency services, professional mental health care, legal advice, or individualized safety planning. The app is not monitored for emergencies.
 
-## Safety note
+## Launch status
 
-This app offers educational and peer-support resources. It is not a substitute for emergency services, professional mental health care, legal advice, or individualized safety planning. The app is not monitored for emergencies.
+**In development — not cleared for public launch.** See the master plan for the verified status and remaining launch gates. A successful code commit or build does not by itself prove that Supabase policies, member permissions, safety resources, or live services are ready.
+
+---
+
+**Founder:** Christina Engel  
+**Integrity Rising — United by Truth, Driven by Purpose.**
