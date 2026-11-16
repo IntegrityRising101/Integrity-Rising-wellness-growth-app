@@ -63,6 +63,29 @@ function PersonalWellnessDashboard() {
       setReflectionError(true);
     }
   }
+  const [milestoneTitle, setMilestoneTitle] = useState('');
+  const [milestoneNote, setMilestoneNote] = useState('');
+  const [milestones, setMilestones] = useState(() => {
+    try {
+      const saved = JSON.parse(window.localStorage.getItem('integrity-rising-growth-milestones') || '[]');
+      return Array.isArray(saved) ? saved : [];
+    } catch { return []; }
+  });
+  function saveMilestones(next) {
+    setMilestones(next);
+    try { window.localStorage.setItem('integrity-rising-growth-milestones', JSON.stringify(next)); } catch {}
+  }
+  function addMilestone(event) {
+    event.preventDefault();
+    const title = milestoneTitle.trim();
+    if (!title) return;
+    saveMilestones([{ id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`, title, note: milestoneNote.trim(), date: getToday() }, ...milestones]);
+    setMilestoneTitle('');
+    setMilestoneNote('');
+  }
+  function deleteMilestone(id) {
+    saveMilestones(milestones.filter(item => item.id !== id));
+  }
   const [plannerTitle, setPlannerTitle] = useState('');
   const [plannerDue, setPlannerDue] = useState(getToday());
   const [plannerTasks, setPlannerTasks] = useState(() => {
@@ -229,6 +252,27 @@ function PersonalWellnessDashboard() {
         </div>
         {nervousState && <div className="wellness-kind-message" role="status"><strong>Your 30-second reset:</strong> If it feels comfortable, let your shoulders soften. Breathe in gently, then breathe out slowly. Repeat at your own pace. You can stop whenever you wish.</div>}
       </div>
+
+      <section className="wellness-practice-card growth-journey-card" aria-labelledby="growth-journey-title">
+        <div className="wellness-practice-heading">
+          <div><h3 id="growth-journey-title">My Growth Journey</h3><p>Every step forward deserves to be recognized.</p></div>
+          <strong>{milestones.length} {milestones.length === 1 ? 'milestone' : 'milestones'}</strong>
+        </div>
+        <form className="growth-journey-form" onSubmit={addMilestone}>
+          <label htmlFor="growth-milestone-title">Name a milestone or personal victory</label>
+          <input id="growth-milestone-title" type="text" maxLength="100" value={milestoneTitle} onChange={event => setMilestoneTitle(event.target.value)} placeholder="For example: I asked for the support I needed" />
+          <label htmlFor="growth-milestone-note">Why does this matter to me? (optional)</label>
+          <textarea id="growth-milestone-note" rows="2" maxLength="300" value={milestoneNote} onChange={event => setMilestoneNote(event.target.value)} placeholder="Add a few words about this moment..." />
+          <button type="submit" disabled={!milestoneTitle.trim()}>Save milestone</button>
+        </form>
+        {milestones.length ? <ol className="growth-journey-timeline">{milestones.map(item => <li key={item.id}>
+          <span className="growth-journey-marker" aria-hidden="true">✦</span>
+          <div className="growth-journey-entry"><div><strong>{item.title}</strong><time dateTime={item.date}>{new Date(`${item.date}T12:00:00`).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}</time></div>
+          {item.note && <p>{item.note}</p>}</div>
+          <button type="button" className="growth-planner-delete" onClick={() => deleteMilestone(item.id)} aria-label={`Delete milestone: ${item.title}`}>Delete</button>
+        </li>)}</ol> : <p className="wellness-history-empty">Your journey starts with one moment you choose to recognize.</p>}
+        <p className="wellness-dashboard-privacy">Milestones are saved only in this browser on this device. They are not yet synced to a member account.</p>
+      </section>
 
       <section className="wellness-practice-card growth-planner-card" aria-labelledby="growth-planner-title">
         <div className="wellness-practice-heading">
