@@ -25,12 +25,14 @@ export default function AchievementCenter() {
   const [items, setItems] = useState(readItems);
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('Personal growth');
+  const [filter, setFilter] = useState('all');
 
   useEffect(() => {
     try { window.localStorage.setItem(STORAGE_KEY, JSON.stringify(items)); } catch { /* usable for this session */ }
   }, [items]);
 
   const completed = items.filter(item => item.done).length;
+  const visibleItems = items.filter(item => filter === 'all' || (filter === 'completed' ? item.done : !item.done));
   const badges = [
     { count: 1, title: 'First Win', detail: 'You recognized a meaningful step.' },
     { count: 3, title: 'Momentum Builder', detail: 'Three milestones celebrated.' },
@@ -100,7 +102,12 @@ export default function AchievementCenter() {
 
       <div className="achievement-list">
         <div className="achievement-list-heading"><h3>My milestones</h3><span>{completed} celebrated</span></div>
-        {items.length === 0 ? <p className="achievement-empty">Your milestones will appear here. Start by recording one moment of progress.</p> : items.map(item => (
+        <div className="achievement-filters" role="group" aria-label="Filter milestones">
+          <button type="button" className={filter === 'all' ? 'active' : ''} aria-pressed={filter === 'all'} onClick={() => setFilter('all')}>All ({items.length})</button>
+          <button type="button" className={filter === 'open' ? 'active' : ''} aria-pressed={filter === 'open'} onClick={() => setFilter('open')}>In progress ({items.length - completed})</button>
+          <button type="button" className={filter === 'completed' ? 'active' : ''} aria-pressed={filter === 'completed'} onClick={() => setFilter('completed')}>Celebrated ({completed})</button>
+        </div>
+        {items.length === 0 ? <p className="achievement-empty">Your milestones will appear here. Start by recording one moment of progress.</p> : visibleItems.length === 0 ? <p className="achievement-empty">Nothing in this view yet. Choose another filter or add a milestone.</p> : visibleItems.map(item => (
           <article className={item.done ? 'achievement-item achievement-item-done' : 'achievement-item'} key={item.id}>
             <label><input type="checkbox" checked={item.done} onChange={() => toggleItem(item.id)} /><span><strong>{item.title}</strong><small>{item.category}{item.completedAt ? ` • Achieved ${item.completedAt}` : ''}</small></span></label>
             <button type="button" onClick={() => removeItem(item.id)} aria-label={`Remove ${item.title}`}>Remove</button>
