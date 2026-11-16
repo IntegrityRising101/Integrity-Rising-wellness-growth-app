@@ -9,8 +9,11 @@ This checklist tracks work still required before the Integrity Rising / The Inte
 - [ ] Connect the project to the GitHub app configuration.
 - [ ] Add the Supabase project URL and public anon key to the app's deployment environment.
 - [x] Apply database migrations in order: 001 schema, 002 moderation hardening, 003 member blocking. — **Completed: Nov 5, 2026 (owner-confirmed).**
-- [ ] Apply migration 008 for community chat rooms in Supabase, then verify row-level security and test member-versus-moderator permissions.
-- [ ] Assign trusted moderators through a secure admin process; never expose service-role credentials in the app.
+- [ ] Confirm migration history for community chat setup (migration 008); the four community tables exist, but table existence alone does not prove which migration created them. — **Checked: Nov 16, 2026**
+- [ ] Apply migration 012 only after reviewing the migration history and confirming it has not already been applied. — **Not yet applied/verified: Nov 16, 2026**
+- [x] Confirm a moderator record exists in `community_moderators`. — **Verified: Nov 16, 2026** (one record found)
+- [ ] Verify the assigned moderator is recognized in an authenticated app session; SQL Editor returned `auth.uid() = NULL` and `is_community_moderator() = false`, so this check is inconclusive. — **Open: Nov 16, 2026**
+- [ ] Assign any additional trusted moderators through a secure admin process; never expose service-role credentials in the app.
 - [ ] Configure Edge Function secrets: APP_ORIGIN, AI_API_URL, AI_API_KEY, and AI_MODEL.
 - [ ] Review, deploy, and test the authenticated ai-assistant Edge Function.
 - [ ] Add per-user rate limits, abuse controls, cost limits, monitoring, and provider error handling before enabling AI for members.
@@ -24,7 +27,9 @@ This checklist tracks work still required before the Integrity Rising / The Inte
 - [ ] Verify all state-by-state domestic violence resource links and contact details.
 - [ ] Test local support finder links and clearly communicate that live shelter availability is not verified.
 - [ ] Complete safety and privacy review of Quick Exit, personal safety planning, and incident tools.
-- [ ] Test member blocking, reporting, moderator review, and content removal with separate test accounts.
+- [ ] Test member blocking, reporting, moderator review, and content removal with separate test accounts. — **Open**
+- [x] Confirm the Community Review Dashboard is visible in the live app. — **Owner-confirmed: Nov 16, 2026**
+- [ ] Test confidential report visibility and moderator status updates in an authenticated moderator session. — **Open: Nov 16, 2026**
 - [ ] Confirm the app clearly states that it is not an emergency service, therapy provider, or clinical diagnosis tool.
 
 ## Final launch checks
@@ -274,3 +279,26 @@ Progress is counted from verified checklist items—not estimates. A task only m
 - [ ] Run the GitHub Actions quality check and verify the deployed app.
 
 **Daily record:** These are repository code and documentation changes only. The Supabase migration has not been run, and live chat permissions, realtime behavior, and deployment have not yet been verified.
+
+
+### Monday, November 16, 2026 — Supabase community setup and policy checks
+
+**Completed and verified in Supabase**
+- [x] Confirmed the four community tables exist: `community_rooms`, `community_room_messages`, `community_room_reports`, and `community_moderators`. — **Verified: Nov 16, 2026**
+- [x] Checked the `community_rooms` schema and confirmed the expected columns: `id`, `name`, `description`, `guidelines`, `sort_order`, `is_active`, and `created_at`. — **Verified: Nov 16, 2026**
+- [x] Added `accountability-leadership` / **Accountability & Leadership** as room 7 using an upsert. — **Success: Nov 16, 2026**
+- [x] Queried the room list and verified all seven rooms are present and active, ordered 1–7. — **Verified: Nov 16, 2026**
+- [x] Inspected chat-message RLS policies: authenticated INSERT, SELECT, and DELETE policies are present; no UPDATE policy is listed. — **Verified: Nov 16, 2026**
+- [x] Inspected chat-report RLS policies: authenticated INSERT, UPDATE, and SELECT policies are present. — **Verified: Nov 16, 2026**
+- [x] Confirmed one moderator record exists in `community_moderators`. — **Verified: Nov 16, 2026**
+- [x] Owner confirmed the Community Review Dashboard is visible in the live app. — **Nov 16, 2026**
+
+**Still open / not yet proven**
+- [ ] Test the report policies' actual row-level restrictions using separate reporter and moderator accounts; policy names and commands alone do not prove the expressions are correct.
+- [ ] Verify moderator recognition from a real authenticated app session. The SQL Editor returned `auth.uid() = NULL` and `is_community_moderator() = false`; this is inconclusive because the SQL Editor query did not run as the app user.
+- [ ] Open Confidential Safety Reports in the dashboard and test report visibility and status changes without exposing reports to unauthorized members.
+- [ ] Test sending, realtime delivery, and own-message deletion with separate member accounts.
+- [ ] Confirm migration history before applying migration 012; do not rerun SQL or migrations blindly.
+- [ ] Run GitHub Actions quality checks and confirm the current live deployment after the repository changes.
+
+**Daily record:** Seven community rooms and the listed RLS policy commands were verified in Supabase. The dashboard is visible. Authenticated moderator behavior, report confidentiality, cross-account chat permissions, migration history, and deployment checks remain open. No claim is made that the complete community security workflow has passed end-to-end testing.
