@@ -192,3 +192,24 @@
   .growth-planner-form { grid-template-columns: 1fr; }
   .growth-planner-form button { width: 100%; }
 }
+
+
+/* Personal Growth Journey timeline */
+.growth-journey-form { display: grid; gap: .45rem; margin: .85rem 0 1rem; }
+.growth-journey-form label { margin-top: .25rem; color: #263735; font-size: .84rem; font-weight: 700; }
+.growth-journey-form input, .growth-journey-form textarea { box-sizing: border-box; width: 100%; padding: .7rem .8rem; border: 1px solid #cbd9d7; border-radius: 8px; background: #fff; color: #263735; font: inherit; }
+.growth-journey-form button { justify-self: start; margin-top: .25rem; padding: .7rem 1rem; border: 0; border-radius: 8px; background: #075e60; color: #fff; font: inherit; font-weight: 700; cursor: pointer; }
+.growth-journey-form button:disabled { opacity: .5; cursor: not-allowed; }
+.growth-journey-timeline { display: grid; gap: .85rem; margin: 1rem 0 0; padding: 0; list-style: none; }
+.growth-journey-timeline li { display: flex; align-items: flex-start; gap: .65rem; padding: .85rem; border: 1px solid #e1e9e5; border-radius: 10px; background: #fff; }
+.growth-journey-marker { display: grid; flex: 0 0 1.8rem; width: 1.8rem; height: 1.8rem; place-items: center; border-radius: 50%; background: #f8f1df; color: #96701f; }
+.growth-journey-entry { flex: 1; min-width: 0; }
+.growth-journey-entry > div { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .35rem .7rem; }
+.growth-journey-entry strong { color: #075e60; overflow-wrap: anywhere; }
+.growth-journey-entry time { color: #647572; font-size: .76rem; white-space: nowrap; }
+.growth-journey-entry p { margin: .45rem 0 0; color: #43534f; font-size: .88rem; line-height: 1.45; overflow-wrap: anywhere; }
+@media (max-width: 600px) {
+  .growth-journey-form button { width: 100%; }
+  .growth-journey-timeline li { flex-wrap: wrap; }
+  .growth-journey-timeline li .growth-planner-delete { margin-left: 2.45rem; }
+}
