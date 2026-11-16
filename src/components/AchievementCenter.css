@@ -13,3 +13,7 @@
 .achievement-filters button{min-height:40px;padding:.5rem .85rem;border:1px solid #cbd9d7;border-radius:999px;background:#fff;color:#31504d;font:inherit;font-size:.84rem;font-weight:700;cursor:pointer}
 .achievement-filters button.active{border-color:#075e60;background:#e7f4f2;color:#075e60;box-shadow:inset 0 0 0 1px #075e60}
 .achievement-filters button:focus-visible{outline:3px solid #c9a64b;outline-offset:2px}
+
+
+.achievement-status{margin:.8rem 0;padding:.75rem .9rem;border:1px solid #d9c98f;border-radius:10px;background:#fbf8ef;color:#594a2e;font-size:.88rem;line-height:1.5}
+.achievement-form button:disabled{opacity:.6;cursor:not-allowed}
