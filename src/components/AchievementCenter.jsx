@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { isSupabaseConfigured, supabase } from '../lib/supabase';
 import './AchievementCenter.css';
 
 const STORAGE_KEY = 'integrity-rising-achievements-v1';
@@ -26,10 +27,57 @@ export default function AchievementCenter() {
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('Personal growth');
   const [filter, setFilter] = useState('all');
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(isSupabaseConfigured);
+  const [status, setStatus] = useState('');
+  const [legacyAvailable, setLegacyAvailable] = useState(false);
 
   useEffect(() => {
-    try { window.localStorage.setItem(STORAGE_KEY, JSON.stringify(items)); } catch { /* usable for this session */ }
-  }, [items]);
+    if (!user) {
+      try { window.localStorage.setItem(STORAGE_KEY, JSON.stringify(items)); } catch { /* usable for this session */ }
+    }
+  }, [items, user]);
+
+  useEffect(() => {
+    if (!isSupabaseConfigured || !supabase) { setLoading(false); return undefined; }
+    let active = true;
+    async function loadMilestones(currentUser) {
+      if (!active) return;
+      setUser(currentUser || null);
+      if (!currentUser) {
+        setItems(readItems());
+        setLoading(false);
+        setStatus('');
+        setLegacyAvailable(false);
+        return;
+      }
+      setLoading(true);
+      setStatus('Loading your member milestones…');
+      const { data, error } = await supabase.from('member_milestones')
+        .select('id,title,category,is_completed,completed_at,created_at')
+        .eq('user_id', currentUser.id).order('created_at', { ascending: true });
+      if (!active) return;
+      if (error) {
+        setItems(readItems());
+        setStatus('Account milestones could not be loaded. Your browser copy remains available. Apply migration 011 in Supabase if this is a new setup.');
+        setLoading(false);
+        return;
+      }
+      setItems((data || []).map(row => ({
+        id: row.id, title: row.title, detail: 'A personal achievement worth recognizing.',
+        category: row.category, done: Boolean(row.is_completed), completedAt: row.completed_at || null
+      })));
+      setLegacyAvailable((data || []).length === 0 && readItems().length > 0);
+      setStatus('');
+      setLoading(false);
+    }
+    supabase.auth.getSession().then(({ data, error }) => {
+      if (!error) loadMilestones(data.session?.user || null);
+      else setLoading(false);
+    });
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => loadMilestones(session?.user || null));
+    return () => { active = false; listener.subscription.unsubscribe(); };
+  }, []);
 
   const completed = items.filter(item => item.done).length;
   const visibleItems = items.filter(item => filter === 'all' || (filter === 'completed' ? item.done : !item.done));
@@ -40,28 +88,45 @@ export default function AchievementCenter() {
     { count: 10, title: 'Legacy in Motion', detail: 'Ten milestones added to your journey.' },
   ];
 
-  function toggleItem(id) {
-    setItems(current => current.map(item => item.id === id
-      ? { ...item, done: !item.done, completedAt: item.done ? null : today() }
-      : item));
+  async function toggleItem(id) {
+    const item = items.find(entry => entry.id === id);
+    if (!item || loading) return;
+    const done = !item.done;
+    if (user) {
+      const { error } = await supabase.from('member_milestones').update({
+        is_completed: done, completed_at: done ? today() : null
+      }).eq('id', id).eq('user_id', user.id);
+      if (error) { setStatus('That milestone could not be updated. Please try again.'); return; }
+    }
+    setItems(current => current.map(entry => entry.id === id
+      ? { ...entry, done, completedAt: done ? today() : null } : entry));
+    setStatus('');
   }
 
-  function addMilestone(event) {
+  async function addMilestone(event) {
     event.preventDefault();
-    if (!title.trim()) return;
-    setItems(current => [...current, {
-      id: `milestone-${Date.now()}`,
-      title: title.trim(),
-      detail: 'A personal achievement worth recognizing.',
-      category,
-      done: false,
-      completedAt: null
-    }]);
+    if (!title.trim() || loading) return;
+    const draft = { title: title.trim(), category, done: false, completedAt: null, detail: 'A personal achievement worth recognizing.' };
+    if (user) {
+      const { data, error } = await supabase.from('member_milestones')
+        .insert({ user_id: user.id, title: draft.title, category }).select('id').single();
+      if (error) { setStatus('Your milestone could not be saved. Apply migration 011 in Supabase if it has not been run.'); return; }
+      setItems(current => [...current, { ...draft, id: data.id }]);
+    } else {
+      setItems(current => [...current, { ...draft, id: `milestone-${Date.now()}` }]);
+    }
     setTitle('');
+    setStatus('');
   }
 
-  function removeItem(id) {
+  async function removeItem(id) {
+    if (loading || !window.confirm('Remove this milestone? This cannot be undone.')) return;
+    if (user) {
+      const { error } = await supabase.from('member_milestones').delete().eq('id', id).eq('user_id', user.id);
+      if (error) { setStatus('That milestone could not be removed. Please try again.'); return; }
+    }
     setItems(current => current.filter(item => item.id !== id));
+    setStatus('');
   }
 
   return (
@@ -72,6 +137,8 @@ export default function AchievementCenter() {
         <p>Progress is not always loud or visible. Give yourself credit for the steps you choose to take.</p>
       </div>
 
+      {status && <p className="achievement-status" role="status">{status}</p>}
+      {legacyAvailable && <p className="achievement-status">Older milestones are saved in this browser and have not been copied into your member account. You can keep them on this device or add them again while signed in.</p>}
       <div className="achievement-summary">
         <div><strong>{completed}</strong><span>Milestones achieved</span></div>
         <div><strong>{items.length}</strong><span>Milestones recorded</span></div>
@@ -97,7 +164,7 @@ export default function AchievementCenter() {
         <select id="achievement-category" value={category} onChange={event => setCategory(event.target.value)}>
           <option>Personal growth</option><option>Wellness</option><option>Resilience</option><option>Relationships</option><option>Learning</option><option>Community</option><option>Other</option>
         </select>
-        <button type="submit">＋ Add milestone</button>
+        <button type="submit" disabled={loading || !title.trim()}>{loading ? 'Loading…' : '＋ Add milestone'}</button>
       </form>
 
       <div className="achievement-list">
@@ -115,7 +182,7 @@ export default function AchievementCenter() {
         ))}
       </div>
 
-      <p className="achievement-privacy">Your milestones are saved in this browser on this device only. They are not synced to an account or server. Avoid adding sensitive personal details on a shared device.</p>
+      <p className="achievement-privacy">{user ? 'Your milestones are saved to your signed-in member account. Database access is restricted to your own records.' : 'You are not signed in. Milestones are saved in this browser on this device only. Sign in to save new milestones to your member account. Avoid adding sensitive personal details on a shared device.'}</p>
     </section>
   );
 }
