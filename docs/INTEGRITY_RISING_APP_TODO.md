@@ -257,3 +257,20 @@ Progress is counted from verified checklist items—not estimates. A task only m
 - [ ] Complete safety-resource, privacy, AI, accessibility, mobile, and controlled-pilot launch gates.
 
 **Daily record:** Documentation has been consolidated and linked in GitHub. This is a project-organization milestone, not a declaration that the app is fully tested or ready for public launch.
+
+### Monday, November 16, 2026 — Community chat consistency improvements
+
+**Completed in GitHub**
+- [x] Added the missing Purpose & Legacy room to the client fallback room list. — **Committed: Nov 16, 2026**
+- [x] Added migration 012 to seed Purpose & Legacy and allow members to delete only their own chat messages under RLS. — **Committed: Nov 16, 2026**
+- [x] Updated the chat-room release checklist to cover seven rooms, migration order, own-message deletion, and no-edit permissions. — **Committed: Nov 16, 2026**
+
+**Still required before this feature is launch-ready**
+- [ ] Review the Supabase migration history; apply migration 012 only if it has not already been applied.
+- [ ] Confirm all seven rooms load for a signed-in test member.
+- [ ] Test realtime delivery with two separate member accounts.
+- [ ] Test own-message deletion and confirm another member cannot delete it.
+- [ ] Connect chat reports to the moderator-only review queue and test moderator permissions.
+- [ ] Run the GitHub Actions quality check and verify the deployed app.
+
+**Daily record:** These are repository code and documentation changes only. The Supabase migration has not been run, and live chat permissions, realtime behavior, and deployment have not yet been verified.
