@@ -2,38 +2,41 @@
 
 ## Current implementation
 
-The app contains six topic-based member chat rooms:
+The app contains seven topic-based member chat rooms:
 
 1. Trauma & Healing
 2. Addiction Recovery
 3. Toxic Relationships
 4. Mental Wellness
 5. Personal Growth
-6. Accountability & Leadership
+6. Purpose & Legacy
+7. Accountability & Leadership
 
 The chat component supports signed-in members, room selection, message history, realtime message updates, and private message reports with a reason and optional details.
 
 ## Required database setup
 
-Apply `supabase/migrations/008_community_chat_rooms.sql` to the correct Integrity Rising Supabase project. This migration uses the existing moderator authorization function established in `002_community_moderation_hardening.sql`.
+Apply migrations `008_community_chat_rooms.sql` and `012_chat_room_consistency.sql` to the correct Integrity Rising Supabase project, after checking the database migration history. Migration 012 adds the Purpose & Legacy room and a row-level-security policy allowing members to delete only their own messages. It does not allow message editing.
 
 1. Sign in to the Supabase dashboard and open the Integrity Rising project.
 2. Open **SQL Editor** and create a new query.
-3. Open `supabase/migrations/008_community_chat_rooms.sql` in this repository and copy its complete contents.
-4. Paste the SQL into the editor and run it once.
-5. Confirm the query completes without errors. If it fails, capture the exact error and inspect which statements succeeded before retrying.
+3. Check whether migrations 008 and 012 have already been applied; do not rerun blindly.
+4. If not applied, run migration 008 first, then migration 012, using the complete contents of each file.
+5. Confirm each query completes without errors. If one fails, capture the exact error and inspect which statements succeeded before retrying.
 
 ## Post-migration verification
 
 - Confirm the `community_rooms`, `community_room_messages`, and `community_room_reports` tables exist.
-- Confirm the six room names above appear in `community_rooms`.
+- Confirm all seven room names above appear in `community_rooms`.
 - Confirm row-level security is enabled on all three tables.
 - Confirm `community_room_messages` is included in the `supabase_realtime` publication.
-- Sign in with a test member account and confirm the six rooms load.
+- Sign in with a test member account and confirm all seven rooms load.
 - Send a harmless test message and confirm it appears after refresh and in a second signed-in browser session.
 - Submit a test report and confirm a row is stored in `community_room_reports`.
 - Sign out and confirm the chat composer is not available.
 - Test that one member cannot read another member's private report unless they are an authorized moderator.
+- Test that a member can delete their own message and cannot delete another member's message.
+- Confirm members cannot edit published messages.
 
 ## Moderation and launch blockers
 
