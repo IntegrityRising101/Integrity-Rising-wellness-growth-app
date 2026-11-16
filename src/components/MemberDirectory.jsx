@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { supabase } from '../lib/supabase';
 import './MemberDirectory.css';
 
@@ -20,13 +20,18 @@ function MemberDirectory() {
   const [loading, setLoading] = useState(true);
   const [busyMember, setBusyMember] = useState('');
   const [notice, setNotice] = useState('');
+  const connectionLoadVersion = useRef(0);
+  const activeUserId = useRef(null);
 
   async function loadConnections(currentUser) {
     if (!currentUser || !supabase) return;
+    const requestId = ++connectionLoadVersion.current;
     const { data, error } = await supabase
       .from('member_connections')
       .select('id, requester_id, recipient_id, status')
       .or(`requester_id.eq.${currentUser.id},recipient_id.eq.${currentUser.id}`);
+    const { data: sessionData } = await supabase.auth.getSession();
+    if (requestId !== connectionLoadVersion.current || sessionData.session?.user?.id !== currentUser.id) return;
     if (error) {
       setConnectionReady(false);
       setConnections([]);
@@ -47,7 +52,17 @@ function MemberDirectory() {
     let requestVersion = 0;
 
     async function loadMembers(currentUser) {
+      const nextUserId = currentUser?.id ?? null;
+      const accountChanged = activeUserId.current !== nextUserId;
+      activeUserId.current = nextUserId;
       const requestId = ++requestVersion;
+      if (accountChanged) {
+        // Clear account-specific connection state before another member signs in.
+        connectionLoadVersion.current += 1;
+        setConnections([]);
+        setConnectionReady(false);
+        setMembers([]);
+      }
       if (!currentUser) {
         setMembers([]);
         setConnections([]);
