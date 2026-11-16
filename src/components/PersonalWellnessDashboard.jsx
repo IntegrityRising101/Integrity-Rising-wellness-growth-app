@@ -44,6 +44,25 @@ function PersonalWellnessDashboard() {
   const [checked, setChecked] = useState({});
   const [saved, setSaved] = useState(false);
   const [storageError, setStorageError] = useState(false);
+  const [eveningReflection, setEveningReflection] = useState(() => {
+    try {
+      const saved = JSON.parse(window.localStorage.getItem('integrity-rising-evening-reflection') || '{}');
+      return saved.date === getToday() ? saved.text || '' : '';
+    } catch { return ''; }
+  });
+  const [reflectionSaved, setReflectionSaved] = useState(false);
+  const [reflectionError, setReflectionError] = useState(false);
+  function saveEveningReflection(event) {
+    event.preventDefault();
+    try {
+      window.localStorage.setItem('integrity-rising-evening-reflection', JSON.stringify({ date: getToday(), text: eveningReflection.trim() }));
+      setReflectionSaved(true);
+      setReflectionError(false);
+    } catch {
+      setReflectionSaved(false);
+      setReflectionError(true);
+    }
+  }
   const promiseItems = ["15-minute reading and reflection", "Complete one high-priority task before checking email"];
   const [promises, setPromises] = useState(() => {
     try {
@@ -196,6 +215,17 @@ function PersonalWellnessDashboard() {
         <div className="wellness-practice-progress" aria-label={`${completedCount} of ${practices.length} practices completed`}><span style={{ width: `${(completedCount / practices.length) * 100}%` }} /></div>
         <ul>{practices.map(item => <li key={item}><label><input type="checkbox" checked={Boolean(checked[item])} onChange={() => togglePractice(item)} /><span>{item}</span></label></li>)}</ul>
       </div>
+
+      <form className="wellness-practice-card evening-alignment-card" onSubmit={saveEveningReflection}>
+        <h3>Evening Alignment</h3>
+        <p>Take a moment to notice the choices you made today. You can be honest with yourself and still be kind to yourself.</p>
+        <label htmlFor="evening-alignment-reflection">Where did I choose comfort over truth today, and what is one kind, honest step I can take tomorrow?</label>
+        <textarea id="evening-alignment-reflection" rows="4" maxLength="1200" value={eveningReflection} onChange={event => { setEveningReflection(event.target.value); setReflectionSaved(false); }} placeholder="Write a few words for yourself..." />
+        <div className="wellness-save-row"><span>{eveningReflection.length}/1200</span><button type="submit">Save evening reflection</button></div>
+        {reflectionSaved && <p className="wellness-kind-message" role="status">Your reflection is saved on this device.</p>}
+        {reflectionError && <p className="wellness-storage-error" role="alert">Your browser could not save this reflection. Please try again.</p>}
+        <p className="wellness-dashboard-privacy">This reflection stays in this browser on this device. It is not synced to an account or sent to Integrity Rising. Avoid writing identifying or highly sensitive information, especially on a shared device.</p>
+      </form>
 
       <div className="wellness-history-card">
         <div className="wellness-practice-heading"><div><h3>My recent check-ins</h3><p>Your latest seven saved entries on this device.</p></div><strong>{history.length} saved</strong></div>
