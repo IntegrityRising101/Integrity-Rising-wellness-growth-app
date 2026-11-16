@@ -241,3 +241,19 @@ Progress is counted from verified checklist items—not estimates. A task only m
 - [ ] Confirm the production GitHub Pages build succeeds after the authentication changes.
 
 **Verification note:** The source code now includes the password-recovery form and callback handling. This is a code-level correction, not proof that Supabase email delivery, redirect allowlisting, or live account flows have been tested. Complete the dashboard configuration and real test-account checks before calling authentication production-ready.
+
+
+### Monday, November 16, 2026 — Development and launch plan consolidated
+
+**Completed**
+- [x] Reviewed the repository README, main app shell, Supabase client, AI Edge Function scaffold, GitHub Pages workflow, existing launch checklist, secure AI notes, and community chat release checklist. — **Completed: Nov 16, 2026**
+- [x] Created the master [Integrity Rising App Development and Launch Plan](INTEGRITY_RISING_APP_DEVELOPMENT_AND_LAUNCH_PLAN/README.md), including the founder message, product scope, architecture map, status, priority work, launch gates, test matrix, and roadmap. — **Completed: Nov 16, 2026**
+- [x] Updated the repository README to introduce the founder mission and link the master plan. — **Completed: Nov 16, 2026**
+- [x] Re-opened the committed README and master plan through GitHub to verify both files were saved. — **Completed: Nov 16, 2026**
+
+**Still open**
+- [ ] Inspect the latest GitHub Actions run and perform a fresh live-app smoke test.
+- [ ] Continue Priority 1 work in the master plan: Supabase migration audit, RLS tests, authentication, and community permission verification.
+- [ ] Complete safety-resource, privacy, AI, accessibility, mobile, and controlled-pilot launch gates.
+
+**Daily record:** Documentation has been consolidated and linked in GitHub. This is a project-organization milestone, not a declaration that the app is fully tested or ready for public launch.
