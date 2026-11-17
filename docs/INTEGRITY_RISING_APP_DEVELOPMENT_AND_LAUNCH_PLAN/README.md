@@ -191,6 +191,9 @@ Work through these in order. Do not skip a security gate just to make the launch
 **Acceptance:** a test member can complete the entire account journey without seeing another member's private information.
 
 ### D. Community and moderation
+
+**Current work focus — November 16, 2026: finish the discussion publishing and approval test.** The categories **Development Updates** and **Questions & Technical Support** are owner-confirmed as created. The next test is not yet complete: verify member visibility, submit a test discussion and reply, and establish whether new posts require moderator approval before appearing publicly. Test the full pending → approve/reject → published/removed workflow with separate member and moderator accounts. Do not mark this workflow complete until both the member-facing result and moderator permissions are verified.
+
 - [ ] Verify chat-room migration and discussion schema against the actual Supabase migration history.
 - [ ] Test a member can read rooms and create allowed messages.
 - [ ] Test members can edit/delete only their own permitted content.
