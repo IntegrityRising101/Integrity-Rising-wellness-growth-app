@@ -48,6 +48,40 @@ Supporting documents:
 - [Secure AI backend setup](docs/SECURE_AI_BACKEND.md)
 - [Community chat rooms release checklist](docs/CHAT_ROOMS_RELEASE_CHECKLIST.md)
 
+## GitHub project organization
+
+GitHub Issues are used to track development tasks, testing, launch requirements, bugs, and documentation. Apply labels consistently so work can be filtered by priority, status, project area, and task type.
+
+### Label convention
+
+**Priority**
+- `priority: critical` — Security, privacy, or launch-blocking work.
+- `priority: high` — Important development work that should be addressed soon.
+
+**Status**
+- `status: in progress` — Work currently underway.
+- `status: needs testing` — Implemented or prepared, but not yet verified.
+- `status: completed` — Verified complete against its acceptance criteria.
+
+**Project area**
+- `area: community` — Discussions, posts, replies, member connections, and moderation.
+- `area: security` — Supabase, authentication permissions, privacy, and data protection.
+- `area: profiles` — Member profiles and account settings.
+- `area: wellness-ai` — Wellness tools and AI features.
+- `area: academy` — Courses and learning resources.
+- `area: safety` — Safety, crisis, and support resources.
+- `area: launch` — Quality assurance, accessibility, release preparation, and launch.
+
+**Task type**
+- `type: documentation` — Plans, guides, checklists, and project records.
+- `type: bug` — A defect or unexpected behavior that needs investigation or repair.
+
+Create these labels in the repository's **Issues → Labels** settings before applying them. Add more than one label when useful: typically one priority, one status, one project area, and a task type when applicable. Do not mark an issue `status: completed` until its acceptance criteria have been tested and verified.
+
+GitHub Discussions are organized with **discussion categories**, not issue labels. The current categories include **Development Updates** and **Questions & Technical Support**. Use Issues for actionable work and Discussions for community conversation, questions, and updates.
+
+Label setup and application are being organized; do not assume the labels have been created or applied until verified in GitHub.
+
 ## Local development
 
 Install dependencies:
