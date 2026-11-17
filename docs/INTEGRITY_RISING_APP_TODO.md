@@ -295,6 +295,9 @@ Progress is counted from verified checklist items—not estimates. A task only m
 - [x] Confirmed one moderator record exists in `community_moderators`. — **Verified: Nov 16, 2026**
 - [x] Owner confirmed the Community Review Dashboard is visible in the live app. — **Nov 16, 2026**
 
+- [x] Tested member connection request flow with two member accounts: sender saw **Request sent**, and recipient-side request controls appeared. — **Owner-confirmed: Nov 16, 2026**
+- [ ] Complete the recipient response test by accepting or declining a request and verifying the resulting status on both accounts.
+
 **Still open / not yet proven**
 - [ ] Test the report policies' actual row-level restrictions using separate reporter and moderator accounts; policy names and commands alone do not prove the expressions are correct.
 - [ ] Verify moderator recognition from a real authenticated app session. The SQL Editor returned `auth.uid() = NULL` and `is_community_moderator() = false`; this is inconclusive because the SQL Editor query did not run as the app user.
