@@ -295,7 +295,7 @@ function MemberDirectory() {
               <p>{search.trim() ? 'Try another name or keyword.' : 'As members create profiles, they will appear here.'}</p>
             </div>
           )}
-          <p className="member-directory-privacy">Profiles are visible only to signed-in members. Connection requests are private to the two members involved. Share only information you are comfortable showing to the community.</p>
+          <p className="member-directory-privacy">Profiles are visible only to signed-in members. The directory shows your display name, optional bio, profile photo, and member-since date; it does not show your sign-in email. Connection requests are visible only to the two members involved. Share only information you are comfortable showing to the community.</p>
         </>
       )}
     </section>

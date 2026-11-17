@@ -60,3 +60,15 @@
 .member-avatar-remove-button:hover { background: #f1f7f6; }
 .member-avatar-remove-button:disabled { opacity: .6; cursor: wait; }
 .member-avatar-remove-button:focus-visible { outline: 3px solid #c9a64b; outline-offset: 3px; }
+
+
+.member-profile-privacy {
+  margin: .6rem 0 1rem;
+  padding: .75rem .9rem;
+  border-left: 3px solid #c9a64b;
+  border-radius: 8px;
+  background: #fff;
+  color: #536164;
+  font-size: .9rem;
+  line-height: 1.55;
+}

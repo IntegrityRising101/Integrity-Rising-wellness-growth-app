@@ -320,6 +320,7 @@ function MemberAccount() {
           <p>You are signed in as <strong>{user.email}</strong>.</p>
           <p className="account-member-since">Member since <strong>{user.created_at ? new Date(user.created_at).toLocaleDateString(undefined, { year: 'numeric', month: 'long' }) : '—'}</strong></p>
           <h3>My Member Profile</h3>
+          <p className="member-profile-privacy">Your display name, optional bio, profile photo, and member-since date are visible to signed-in members in Meet the Members. Your sign-in email is not shown in the directory. Only share information you are comfortable sharing.</p>
           {profileLoading || profileUserId !== user.id ? (
             <p>Loading your profile…</p>
           ) : (
@@ -366,13 +367,14 @@ function MemberAccount() {
               <label htmlFor="member-bio">Short bio</label>
               <textarea
                 id="member-bio"
+                aria-describedby="member-bio-help"
                 rows={4}
                 maxLength={280}
                 value={bio}
                 onChange={(event) => setBio(event.target.value)}
                 placeholder="Share a little about yourself (optional)."
               />
-              <p className="account-password-hint">{bio.length}/280 characters. Your profile is visible to signed-in members.</p>
+              <p className="account-password-hint" id="member-bio-help">{bio.length}/280 characters. Your bio is optional and visible to signed-in members.</p>
               <button type="submit" disabled={profileBusy}>
                 {profileBusy ? 'Saving…' : 'Save profile'}
               </button>
