@@ -403,3 +403,33 @@ The app is ready for a public launch decision only when:
 
 **Integrity Rising — United by Truth, Driven by Purpose.**  
 *Learn • Grow • Heal • Rise.*
+
+
+### November 16, 2026 — Community discussions and milestone roadmap update
+
+**Current work recorded from the founder's development session**
+- [x] Organized the **Development Updates** discussion category. — **Owner-confirmed: Nov 16, 2026**
+- [x] Added **Questions & Technical Support** for member questions and app help. — **Owner-confirmed: Nov 16, 2026**
+- [x] Continued organizing GitHub Discussions categories. — **Owner-confirmed: Nov 16, 2026**
+- [x] Confirmed the member connection request flow: request sent and recipient-side controls appeared. — **Owner-confirmed: Nov 16, 2026**
+- [x] Confirmed the Community Review Dashboard is visible in the live app. — **Owner-confirmed: Nov 16, 2026**
+
+**Eight-milestone roadmap**
+1. **Database Foundation** — foundation verified; security and permission testing continue.
+2. **Member Connections** — initial request-sending test passed; accept/decline and status synchronization remain open.
+3. **Member Profiles** — end-to-end verification remains open.
+4. **Community Experience** — discussion categories and review dashboard are in place; cross-account posting, reports, and moderation tests remain open.
+5. **Wellness & AI Hub** — implementation, privacy, and provider readiness require review.
+6. **Academy & Learning** — course/resource links and member experience require testing.
+7. **Safety & Support** — resource accuracy, privacy, and Quick Exit limitations require review.
+8. **Final Testing & Launch** — release gate not yet started; launch remains blocked by outstanding verification.
+
+**Next development sequence**
+1. Confirm the discussion categories display as intended.
+2. Test a discussion post and reply using a signed-in test account.
+3. Accept or decline a member connection request and verify both accounts show the correct status.
+4. Test report submission and moderator-only review with separate member and moderator accounts.
+5. Run GitHub Actions and repeat the deployed-app smoke test.
+6. Continue member profile and authentication checks.
+
+**Status:** Owner-confirmed progress is recorded, but it does not certify end-to-end security or launch readiness. Keep launch status **IN DEVELOPMENT — NOT CLEARED FOR PUBLIC LAUNCH** until the release gates pass.
