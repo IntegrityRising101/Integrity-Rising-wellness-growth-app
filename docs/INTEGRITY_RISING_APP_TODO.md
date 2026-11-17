@@ -307,3 +307,33 @@ Progress is counted from verified checklist items—not estimates. A task only m
 - [ ] Run GitHub Actions quality checks and confirm the current live deployment after the repository changes.
 
 **Daily record:** Seven community rooms and the listed RLS policy commands were verified in Supabase. The dashboard is visible. Authenticated moderator behavior, report confidentiality, cross-account chat permissions, migration history, and deployment checks remain open. No claim is made that the complete community security workflow has passed end-to-end testing.
+
+
+### Monday, November 16, 2026 — Discussion categories and roadmap progress
+
+**Completed / owner-confirmed**
+- [x] Organized **Development Updates**. — **Nov 16, 2026**
+- [x] Added **Questions & Technical Support** for member questions and app assistance. — **Nov 16, 2026**
+- [x] Continued organizing GitHub Discussions categories. — **Nov 16, 2026**
+- [x] Confirmed the Community Review Dashboard is visible in the live app. — **Nov 16, 2026**
+- [x] Confirmed a member can send a connection request and recipient-side controls appear. — **Nov 16, 2026**
+
+**Next tasks — keep open until tested**
+- [ ] Confirm discussion categories display correctly to members.
+- [ ] Publish a test discussion and reply; verify visibility and permissions.
+- [ ] Accept or decline a member connection request and verify both accounts.
+- [ ] Test report submission, confidentiality, and moderator review using separate accounts.
+- [ ] Verify moderator permissions in a real authenticated app session.
+- [ ] Run GitHub Actions quality checks and verify the latest deployed app.
+
+**Eight-milestone roadmap**
+- [x] 1 — Database Foundation: foundation verified; security tests continue.
+- [x] 2 — Member Connections: initial request-flow test passed; accept/decline test remains open.
+- [ ] 3 — Member Profiles.
+- [ ] 4 — Community Experience.
+- [ ] 5 — Wellness & AI Hub.
+- [ ] 6 — Academy & Learning.
+- [ ] 7 — Safety & Support.
+- [ ] 8 — Final Testing & Launch.
+
+**Daily record:** Discussion organization and the initial connection-request flow are owner-confirmed. Cross-account, moderation, deployment, and launch checks remain open. The app is not yet cleared for public launch.
