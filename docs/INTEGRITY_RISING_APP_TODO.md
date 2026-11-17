@@ -309,6 +309,33 @@ Progress is counted from verified checklist items—not estimates. A task only m
 **Daily record:** Seven community rooms and the listed RLS policy commands were verified in Supabase. The dashboard is visible. Authenticated moderator behavior, report confidentiality, cross-account chat permissions, migration history, and deployment checks remain open. No claim is made that the complete community security workflow has passed end-to-end testing.
 
 
+### Monday, November 16, 2026 — Community discussions: publishing and approval test in progress
+
+**Completed / owner-confirmed**
+- [x] Organized **Development Updates**. — **Nov 16, 2026**
+- [x] Added **Questions & Technical Support** for member questions and app assistance. — **Nov 16, 2026**
+- [x] Confirmed the Community Review Dashboard is visible in the live app. — **Nov 16, 2026**
+
+**Active task — not yet complete**
+- [ ] Confirm both discussion categories display correctly to signed-in members.
+- [ ] Create and publish a clearly labelled test discussion in each category.
+- [ ] Add a test reply and confirm the discussion and reply display for another member.
+- [ ] Submit a post that should require review; confirm whether it enters a pending state and is hidden from ordinary members until approved.
+- [ ] As an authorized moderator, approve the pending post and confirm it becomes visible to members.
+- [ ] Test rejecting/removing a post and confirm it does not remain publicly visible.
+- [ ] Verify an ordinary member cannot approve, reject, or publish another member's pending post.
+- [ ] Record the exact results and any fixes; only then check off the discussion publishing/approval milestone.
+
+**Important status:** Category setup is complete, but end-to-end discussion posting, replies, moderator approval, rejection, and published visibility are still **in progress / unverified**. Do not describe the approval-and-publishing workflow as finished until the separate-account tests pass.
+
+**Other community checks still open**
+- [ ] Accept or decline a member connection request and verify both accounts.
+- [ ] Test report submission, confidentiality, and moderator review using separate accounts.
+- [ ] Verify moderator permissions in a real authenticated app session.
+- [ ] Run GitHub Actions quality checks and verify the latest deployed app.
+
+**Daily record:** This entry records the next active test scope. No test post, moderator approval, rejection, or publishing result is claimed as completed.
+
 ### Monday, November 16, 2026 — Discussion categories and roadmap progress
 
 **Completed / owner-confirmed**
