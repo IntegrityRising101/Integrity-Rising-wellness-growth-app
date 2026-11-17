@@ -283,6 +283,8 @@ Progress is counted from verified checklist items—not estimates. A task only m
 
 ### Monday, November 16, 2026 — Supabase community setup and policy checks
 
+- [x] Applied and verified migration 007 `member_connections` in Supabase: table exists, RLS enabled, four policies installed, and update trigger present. — **Verified: Nov 16, 2026**
+
 **Completed and verified in Supabase**
 - [x] Confirmed the four community tables exist: `community_rooms`, `community_room_messages`, `community_room_reports`, and `community_moderators`. — **Verified: Nov 16, 2026**
 - [x] Checked the `community_rooms` schema and confirmed the expected columns: `id`, `name`, `description`, `guidelines`, `sort_order`, `is_active`, and `created_at`. — **Verified: Nov 16, 2026**
