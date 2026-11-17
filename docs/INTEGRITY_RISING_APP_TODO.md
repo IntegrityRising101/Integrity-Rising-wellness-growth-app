@@ -364,3 +364,24 @@ Progress is counted from verified checklist items—not estimates. A task only m
 - [ ] 8 — Final Testing & Launch.
 
 **Daily record:** Discussion organization and the initial connection-request flow are owner-confirmed. Cross-account, moderation, deployment, and launch checks remain open. The app is not yet cleared for public launch.
+
+
+### Tuesday, November 17, 2026 — Member profile privacy clarity and accessibility
+
+**Verified in repository source**
+- [x] Confirmed the existing My Account profile editor supports display name (1–60 characters), optional bio (up to 280 characters), profile-photo upload/removal (JPG, PNG, or WebP; 2 MB maximum), and a member-since date.
+- [x] Confirmed the profile table contains display name, bio, and timestamps but does not store account email; the member directory query does not request email.
+- [x] Reviewed profile access rules: signed-in members can view profile rows; members can insert/update only their own profile. Avatar storage is private, readable only by authenticated members, and write/delete policies restrict paths to the signed-in member's user ID.
+- [x] Added a clearer privacy disclosure in My Account and Meet the Members, explicitly stating which profile fields are shown and that sign-in email is not shown.
+- [x] Connected the bio character/help text to the textarea with `aria-describedby` for assistive technology.
+- [x] GitHub quality checks passed (lint and production build). — **Nov 17, 2026**
+- [x] GitHub Pages deployment succeeded for the profile privacy/accessibility change. — **Nov 17, 2026**
+
+**Still open — live member testing**
+- [ ] Save a changed display name and bio, refresh, and confirm both persist.
+- [ ] Upload and remove a profile photo; confirm the directory updates for another signed-in member.
+- [ ] Confirm a second account can see only the published profile fields and cannot see the member's sign-in email.
+- [ ] Test profile loading after sign-out and sign-in with a different account.
+- [ ] Decide whether to add an optional directory-visibility setting. Current RLS intentionally makes profile rows visible to all signed-in members; no individual opt-out exists yet.
+
+**Status:** Profile editing and avatar support are present in source. Privacy disclosure and bio accessibility improvements are deployed. The full member-profile milestone remains open until the live tests above pass.
