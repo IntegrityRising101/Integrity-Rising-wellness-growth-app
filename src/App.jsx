@@ -1,4 +1,5 @@
 import './App.css';
+import heroImage from './assets/hero.png';
 import QuickExitButton from './components/QuickExitButton';
 import IncidentVault from './components/IncidentVault';
 import PersonalSafetyPlan from './components/PersonalSafetyPlan';
@@ -54,6 +55,7 @@ function App() {
   return (
     <div className="app-container">
       <header className="app-header" id="top">
+        <img className="brand-hero-image" src={heroImage} alt="Integrity Rising brand artwork" />
         <p className="brand-eyebrow">THE INTEGRITY MOVEMENT</p>
         <h1>Integrity Rising</h1>
         <p className="brand-app-name">THE WELLNESS &amp; GROWTH APP</p>
