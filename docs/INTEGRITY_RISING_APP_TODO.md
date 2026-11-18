@@ -392,6 +392,7 @@ Progress is counted from verified checklist items—not estimates. A task only m
 - [x] Re-inspected the profile editor, member directory, profiles schema/RLS policies, and private avatar-storage policies before making changes.
 - [x] Confirmed display-name editing, optional bio, avatar upload/removal, and member-since display already exist; did not duplicate these features.
 - [x] Added a live preview card in My Account showing the same member-facing details used by the directory: display name, bio/fallback text, profile photo or initials, and member-since date.
+- [x] Made profile saves explicitly retain the current `avatar_path`, so saving a display-name or bio edit does not omit the profile-photo reference from the update payload.
 - [x] Clearly labelled the preview as visible to signed-in members and explained that edits must be saved to publish; the preview does not display sign-in email or private account details.
 - [x] Preserved the existing Supabase schema, row-level security policies, authentication behavior, and teal/gold styling.
 
