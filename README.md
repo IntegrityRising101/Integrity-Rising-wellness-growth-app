@@ -43,6 +43,8 @@ The master project record is maintained here:
 
 It includes the founder vision, feature map, current status, development priorities, launch gates, test matrix, daily progress record, and links to detailed technical documents.
 
+Start with the [Project Documentation Index](docs/README.md) for the complete document directory and repository map.
+
 Supporting documents:
 - [Detailed task checklist and progress log](docs/INTEGRITY_RISING_APP_TODO.md)
 - [Secure AI backend setup](docs/SECURE_AI_BACKEND.md)
