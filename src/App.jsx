@@ -1,5 +1,4 @@
 import './App.css';
-import integrityRisingLogo from './assets/integrity-rising-logo.png';
 import QuickExitButton from './components/QuickExitButton';
 import IncidentVault from './components/IncidentVault';
 import PersonalSafetyPlan from './components/PersonalSafetyPlan';
@@ -55,12 +54,6 @@ function App() {
   return (
     <div className="app-container">
       <header className="app-header" id="top">
-        <img
-          src={integrityRisingLogo}
-          alt="Integrity Rising — The Wellness & Growth App"
-          className="app-brand-logo"
-          style={{ width: 'clamp(112px, 22vw, 180px)', height: 'auto', display: 'block', margin: '0 auto 1rem', borderRadius: '50%', objectFit: 'contain' }}
-        />
         <p className="brand-eyebrow">THE INTEGRITY MOVEMENT</p>
         <h1>Integrity Rising</h1>
         <p className="brand-app-name">THE WELLNESS &amp; GROWTH APP</p>
