@@ -84,8 +84,9 @@ function App() {
           </div>
         </section>
 
-        <AppDirectory />
-<SectionHeading kicker="YOUR PERSONAL HOME" title="Welcome to Your Personal Dashboard" description="Your daily check-in, encouragement, goals, and next steps—all in one place." />
+        <section id="dashboard" className="app-area dashboard-area">
+          <AppDirectory />
+          <SectionHeading kicker="YOUR PERSONAL HOME" title="Welcome to Your Personal Dashboard" description="Your daily check-in, encouragement, goals, and next steps—all in one place." />
         
           <div className="dashboard-quick-actions" aria-label="Dashboard shortcuts">
             <a href="#community"><span aria-hidden="true">♡</span><strong>Community</strong><small>Find a room, connect, and feel supported.</small></a>
