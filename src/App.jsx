@@ -18,6 +18,7 @@ import CommunityChatRooms from './components/CommunityChatRooms';
 import CommunityResourceLibrary from './components/CommunityResourceLibrary';
 import Academy from './components/Academy';
 import PersonalWellnessDashboard from './components/PersonalWellnessDashboard';
+import MoodTracker from './components/MoodTracker';
 import GoalCenter from './components/GoalCenter';
 import MemberAccount from './components/MemberAccount';
 import MemberDirectory from './components/MemberDirectory';
@@ -111,6 +112,7 @@ function App() {
           <SectionHeading kicker="CARE FOR YOUR WHOLE SELF" title="Wellness Center" description="Explore supportive tools for emotional wellness, reflection, stress relief, and everyday growth." />
           <SectionArtwork variant="wellness" />
           <PersonalWellnessDashboard />
+          <MoodTracker />
           <GuidedWellnessPractices />
           <StressReliefCenter />
           <SelfReflectionCheck />
