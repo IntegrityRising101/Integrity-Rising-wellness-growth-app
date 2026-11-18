@@ -385,3 +385,21 @@ Progress is counted from verified checklist items—not estimates. A task only m
 - [ ] Decide whether to add an optional directory-visibility setting. Current RLS intentionally makes profile rows visible to all signed-in members; no individual opt-out exists yet.
 
 **Status:** Profile editing and avatar support are present in source. Privacy disclosure and bio accessibility improvements are deployed. The full member-profile milestone remains open until the live tests above pass.
+
+### Wednesday, November 18, 2026 — Member profile preview
+
+**Completed in repository source**
+- [x] Re-inspected the profile editor, member directory, profiles schema/RLS policies, and private avatar-storage policies before making changes.
+- [x] Confirmed display-name editing, optional bio, avatar upload/removal, and member-since display already exist; did not duplicate these features.
+- [x] Added a live preview card in My Account showing the same member-facing details used by the directory: display name, bio/fallback text, profile photo or initials, and member-since date.
+- [x] Clearly labelled the preview as visible to signed-in members and explained that edits must be saved to publish; the preview does not display sign-in email or private account details.
+- [x] Preserved the existing Supabase schema, row-level security policies, authentication behavior, and teal/gold styling.
+
+**Still required**
+- [ ] Verify the preview in the live app and compare it with the directory card.
+- [ ] Save a changed display name and bio, refresh, and confirm persistence.
+- [ ] Upload and remove a profile photo; confirm another signed-in member sees the updated card.
+- [ ] Complete the two-account profile privacy and account-switch tests.
+- [ ] Confirm the latest GitHub quality-check and Pages deployment workflows succeed.
+
+**Status:** The preview is committed in source. Live behavior and the latest workflow results remain pending; no Supabase migration or authentication-setting change was made.
