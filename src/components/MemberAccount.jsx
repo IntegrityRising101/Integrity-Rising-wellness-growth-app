@@ -283,6 +283,13 @@ function MemberAccount() {
     setPassword('');
   }
 
+  const previewName = displayName.trim() || 'Movement Member';
+  const previewInitials = previewName.split(/\\s+/).slice(0, 2).map(part => part[0]?.toUpperCase() || '').join('');
+  const previewBio = bio.trim() || 'Growing, learning, and rising—one step at a time.';
+  const previewMemberSince = user?.created_at
+    ? new Date(user.created_at).toLocaleDateString(undefined, { month: 'long', year: 'numeric' })
+    : '—';
+
   return (
     <section className="member-account" aria-labelledby="member-account-title">
       <span className="member-account-kicker">THE INTEGRITY MOVEMENT</span>
@@ -379,6 +386,27 @@ function MemberAccount() {
                 {profileBusy ? 'Saving…' : 'Save profile'}
               </button>
               </form>
+              <aside className="member-profile-preview" aria-labelledby="member-profile-preview-title">
+                <div className="member-profile-preview-heading">
+                  <h4 id="member-profile-preview-title">Member profile preview</h4>
+                  <span>Visible to signed-in members</span>
+                </div>
+                <article className="member-profile-preview-card">
+                  {avatarUrl ? (
+                    <img className="member-profile-preview-avatar" src={avatarUrl} alt="" />
+                  ) : (
+                    <div className="member-profile-preview-avatar member-profile-preview-placeholder" aria-hidden="true">
+                      {previewInitials}
+                    </div>
+                  )}
+                  <div className="member-profile-preview-copy">
+                    <h5>{previewName}</h5>
+                    <p>{previewBio}</p>
+                    <span>Member since {previewMemberSince}</span>
+                  </div>
+                </article>
+                <p className="member-profile-preview-note">This preview updates as you edit. Select Save profile to publish your changes. Your sign-in email and private account details are not displayed.</p>
+              </aside>
             </>
           )}
           <button type="button" onClick={handleSignOut}>Sign out</button>
