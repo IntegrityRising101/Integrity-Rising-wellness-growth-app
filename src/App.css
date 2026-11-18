@@ -815,3 +815,22 @@
   .main-navigation a { transition: none; }
   .main-navigation a:hover { transform: none; }
 }
+
+
+/* Integrity Rising hero artwork */
+.app-header .brand-hero-image {
+  display: block;
+  width: min(100%, 260px);
+  max-height: 220px;
+  object-fit: contain;
+  margin: 0 auto 22px;
+  border-radius: 22px;
+  filter: drop-shadow(0 10px 22px rgba(0, 0, 0, .22));
+}
+@media (max-width: 600px) {
+  .app-header .brand-hero-image {
+    width: min(82%, 210px);
+    max-height: 180px;
+    margin-bottom: 18px;
+  }
+}
