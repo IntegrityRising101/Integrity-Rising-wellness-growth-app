@@ -405,3 +405,24 @@ Progress is counted from verified checklist items—not estimates. A task only m
 - [x] Confirmed GitHub Pages deployment succeeded for commit `72fbfd47`. — [Deployment run](https://github.com/IntegrityRising101/Integrity-Rising-wellness-growth-app/actions/runs/44362888929)
 
 **Status:** The preview and avatar-preservation change are committed. Quality checks and GitHub Pages deployment both succeeded for the current commit. Live member behavior remains to be tested; no Supabase migration or authentication-setting change was made.
+
+### Wednesday, November 18, 2026 — Repository organization
+
+**Completed**
+- [x] Audited the live repository's top-level folders and documentation locations. — **Completed: Nov 18, 2026**
+- [x] Added `docs/README.md` as the central documentation index, with a repository map, document directory, work-tracking conventions, and safe contribution workflow. — **Committed: Nov 18, 2026**
+- [x] Linked the central documentation index from the root `README.md`. — **Committed: Nov 18, 2026**
+- [x] Identified a migration filename collision: two existing files begin with `005_`. — **Documented for careful review; no migration files changed.**
+
+**Repository organization notes**
+- The repository currently includes `.github/workflows/`, `docs/`, `public/`, `src/`, and `supabase/` at the root.
+- The source tree includes `src/components/`, `src/lib/`, `src/utils/`, `src/assets/`, and `src/pages/`. Keep application code in its existing locations unless a code-aware refactor is planned and tested.
+- Existing workflows include GitHub Pages deployment, quality checks, and package-lock synchronization.
+- No application source files, database migrations, secrets, or deployment settings were changed during this documentation cleanup.
+
+**Next organization tasks**
+- [ ] Review existing GitHub labels and apply a consistent set to the open issues.
+- [ ] Review open issues for duplicates, outdated tasks, and missing acceptance criteria before closing or changing their status.
+- [ ] Verify all documentation links and the latest GitHub Actions run.
+- [ ] Reconcile the two `005_` migration filenames against the target Supabase migration history before any migration renaming or new migration numbering.
+
