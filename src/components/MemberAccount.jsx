@@ -284,7 +284,7 @@ function MemberAccount() {
   }
 
   const previewName = displayName.trim() || 'Movement Member';
-  const previewInitials = previewName.split(/\\s+/).slice(0, 2).map(part => part[0]?.toUpperCase() || '').join('');
+  const previewInitials = previewName.split(/\s+/).slice(0, 2).map(part => part[0]?.toUpperCase() || '').join('');
   const previewBio = bio.trim() || 'Growing, learning, and rising—one step at a time.';
   const previewMemberSince = user?.created_at
     ? new Date(user.created_at).toLocaleDateString(undefined, { month: 'long', year: 'numeric' })
