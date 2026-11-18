@@ -162,7 +162,7 @@ function MemberAccount() {
       const { error } = await supabase
         .from('profiles')
         .upsert(
-          { id: user.id, display_name: cleanName, bio: cleanBio, updated_at: new Date().toISOString() },
+          { id: user.id, display_name: cleanName, bio: cleanBio, avatar_path: avatarPath || null, updated_at: new Date().toISOString() },
           { onConflict: 'id' },
         );
       if (error) throw error;
