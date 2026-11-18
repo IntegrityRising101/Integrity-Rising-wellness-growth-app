@@ -185,7 +185,7 @@ function MoodTracker() {
       </div>
 
       <p className="mood-privacy-note">
-        Privacy: your check-ins are saved to your signed-in account. Only you can view or delete your entries. This is a wellness tool, not a diagnosis or substitute for professional care.
+        Privacy: your check-ins are saved to your signed-in account and protected by database access rules. This is a wellness tool, not a diagnosis or substitute for professional care.
       </p>
     </section>
   );
