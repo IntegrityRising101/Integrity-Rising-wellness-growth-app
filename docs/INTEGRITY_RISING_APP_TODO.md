@@ -401,6 +401,7 @@ Progress is counted from verified checklist items—not estimates. A task only m
 - [ ] Save a changed display name and bio, refresh, and confirm persistence.
 - [ ] Upload and remove a profile photo; confirm another signed-in member sees the updated card.
 - [ ] Complete the two-account profile privacy and account-switch tests.
-- [ ] Confirm the latest GitHub quality-check and Pages deployment workflows succeed.
+- [x] Confirmed GitHub quality checks (lint and production build) succeeded for commit `72fbfd47`. — [Workflow run](https://github.com/IntegrityRising101/Integrity-Rising-wellness-growth-app/actions/runs/44362889187)
+- [x] Confirmed GitHub Pages deployment succeeded for commit `72fbfd47`. — [Deployment run](https://github.com/IntegrityRising101/Integrity-Rising-wellness-growth-app/actions/runs/44362888929)
 
-**Status:** The preview is committed in source. Live behavior and the latest workflow results remain pending; no Supabase migration or authentication-setting change was made.
+**Status:** The preview and avatar-preservation change are committed. Quality checks and GitHub Pages deployment both succeeded for the current commit. Live member behavior remains to be tested; no Supabase migration or authentication-setting change was made.
