@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Business OS</title>
+<style>
+:root{--bg:#f6f5f1;--card:#fff;--tx:#1d1d1b;--mut:#6b6a64;--ac:#3b5bdb;--bd:#e4e2da;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#161615;--card:#212120;--tx:#eeede8;--mut:#9a9890;--ac:#8aa0ff;--bd:#34342f}}
+:root[data-theme="dark"]{--bg:#161615;--card:#212120;--tx:#eeede8;--mut:#9a9890;--ac:#8aa0ff;--bd:#34342f}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}
+header{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;padding:14px 16px}
+header input{font-size:20px;font-weight:700;background:none;border:0;color:var(--tx);width:min(100%,360px)}
+.date{color:var(--mut);font-size:13px}
+main{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,330px),1fr));gap:12px;padding:0 12px 24px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:8px;min-width:0}
+h2{margin:0;font-size:15px}h2 small{color:var(--mut);font-weight:400}
+input,select,textarea,button{font:inherit;color:var(--tx)}
+input,select,textarea{background:var(--bg);border:1px solid var(--bd);border-radius:8px;padding:8px;width:100%}
+textarea{min-height:110px;resize:vertical}
+button{background:var(--ac);color:#fff;border:0;border-radius:8px;padding:8px 12px;cursor:pointer}
+button.g{background:none;color:var(--ac);border:1px solid var(--bd)}button:disabled{opacity:.5}
+.row{display:flex;gap:6px;flex-wrap:wrap}.row>*{flex:1;min-width:90px}
+.item{display:flex;gap:8px;align-items:flex-start;border-top:1px solid var(--bd);padding:6px 0;font-size:14px}
+.item span{flex:1;overflow-wrap:anywhere}.item.done span{text-decoration:line-through;color:var(--mut)}
+.x{background:none;color:var(--mut);padding:0 6px;flex:none;min-width:0}
+.list{max-height:230px;overflow:auto}.mut{color:var(--mut);font-size:13px}
+</style></head><body>
+<header><input id="nm" aria-label="Business name"><span class="date" id="dt"></span></header>
+<main>
+<section class="card"><h2>Today’s priorities</h2>
+<div class="row"><input id="tin" placeholder="Add a task…"><button id="tadd" style="flex:none">Add</button></div>
+<div class="list" id="tl"></div></section>
+
+<section class="card"><h2>Business profile <small>(the AI uses this)</small></h2>
+<textarea id="ab" style="min-height:60px" placeholder="What does your business do?"></textarea>
+<input id="au" placeholder="Who is your audience?"><input id="vo" placeholder="Your voice (warm, bold, professional…)"></section>
+
+<section class="card"><h2>AI assistant</h2>
+<div class="list" id="chat"><span class="mut">Ask for ideas, plans, pricing, anything.</span></div>
+<div class="row"><input id="ci" placeholder="Ask your assistant…"><button id="cs" style="flex:none">Send</button></div></section>
+
+<section class="card"><h2>Email studio</h2>
+<input id="et" type="email" placeholder="To (email)"><input id="ep" placeholder="What’s this email for?">
+<select id="etn"><option>friendly</option><option>professional</option><option>persuasive</option><option>short and direct</option></select>
+<textarea id="eb" placeholder="Your draft appears here. Edit freely. First line: Subject: …"></textarea>
+<div class="row"><button id="ed">Draft with AI</button><button class="g" id="es">Open in email app</button><button class="g" id="ec">Copy</button></div></section>
+
+<section class="card"><h2>Workbook &amp; course builder</h2>
+<select id="wt"><option>Workbook</option><option>Course</option></select>
+<input id="wp" placeholder="Topic"><input id="wa" placeholder="Who is it for?">
+<textarea id="wb" placeholder="Outline and content appear here…"></textarea>
+<div class="row"><button id="wd">Generate</button><button class="g" id="wn">Expand</button><button class="g" id="ws">Save</button></div></section>
+
+<section class="card"><h2>Social media planner</h2>
+<div class="row"><select id="sp"><option>Instagram</option><option>Facebook</option><option>LinkedIn</option><option>X</option><option>TikTok</option></select><input id="sd" type="date"></div>
+<input id="st" placeholder="Post topic or goal">
+<textarea id="sb" style="min-height:80px" placeholder="Post copy appears here…"></textarea>
+<div class="row"><button id="sg">Write post</button><button class="g" id="sa">Add to planner</button></div>
+<div class="list" id="pl"></div></section>
+
+<section class="card"><h2>Library <small>(saved workbooks &amp; courses)</small></h2>
+<div class="list" id="ll"><span class="mut">Nothing saved yet.</span></div></section>
+</main>
+<script>
+const $=s=>document.querySelector(s);
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let S={name:'My Business',about:'',audience:'',voice:'',tasks:[],lib:[],posts:[]};
+try{Object.assign(S,JSON.parse(localStorage.getItem('bos')||'{}'))}catch(e){}
+const save=()=>{try{localStorage.setItem('bos',JSON.stringify(S))}catch(e){}};
+let sample=null;
+(async()=>{try{sample=await window.claude.use('sample')}catch(e){}})();
+$('#dt').textContent=new Date().toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric'});
+$('#nm').value=S.name;$('#ab').value=S.about;$('#au').value=S.audience;$('#vo').value=S.voice;
+[['#nm','name'],['#ab','about'],['#au','audience'],['#vo','voice']].forEach(([id,k])=>$(id).oninput=e=>{S[k]=e.target.value;save()});
+
+async function ai(prompt,btn,out,history){
+ if(!sample)try{sample=await window.claude.use('sample')}catch(e){}
+ if(!sample){out('AI isn’t available in this view.');return ''}
+ const ctx=`You are the built-in assistant of a business operating system. Business: ${S.name}. About: ${S.about||'n/a'}. Audience: ${S.audience||'n/a'}. Voice: ${S.voice||'n/a'}.\n\n`;
+ const msgs=history?history.concat([{role:'user',content:prompt}]):[{role:'user',content:prompt}];
+ msgs[0]={role:msgs[0].role,content:ctx+msgs[0].content};
+ btn.disabled=true;
+ try{const r=await sample(msgs,{cache:false,onText:({text})=>out(text)});out(r.text);return r.text}
+ catch(e){out(e.code==='not_granted'?'Permission to use AI was declined.':'Something went wrong. Try again in a moment.');return ''}
+ finally{btn.disabled=false}
+}
+
+// Tasks
+function rT(){$('#tl').innerHTML=S.tasks.map((t,i)=>`<div class="item ${t.d?'done':''}"><input type="checkbox" style="width:auto" ${t.d?'checked':''} data-t="${i}"><span>${esc(t.t)}</span><button class="x" data-xt="${i}" aria-label="Delete">×</button></div>`).join('')||'<span class="mut">No tasks yet.</span>'}
+$('#tadd').onclick=()=>{const v=$('#tin').value.trim();if(!v)return;S.tasks.push({t:v,d:0});$('#tin').value='';save();rT()};
+$('#tin').onkeydown=e=>{if(e.key==='Enter')$('#tadd').click()};
+$('#tl').onclick=e=>{const a=e.target.dataset;if(a.t!==undefined){S.tasks[a.t].d^=1}else if(a.xt!==undefined){S.tasks.splice(a.xt,1)}else return;save();rT()};
+
+// Chat
+let hist=[];
+async function send(){const v=$('#ci').value.trim();if(!v)return;$('#ci').value='';
+ const log=$('#chat');if(!hist.length)log.innerHTML='';
+ log.insertAdjacentHTML('beforeend',`<div class="item"><span><b>You:</b> ${esc(v)}</span></div><div class="item"><span id="cur"></span></div>`);
+ const cur=$('#cur');const t=await ai(v,$('#cs'),x=>{cur.textContent=x;log.scrollTop=log.scrollHeight},hist.length?hist:null);
+ cur.removeAttribute('id');if(t){hist.push({role:'user',content:v},{role:'assistant',content:t})}}
+$('#cs').onclick=send;$('#ci').onkeydown=e=>{if(e.key==='Enter')send()};
+
+// Email
+$('#ed').onclick=()=>{const p=$('#ep').value.trim();if(!p){$('#ep').focus();return}
+ ai(`Write an email to ${$('#et').value||'a contact'}. Purpose: ${p}. Tone: ${$('#etn').value}. Output ONLY the email: first line "Subject: ...", a blank line, then the body.`,$('#ed'),x=>$('#eb').value=x)};
+$('#es').onclick=()=>{let b=$('#eb').value,s='';const m=b.match(/^Subject:\s*(.*)\n+/i);if(m){s=m[1];b=b.slice(m[0].length)}
+ location.href='mailto:'+encodeURIComponent($('#et').value)+'?subject='+encodeURIComponent(s)+'&body='+encodeURIComponent(b)};
+const copy=async(t,b)=>{try{await navigator.clipboard.writeText(t);const o=b.textContent;b.textContent='Copied';setTimeout(()=>b.textContent=o,1200)}catch(e){}};
+$('#ec').onclick=()=>copy($('#eb').value,$('#ec'));
+
+// Builder
+$('#wd').onclick=()=>{const p=$('#wp').value.trim();if(!p){$('#wp').focus();return}
+ const w=$('#wt').value==='Workbook';
+ ai(w?`Create a practical workbook on "${p}" for ${$('#wa').value||'my audience'}: title, short intro, 6 sections each with a teaching paragraph, 3 reflection or exercise prompts, and a closing action plan.`:`Create a course on "${p}" for ${$('#wa').value||'my audience'}: title, promise, 6 modules each with lessons, learning goal and one activity, plus a launch checklist.`,$('#wd'),x=>$('#wb').value=x)};
+$('#wn').onclick=()=>{const b=$('#wb').value;if(!b)return;ai('Expand and polish this, keeping its structure and adding concrete detail and examples:\n\n'+b,$('#wn'),x=>$('#wb').value=x)};
+function rL(){$('#ll').innerHTML=S.lib.map((l,i)=>`<div class="item"><span><b>${esc(l.k)}:</b> ${esc(l.n)}</span><button class="g" data-lo="${i}">Open</button><button class="x" data-lx="${i}" aria-label="Delete">×</button></div>`).join('')||'<span class="mut">Nothing saved yet.</span>'}
+$('#ws').onclick=()=>{const b=$('#wb').value.trim();if(!b)return;S.lib.unshift({k:$('#wt').value,n:$('#wp').value||b.split('\n')[0].slice(0,50),b});save();rL()};
+$('#ll').onclick=e=>{const a=e.target.dataset;if(a.lo!==undefined){$('#wb').value=S.lib[a.lo].b;$('#wb').scrollIntoView({block:'center'})}else if(a.lx!==undefined){S.lib.splice(a.lx,1);save();rL()}};
+
+// Social
+$('#sg').onclick=()=>{const t=$('#st').value.trim();if(!t){$('#st').focus();return}
+ ai(`Write one ${$('#sp').value} post about: ${t}. Match platform style, include a hook, a call to action, and fitting hashtags. Output only the post.`,$('#sg'),x=>$('#sb').value=x)};
+function rP(){$('#pl').innerHTML=S.posts.slice().sort((a,b)=>(a.d||'9').localeCompare(b.d||'9')).map(p=>{const i=S.posts.indexOf(p);return `<div class="item"><span><b>${esc(p.p)}</b> · ${esc(p.d||'unscheduled')}<br>${esc(p.b.slice(0,90))}…</span><button class="g" data-pc="${i}">Copy</button><button class="x" data-px="${i}" aria-label="Delete">×</button></div>`}).join('')}
+$('#sa').onclick=()=>{const b=$('#sb').value.trim();if(!b)return;S.posts.push({p:$('#sp').value,d:$('#sd').value,b});save();rP()};
+$('#pl').onclick=e=>{const a=e.target.dataset;if(a.pc!==undefined)copy(S.posts[a.pc].b,e.target);else if(a.px!==undefined){S.posts.splice(a.px,1);save();rP()}};
+
+rT();rL();rP();
+</script></body></html>
