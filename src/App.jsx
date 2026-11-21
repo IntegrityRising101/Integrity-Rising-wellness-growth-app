@@ -1,5 +1,5 @@
 import './App.css';
-import heroImage from './assets/hero.png';
+import heroImage from './assets/file_0000000007a88212aad3fe441a39b1c3.png';
 import QuickExitButton from './components/QuickExitButton';
 import IncidentVault from './components/IncidentVault';
 import PersonalSafetyPlan from './components/PersonalSafetyPlan';
