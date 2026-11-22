@@ -229,6 +229,15 @@ function CommunityDiscussions() {
     };
   }, []);
 
+  function jumpToConversation() {
+    if (!user) {
+      document.getElementById('member-account-title')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    document.getElementById('discussion-composer')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.getElementById('discussion-title')?.focus({ preventScroll: true });
+  }
+
   async function publishPost(event) {
     event.preventDefault();
     if (!user || busy) return;
@@ -393,6 +402,12 @@ function CommunityDiscussions() {
         <span className="discussion-status">Members</span>
       </div>
 
+      <div className="community-conversation-launch">
+        <button type="button" className="community-conversation-button" onClick={jumpToConversation}>
+          Start a Conversation
+        </button>
+      </div>
+
       <section className="community-join-card" aria-label="Join the Integrity Rising community">
         <div>
           <p className="community-join-kicker">READY TO CONNECT?</p>
@@ -546,7 +561,7 @@ function CommunityDiscussions() {
         </div>
       ) : (
         <>
-          <form className="discussion-composer" onSubmit={publishPost}>
+          <form id="discussion-composer" className="discussion-composer" onSubmit={publishPost}>
             <h3>Start a conversation</h3>
             <label htmlFor="discussion-category">Choose a topic</label>
             <select id="discussion-category" value={category} onChange={event => setCategory(event.target.value)}>
