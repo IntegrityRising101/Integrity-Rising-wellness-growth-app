@@ -33,6 +33,8 @@ import AchievementCenter from './components/AchievementCenter';
 import ThirtyDayChallenge from './components/ThirtyDayChallenge';
 import SectionArtwork from './components/SectionArtwork';
 import GrowthProgressCenter from './components/GrowthProgressCenter';
+import MyDay from './components/MyDay';
+import WellnessQuiz from './components/WellnessQuiz';
 
 const navigation = [
   { label: 'Home', target: 'dashboard', icon: '⌂' },
@@ -97,6 +99,7 @@ function App() {
             <a href="#safety"><span aria-hidden="true">＋</span><strong>Safety &amp; Support</strong><small>Find resources and practical support.</small></a>
           </div>
           <MotivationForTheWeek />
+          <MyDay />
         </section>
 
         <section id="community" className="app-area">
@@ -129,6 +132,7 @@ function App() {
           <SectionHeading kicker="LEARN • GROW • HEAL • RISE" title="Integrity Rising Academy" description="Build knowledge, strengthen life skills, and keep moving toward the legacy you want to create." />
           <SectionArtwork variant="academy" />
           <Academy />
+          <WellnessQuiz />
         </section>
 
         <section id="safety" className="safety-section app-area">
