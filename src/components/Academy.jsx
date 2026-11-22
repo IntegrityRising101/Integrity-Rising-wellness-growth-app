@@ -214,6 +214,8 @@ function Academy() {
     setActivePath(item.id);
     setSelectedCourse(item.courseIds[0]);
     setExpandedLesson(0);
+    // Make the selected path's courses visible immediately, especially on mobile.
+    document.getElementById('academy-course-layout')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
   async function toggleComplete(key) {
@@ -272,7 +274,7 @@ function Academy() {
         </div>
       </div>
 
-      <div className="academy-course-layout">
+      <div className="academy-course-layout" id="academy-course-layout">
         <div className="academy-course-list">
           <h3>{path.title} courses</h3>
           {pathCourses.map(item => (
