@@ -31,6 +31,7 @@ import StressReliefCenter from './components/StressReliefCenter';
 import AchievementCenter from './components/AchievementCenter';
 import ThirtyDayChallenge from './components/ThirtyDayChallenge';
 import SectionArtwork from './components/SectionArtwork';
+import GrowthProgressCenter from './components/GrowthProgressCenter';
 
 const navigation = [
   { label: 'Home', target: 'dashboard', icon: '⌂' },
@@ -141,6 +142,7 @@ function App() {
 
         <section id="growth" className="app-area">
           <SectionHeading kicker="YOUR JOURNEY, YOUR PACE" title="My Growth" description="Set meaningful goals, track your progress, celebrate milestones, and save the resources that support your next chapter." />
+          <GrowthProgressCenter />
           <GoalCenter />
           <GratitudeJournal />
           <AchievementCenter />
