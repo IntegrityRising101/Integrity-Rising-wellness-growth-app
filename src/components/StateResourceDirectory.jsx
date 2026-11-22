@@ -42,6 +42,7 @@ export default function StateResourceDirectory() {
 
       <p className="state-resource-count" aria-live="polite">{selectedState ? `Selected: ${selectedState} · ${visibleResources.length} listing${visibleResources.length === 1 ? "" : "s"}` : `Showing ${visibleResources.length} of ${stateResources.length} state and district listings`}</p>
       {selectedState && visibleResources.length > 0 && <div className="state-resource-selected" role="status"><h3>Resources for {selectedState}</h3><p>{visibleResources[0][1]}</p><a href={visibleResources[0][2]} target="_blank" rel="noreferrer">Open resource website ↗</a><button type="button" onClick={() => { setSelectedState(""); setSearch(""); }}>Show all states</button></div>}
+      {selectedState && visibleResources.length > 0 && <div className="state-resource-selected" role="status"><h3>Resources for {selectedState}</h3><p>{visibleResources[0][1]}</p><a href={visibleResources[0][2]} target="_blank" rel="noreferrer">Open resource website ↗</a><button type="button" onClick={() => { setSelectedState(""); setSearch(""); }}>Show all states</button></div>}
       <div className="state-resource-list">
         {(selectedState ? [] : visibleResources).map(([state, organization]) => (
           <article className="state-resource-card" key={state}>
@@ -56,6 +57,7 @@ export default function StateResourceDirectory() {
         <strong>Directory sources:</strong>
         <a href="https://www.justice.gov/ovw/state-and-territory-coalitions" target="_blank" rel="noreferrer">U.S. Department of Justice – State and Territory Coalitions</a>
         <a href="https://nnedv.org/content/state-u-s-territory-coalitions/" target="_blank" rel="noreferrer">NNEDV – State and U.S. Territory Coalitions</a>
+        <a href="https://www.justice.gov/ovw/resources-victims-and-survivors" target="_blank" rel="noreferrer">DOJ – Resources for victims and survivors</a>
         <a href="https://www.justice.gov/ovw/resources-victims-and-survivors" target="_blank" rel="noreferrer">DOJ – Resources for victims and survivors</a>
         <p>State coalition names are cross-checked against the U.S. Department of Justice FY2026 directory; coalition website links are provided as starting points and may not have been individually live-tested. Coalition websites are not necessarily direct crisis hotlines. For local direct-service options, use the DOJ survivor resources page. Oklahoma is linked to the state victim-services resource because the FY2026 DOJ coalition list does not name a domestic-violence coalition for Oklahoma.</p>
       </div>
