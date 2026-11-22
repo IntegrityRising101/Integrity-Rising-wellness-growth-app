@@ -140,6 +140,12 @@ function Academy() {
   const [selectedCourse, setSelectedCourse] = useState(learningPaths[0].courseIds[0]);
   const [completed, setCompleted] = useState(readSavedProgress);
   const [expandedLesson, setExpandedLesson] = useState(0);
+  const [courseNotes, setCourseNotes] = useState(() => {
+    try { return JSON.parse(window.localStorage.getItem('integrity-rising-academy-notes-v1') || '{}'); } catch { return {}; }
+  });
+  useEffect(() => {
+    try { window.localStorage.setItem('integrity-rising-academy-notes-v1', JSON.stringify(courseNotes)); } catch { /* Keep notes available for this session. */ }
+  }, [courseNotes]);
 
   useEffect(() => {
     if (!user) {
@@ -295,6 +301,18 @@ function Academy() {
           <span className="academy-course-level">{course.level}</span>
           <h3>{course.title}</h3>
           <p>{course.description}</p>
+          <div className="academy-personal-notes">
+            <label htmlFor={`academy-notes-${course.id}`}>My private notes for this course</label>
+            <textarea
+              id={`academy-notes-${course.id}`}
+              rows="5"
+              maxLength={4000}
+              value={courseNotes[course.id] || ''}
+              onChange={event => setCourseNotes(current => ({ ...current, [course.id]: event.target.value }))}
+              placeholder="Write your thoughts, questions, takeaways, or reminders here…"
+            />
+            <small>{(courseNotes[course.id] || '').length}/4000 characters · Saved on this device automatically</small>
+          </div>
           <div className="academy-progress-label">
             <span>Your course progress</span>
             <strong>{doneCount} of {course.lessons.length} complete · {progress}%</strong>
