@@ -426,3 +426,26 @@ Progress is counted from verified checklist items—not estimates. A task only m
 - [ ] Verify all documentation links and the latest GitHub Actions run.
 - [ ] Reconcile the two `005_` migration filenames against the target Supabase migration history before any migration renaming or new migration numbering.
 
+
+
+### Sunday, November 22, 2026 — Build repair, deployment, and ongoing feature testing
+
+**Completed and verified**
+- [x] Corrected the malformed reset statement in `src/components/WellnessQuiz.jsx` that caused the earlier Vite build failure. — **Committed before the successful deployment: Nov 22, 2026**
+- [x] Confirmed a later GitHub Pages deployment completed successfully (Deployment run #246; run ID `45048140416`). — **Verified: Nov 22, 2026**
+- [x] Confirmed Quality Checks run #257 succeeded (run ID `45049175967`). — **Verified: Nov 22, 2026**
+- [x] Opened the deployed app successfully on the founder's laptop. — **Owner-confirmed: Nov 22, 2026**
+- [x] Founder reports that app features have been continuously tested during development; do not ask for blanket retesting of features already checked. — **Owner-confirmed: Nov 22, 2026**
+
+**Build incident record**
+- [x] Recorded that older deployment run #245 failed on the earlier commit because of the WellnessQuiz syntax error. — **Reviewed: Nov 22, 2026**
+- [x] Confirmed the later corrected deployment #246 succeeded; do not rerun the superseded failed run #245.
+- [ ] Review any remaining red workflow runs only if they relate to the current `main` commit; distinguish old historical failures from current blockers.
+- [ ] Review the Node.js 20 deprecation warning separately if it remains in current workflow logs; it did not cause the earlier build failure.
+
+**Still open — launch readiness**
+- [ ] Finish the remaining backend, Supabase/RLS, authentication, moderation, privacy, AI, safety-resource, accessibility, and policy launch gates already listed above.
+- [ ] Resolve and verify any specific feature defects previously reported by the founder; do not mark a feature complete based only on its presence in the UI.
+- [ ] Continue recording new feature work and actual completion dates in this file as development proceeds.
+
+**Testing note:** The founder has been testing the app during development. This dated entry records the current successful laptop load and successful workflows; it does not claim that every security, privacy, backend, resource, or release-gate test has passed.
