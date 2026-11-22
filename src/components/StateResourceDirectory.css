@@ -25,3 +25,10 @@
 .state-resource-selected a { color: #075e60; font-weight: 700; }
 .state-resource-selected button { justify-self: start; min-height: 44px; padding: 10px 14px; border: 1px solid #075e60; border-radius: 8px; color: #075e60; background: white; font: inherit; font-weight: 700; cursor: pointer; }
 .state-resource-selected a:focus-visible, .state-resource-selected button:focus-visible { outline: 3px solid #c9a64b; outline-offset: 3px; }
+
+.state-resource-selected { display: grid; gap: 10px; padding: 18px; margin: 14px 0; border: 2px solid #c9a64b; border-radius: 12px; background: #fff8e8; }
+.state-resource-selected h3 { margin: 0; color: #075e60; }
+.state-resource-selected p { margin: 0; line-height: 1.5; }
+.state-resource-selected a { color: #075e60; font-weight: 700; }
+.state-resource-selected button { justify-self: start; min-height: 44px; padding: 10px 14px; border: 1px solid #075e60; border-radius: 8px; color: #075e60; background: white; font: inherit; font-weight: 700; cursor: pointer; }
+.state-resource-selected a:focus-visible, .state-resource-selected button:focus-visible { outline: 3px solid #c9a64b; outline-offset: 3px; }
