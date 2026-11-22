@@ -27,6 +27,7 @@ import ModerationDashboard from './components/ModerationDashboard';
 import AppDirectory from './components/AppDirectory';
 import MotivationForTheWeek from './components/MotivationForTheWeek';
 import GratitudeJournal from './components/GratitudeJournal';
+import PrivateJournal from './components/PrivateJournal';
 import StressReliefCenter from './components/StressReliefCenter';
 import AchievementCenter from './components/AchievementCenter';
 import ThirtyDayChallenge from './components/ThirtyDayChallenge';
@@ -116,6 +117,7 @@ function App() {
           <GuidedWellnessPractices />
           <StressReliefCenter />
           <SelfReflectionCheck />
+          <PrivateJournal />
           <WomensWellness />
           <WellnessAI />
           <WellnessChat />
