@@ -3,6 +3,7 @@ import './AppDirectory.css';
 
 const destinations = [
   { title: 'My Account & Dashboard', category: 'Personal', target: 'dashboard', description: 'Sign in, view your personal dashboard, and access your check-ins.', keywords: 'account profile member progress' },
+  { title: 'Letter to My Future Self', category: 'Personal', target: 'dashboard', description: 'Write and save a dated letter to your future self in My Day.', keywords: 'future self letter write letters hopes goals memories encouragement my day' },
   { title: 'Mood Tracker', category: 'Wellness', target: 'dashboard', description: 'Record a mood check-in and notice patterns over time.', keywords: 'feelings emotions mood mental health' },
   { title: 'Wellness Support', category: 'Wellness', target: 'wellness', description: 'Explore guided coping tools and supportive wellness conversations.', keywords: 'stress anxiety grounding journaling' },
   { title: 'AI Tools & Providers', category: 'Wellness', target: 'wellness', description: 'Find the AI resource hub and review privacy information before using external tools.', keywords: 'chatgpt meta muse grok gemini manus deepseek' },
