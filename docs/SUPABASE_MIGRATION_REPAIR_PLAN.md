@@ -94,3 +94,16 @@ Continue the read-only repository review: inspect Supabase-related GitHub Action
 - Existing seven rooms remain public.
 - Private rooms are limited to approved members and authorized moderators.
 - No production database changes without review and explicit approval.
+
+
+## 7. Additional read-only repository findings (2026-11-26)
+
+- The current GitHub Actions workflows include GitHub Pages build/deploy and quality checks. Neither workflow runs Supabase migrations or `supabase db push`. Therefore GitHub Actions history does not establish which database migrations were applied.
+- `src/components/GoalCenter.jsx` reads and writes goals through the dedicated `public.member_goals` table and `public.goal_tasks`, not through `profiles.member_goals`.
+- A repository code search for `member_goals` returned the Goal Center and migration 004 references; no app usage of `profiles.member_goals` was found in that search. Treat this as a strong indication the profile column is unnecessary, but confirm with a full repository search before dropping it.
+- Migration 004 creates `member_goals` with owner-only RLS and creates `goal_tasks` with an owner check plus a parent-goal ownership check. This is the intended private-goal storage path.
+- Because the separate `member_goals` table already exists in the live database and has owner-only RLS according to the audit, the repair should prioritize safely removing any private content from the broadly readable profile column, not rebuilding the Goal Center's data model.
+
+### Updated next action
+
+Perform a full repository search for any references to `profiles.member_goals` or profile goal serialization, then inspect the actual profile column's values/counts using a carefully scoped, read-only query before proposing its removal. Do not select or print private goal text into chat. In parallel, prepare a verified schema-vs-migration reconciliation table for migrations 001–012.
